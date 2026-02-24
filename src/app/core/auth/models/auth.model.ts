@@ -13,3 +13,9 @@ export interface AuthCredentials {
     username: string;
     password: string;
 }
+
+export interface GuestSessionResponse {
+    success: boolean;
+    guest_session_id: string;
+    expires_at: string;
+}

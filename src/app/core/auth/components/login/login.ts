@@ -44,6 +44,10 @@ export class Login {
         }
     }
 
+    public onGuestLogin(): void {
+        this.store.loginAsGuest();
+    }
+
     public onRegisterNavigate(): void {
         this.router.navigate(['auth/sign-up']);
     }

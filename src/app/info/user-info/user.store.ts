@@ -59,6 +59,30 @@ export const UserStore = signalStore(
                 ),
             ),
 
+            loginAsGuest: rxMethod<void>(
+                pipe(
+                    tap(() => patchState(store, { isLoading: true })),
+                    switchMap(() =>
+                        authService.loginAsGuest().pipe(
+                            tap((res) => {
+                                patchState(store, {
+                                    sessionId: res.guest_session_id,
+                                    isAuthenticated: true,
+                                    isLoading: false,
+                                });
+                                alertService.showAlert('Guest Session Active.', 'info');
+                                router.navigate(['/']);
+                            }),
+                            catchError(() => {
+                                patchState(store, { isLoading: false });
+                                alertService.showAlert('Failed to start guest session.', 'error');
+                                return EMPTY;
+                            }),
+                        ),
+                    ),
+                ),
+            ),
+
             logout(): void {
                 localStorage.removeItem('neonum_session_id');
                 patchState(store, { sessionId: null, isAuthenticated: false });

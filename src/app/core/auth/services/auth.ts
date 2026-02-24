@@ -2,7 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { map, Observable, switchMap, tap } from 'rxjs';
-import { AuthCredentials, SessionResponse, TokenResponse } from '../models/auth.model';
+import {
+    AuthCredentials,
+    GuestSessionResponse,
+    SessionResponse,
+    TokenResponse,
+} from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
@@ -32,6 +37,19 @@ export class Auth {
                 map((res) => {
                     if (!res.success) throw new Error('Invalid Credentials');
                     return res;
+                }),
+            );
+    }
+
+    public loginAsGuest(): Observable<GuestSessionResponse> {
+        return this.http
+            .get<GuestSessionResponse>(`${this.proxyUrl}?path=authentication/guest_session/new`)
+            .pipe(
+                tap((res) => {
+                    if (res.success) {
+                        localStorage.setItem(this.AUTH_KEY, res.guest_session_id);
+                        localStorage.setItem('is_guest', 'true');
+                    }
                 }),
             );
     }

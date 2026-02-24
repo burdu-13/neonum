@@ -45,7 +45,7 @@
                 mat-flat-button
                 color="primary"
                 class="login__main-btn"
-                [disabled]="loginForm.invalid"
+                [disabled]="loginForm.invalid || store.isLoading()"
             >
                 @if (store.isLoading()) {
                     <span>Logging In...</span>
@@ -59,8 +59,8 @@
             <button
                 mat-button
                 type="button"
-                (click)="guestClicked.emit()"
                 class="login__action-btn"
+                (click)="onGuestLogin()"
             >
                 Guest Session
             </button>
