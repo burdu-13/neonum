@@ -1,1 +1,34 @@
-<p>dashboard-container works!</p>
+<main class="dashboard">
+    <header class="dashboard__header">
+        <div class="dashboard__profile">
+            <h1 class="dashboard__welcome">
+                Welcome back,
+                <span class="dashboard__user">{{ store.account()?.username ?? 'Agent' }}</span>
+            </h1>
+        </div>
+    </header>
+
+    <section class="dashboard__content">
+        <header class="dashboard__section-header">
+            <h2 class="dashboard__section-title">Trending Now</h2>
+            <div class="dashboard__controls">
+                <button
+                    mat-icon-button
+                    color="primary"
+                >
+                    <mat-icon>filter_list</mat-icon>
+                </button>
+            </div>
+        </header>
+
+        <div class="dashboard__grid">
+            @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track item) {
+                <div class="dashboard__skeleton">
+                    <div class="dashboard__skeleton-poster"></div>
+                    <div class="dashboard__skeleton-line"></div>
+                    <div class="dashboard__skeleton-line dashboard__skeleton-line--short"></div>
+                </div>
+            }
+        </div>
+    </section>
+</main>

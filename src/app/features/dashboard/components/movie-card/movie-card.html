@@ -1,0 +1,16 @@
+<div class="movie-card">
+    <div class="movie-card__poster-wrapper">
+        <img
+            [src]="'https://image.tmdb.org/t/p/w500' + movie().poster_path"
+            [alt]="movie().title"
+            class="movie-card__poster"
+        />
+        <div class="movie-card__overlay">
+            <span class="movie-card__rating">★ {{ movie().vote_average.toFixed(1) }}</span>
+        </div>
+    </div>
+    <div class="movie-card__info">
+        <h3 class="movie-card__title">{{ movie().title }}</h3>
+        <p class="movie-card__year">{{ movie().release_date | date: 'yyyy' }}</p>
+    </div>
+</div>

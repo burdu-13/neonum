@@ -46,17 +46,17 @@ export const UserStore = signalStore(
                                             isLoading: false,
                                         });
                                         alertService.showAlert(
-                                            `Welcome, ${account.username}!`,
+                                            `Access Granted. Welcome, ${account.username}`,
                                             'success',
                                         );
-                                        router.navigate(['/']);
+                                        router.navigate(['/dashboard']);
                                     }),
                                 ),
                             ),
                             catchError(() => {
                                 patchState(store, { isLoading: false });
                                 alertService.showAlert(
-                                    'Login failed. Check your TMDB credentials.',
+                                    'Authorization failed. Check credentials.',
                                     'error',
                                 );
                                 return EMPTY;

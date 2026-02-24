@@ -1,0 +1,69 @@
+@use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
+
+.movie-card {
+    width: 20rem;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:hover {
+        transform: translateY(-0.8rem);
+
+        .movie-card__overlay {
+            opacity: 1;
+        }
+    }
+
+    &__poster-wrapper {
+        position: relative;
+        border-radius: 1.2rem;
+        overflow: hidden;
+        aspect-ratio: 2/3;
+        background: var(--nn-surface);
+        border: 0.1rem solid var(--nn-border);
+    }
+
+    &__poster {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    &__overlay {
+        @include abs-center;
+        width: 100%;
+        height: 100%;
+        @include flex(center, center);
+        background: rgba(0, 0, 0, 0.4);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &__rating {
+        @include glass(0.8, 0.8rem);
+        padding: 0.4rem 0.8rem;
+        border-radius: 0.4rem;
+        color: var(--nn-primary);
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    &__info {
+        padding-top: 1.2rem;
+    }
+
+    &__title {
+        @include text-truncate;
+        margin: 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: var(--nn-text);
+    }
+
+    &__year {
+        margin-top: 0.4rem;
+        font-size: 1.2rem;
+        color: var(--nn-text);
+        opacity: 0.5;
+    }
+}
