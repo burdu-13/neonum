@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { catchError, EMPTY, tap } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { AlertService } from '../../../../shared/services/alert/alert';
 @Component({
     selector: 'app-login',
     imports: [
@@ -27,6 +28,7 @@ export class Login {
     private readonly router = inject(Router);
     private readonly authService = inject(Auth);
     private readonly snackBar = inject(MatSnackBar);
+    private readonly alertService = inject(AlertService);
 
     public readonly loginForm: FormGroup = this.fb.nonNullable.group({
         username: ['', [Validators.required]],
@@ -43,23 +45,22 @@ export class Login {
             .login(this.loginForm.getRawValue())
             .pipe(
                 tap(() => {
+                    this.alertService.showAlert(
+                        'Access Granted. Welcome to the Mainframe.',
+                        'success',
+                    );
                     this.loginSubmitted.emit();
                     this.router.navigate(['/']);
                 }),
-
                 catchError((err) => {
-                    this.showErrorNotification();
+                    this.alertService.showAlert(
+                        'Authorization failed. Please check your TMDB credentials.',
+                        'error',
+                    );
                     return EMPTY;
                 }),
             )
             .subscribe();
-    }
-
-    private showErrorNotification(): void {
-        this.snackBar.open('Authorization failed. Check your TMDB credentials.', 'Close', {
-            duration: 4000,
-            panelClass: ['error-snackbar'],
-        });
     }
 
     public onRegisterNavigate(): void {

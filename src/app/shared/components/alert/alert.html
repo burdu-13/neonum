@@ -1,0 +1,17 @@
+@if (alert$ | async; as alert) {
+    <div class="alert alert--{{ alert.type }}">
+        <div class="alert__content">
+            <mat-icon class="alert__icon">
+                {{ alert.type === 'error' ? 'error_outline' : 'check_circle_outline' }}
+            </mat-icon>
+            <span class="alert__message">{{ alert.message }}</span>
+            <button
+                class="alert__close"
+                (click)="onClose()"
+            >
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
+        <div class="alert__progress"></div>
+    </div>
+}
