@@ -3,14 +3,19 @@
 @use './app/shared/styles/mixins' as *;
 @use './app/shared/styles/m3-theme' as *;
 @use './app/shared/styles/reset' as *;
+@include mat.core();
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-@include mat.core();
 
 html {
     height: 100%;
     font-size: 62.5%;
+}
+
+body,
+html,
+* {
+    font-family: 'Inter', sans-serif;
 }
 
 body {
