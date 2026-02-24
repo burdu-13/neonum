@@ -1,0 +1,41 @@
+@mixin flex($justify: flex-start, $align: stretch, $direction: row, $wrap: nowrap, $gap: 0) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+    flex-wrap: $wrap;
+    gap: $gap;
+    @content;
+}
+
+@mixin glass($opacity: 0.7, $blur: 10px) {
+    background: rgba(var(--nn-surface-rgb), $opacity);
+    backdrop-filter: blur($blur);
+    -webkit-backdrop-filter: blur($blur);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@mixin abs-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+@mixin mq($size) {
+    $breakpoints: (
+        'sm': 576px,
+        'md': 768px,
+        'lg': 992px,
+        'xl': 1200px,
+    );
+    @media (min-width: map-get($breakpoints, $size)) {
+        @content;
+    }
+}
+
+@mixin text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

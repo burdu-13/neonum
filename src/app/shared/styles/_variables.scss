@@ -1,0 +1,21 @@
+:root {
+    --nn-bg: #050505;
+    --nn-surface: #121212;
+    --nn-surface-rgb: 18, 18, 18;
+    --nn-primary: #00e5ff;
+    --nn-primary-rgb: 0, 229, 255;
+    --nn-text: #ececec;
+    --nn-border: #222222;
+
+    --nn-space-xs: 0.4rem;
+    --nn-space-sm: 0.8rem;
+    --nn-space-md: 1.6rem;
+    --nn-space-lg: 3.2rem;
+    --nn-space-xl: 6.4rem;
+}
+
+$nn-bg: var(--nn-bg);
+$nn-surface: var(--nn-surface);
+$nn-primary: var(--nn-primary);
+$nn-text: var(--nn-text);
+$nn-border: var(--nn-border);

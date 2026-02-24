@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+
+$neonum-theme: mat.define-theme(
+    (
+        color: (
+            theme-type: dark,
+            primary: mat.$azure-palette,
+            tertiary: mat.$cyan-palette,
+        ),
+        typography: (
+            brand-family: 'Inter, sans-serif',
+            plain-family: 'Inter, sans-serif',
+        ),
+        density: (
+            scale: -1,
+        ),
+    )
+);
