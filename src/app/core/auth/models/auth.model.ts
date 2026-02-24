@@ -19,3 +19,12 @@ export interface GuestSessionResponse {
     guest_session_id: string;
     expires_at: string;
 }
+
+export interface AccountDetails {
+    id: number;
+    username: string;
+    avatar: {
+        tmdb: { avatar_path: string | null };
+    };
+    include_adult: boolean;
+}

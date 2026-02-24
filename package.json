@@ -29,6 +29,7 @@
     "@angular/cli": "^21.0.3",
     "@angular/compiler-cli": "^21.0.0",
     "@angular/material": "^21.1.5",
+    "@netlify/functions": "^5.1.2",
     "@ngrx/signals": "^21.0.1",
     "jsdom": "^27.1.0",
     "typescript": "~5.9.2",

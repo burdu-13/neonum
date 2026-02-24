@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
 import { map, Observable, switchMap, tap } from 'rxjs';
 import {
+    AccountDetails,
     AuthCredentials,
     GuestSessionResponse,
     SessionResponse,
@@ -39,6 +40,12 @@ export class Auth {
                     return res;
                 }),
             );
+    }
+
+    public getAccountDetails(sessionId: string): Observable<AccountDetails> {
+        return this.http.get<AccountDetails>(
+            `${this.proxyUrl}?path=account&session_id=${sessionId}`,
+        );
     }
 
     public loginAsGuest(): Observable<GuestSessionResponse> {

@@ -3,12 +3,13 @@ import { patchState, signalStore, withHooks, withMethods, withState } from '@ngr
 import { Router } from '@angular/router';
 import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { AuthCredentials } from '../../core/auth/models/auth.model';
+import { AccountDetails, AuthCredentials } from '../../core/auth/models/auth.model';
 import { Auth } from '../../core/auth/services/auth';
 import { AlertService } from '../../shared/services/alert/alert';
 
 export interface UserState {
     sessionId: string | null;
+    account: AccountDetails | null;
     isLoading: boolean;
     isAuthenticated: boolean;
 }
@@ -16,6 +17,7 @@ export interface UserState {
 const initialState: UserState = {
     sessionId: localStorage.getItem('neonum_session_id'),
     isLoading: false,
+    account: null,
     isAuthenticated: !!localStorage.getItem('neonum_session_id'),
 };
 
@@ -34,22 +36,27 @@ export const UserStore = signalStore(
                     tap(() => patchState(store, { isLoading: true })),
                     switchMap((credentials) =>
                         authService.login(credentials).pipe(
-                            tap((session) => {
-                                patchState(store, {
-                                    sessionId: session.session_id,
-                                    isAuthenticated: true,
-                                    isLoading: false,
-                                });
-                                alertService.showAlert(
-                                    'Access Granted. Welcome to Neonum.',
-                                    'success',
-                                );
-                                router.navigate(['/']);
-                            }),
+                            switchMap((session) =>
+                                authService.getAccountDetails(session.session_id).pipe(
+                                    tap((account) => {
+                                        patchState(store, {
+                                            sessionId: session.session_id,
+                                            account: account,
+                                            isAuthenticated: true,
+                                            isLoading: false,
+                                        });
+                                        alertService.showAlert(
+                                            `Welcome, ${account.username}!`,
+                                            'success',
+                                        );
+                                        router.navigate(['/']);
+                                    }),
+                                ),
+                            ),
                             catchError(() => {
                                 patchState(store, { isLoading: false });
                                 alertService.showAlert(
-                                    'Authorization failed. Check credentials.',
+                                    'Login failed. Check your TMDB credentials.',
                                     'error',
                                 );
                                 return EMPTY;
