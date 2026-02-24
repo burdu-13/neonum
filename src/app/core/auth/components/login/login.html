@@ -1,0 +1,78 @@
+<section class="login">
+    <div class="login__card">
+        <div class="login__icon-box">
+            <mat-icon class="login__icon">account_circle</mat-icon>
+        </div>
+
+        <header class="login__header">
+            <h1 class="login__title">Sign In</h1>
+            <p class="login__subtitle">Continue your cinematic journey</p>
+        </header>
+
+        <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onLogin()"
+            class="login__form"
+        >
+            <mat-form-field
+                appearance="outline"
+                class="login__field"
+            >
+                <mat-label>Username</mat-label>
+                <input
+                    matInput
+                    formControlName="username"
+                    placeholder="Enter your username"
+                />
+                <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field
+                appearance="outline"
+                class="login__field"
+            >
+                <mat-label>Password</mat-label>
+                <input
+                    matInput
+                    formControlName="password"
+                    type="password"
+                    placeholder="Enter your password"
+                />
+                <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+
+            <button
+                mat-flat-button
+                color="primary"
+                class="login__main-btn"
+                [disabled]="loginForm.invalid || store.isLoading()"
+            >
+                @if (store.isLoading()) {
+                    <span>Logging In...</span>
+                } @else {
+                    <span>Log In</span>
+                }
+            </button>
+        </form>
+
+        <div class="login__actions">
+            <button
+                mat-button
+                type="button"
+                class="login__action-btn"
+                (click)="onGuestLogin()"
+            >
+                Guest Session
+            </button>
+
+            <button
+                mat-button
+                type="button"
+                (click)="onRegisterNavigate()"
+                class="login__action-btn"
+            >
+                Create Account
+            </button>
+        </div>
+    </div>
+</section>

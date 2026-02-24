@@ -1,0 +1,77 @@
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { environment } from '../../../../environments/environment';
+import { map, Observable, switchMap, tap } from 'rxjs';
+import {
+    AccountDetails,
+    AuthCredentials,
+    GuestSessionResponse,
+    SessionResponse,
+    TokenResponse,
+} from '../models/auth.model';
+
+@Injectable({ providedIn: 'root' })
+export class Auth {
+    private readonly http = inject(HttpClient);
+    private readonly proxyUrl = environment.proxyUrl;
+    private readonly AUTH_KEY = 'neonum_session_id';
+
+    public login(credentials: AuthCredentials): Observable<SessionResponse> {
+        return this.getRequestToken().pipe(
+            switchMap((tokenRes) => this.validateToken(credentials, tokenRes.request_token)),
+            switchMap((validatedRes) => this.createSession(validatedRes.request_token)),
+            tap((session) => this.saveSession(session.session_id)),
+        );
+    }
+
+    private getRequestToken(): Observable<TokenResponse> {
+        return this.http.get<TokenResponse>(`${this.proxyUrl}?path=authentication/token/new`);
+    }
+
+    private validateToken(credentials: AuthCredentials, token: string): Observable<TokenResponse> {
+        return this.http
+            .post<TokenResponse>(`${this.proxyUrl}?path=authentication/token/validate_with_login`, {
+                ...credentials,
+                request_token: token,
+            })
+            .pipe(
+                map((res) => {
+                    if (!res.success) throw new Error('Invalid Credentials');
+                    return res;
+                }),
+            );
+    }
+
+    public getAccountDetails(sessionId: string): Observable<AccountDetails> {
+        return this.http.get<AccountDetails>(
+            `${this.proxyUrl}?path=account&session_id=${sessionId}`,
+        );
+    }
+
+    public loginAsGuest(): Observable<GuestSessionResponse> {
+        return this.http
+            .get<GuestSessionResponse>(`${this.proxyUrl}?path=authentication/guest_session/new`)
+            .pipe(
+                tap((res) => {
+                    if (res.success) {
+                        localStorage.setItem(this.AUTH_KEY, res.guest_session_id);
+                        localStorage.setItem('is_guest', 'true');
+                    }
+                }),
+            );
+    }
+
+    private createSession(token: string): Observable<SessionResponse> {
+        return this.http.post<SessionResponse>(`${this.proxyUrl}?path=authentication/session/new`, {
+            request_token: token,
+        });
+    }
+
+    private saveSession(sessionId: string): void {
+        localStorage.setItem(this.AUTH_KEY, sessionId);
+    }
+
+    public get isAuthenticated(): boolean {
+        return !!localStorage.getItem(this.AUTH_KEY);
+    }
+}

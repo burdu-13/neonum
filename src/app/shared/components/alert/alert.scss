@@ -1,0 +1,91 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/variables' as *;
+
+.alert {
+    position: fixed;
+    top: 8rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1100;
+
+    min-width: 32rem;
+    max-width: 90vw;
+    border-radius: 0.8rem;
+    overflow: hidden;
+    @include glass(0.8, 1.5rem);
+    border: 1px solid var(--nn-border);
+    box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.5);
+
+    animation: alertSlideIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+    &__content {
+        @include flex(center, center, $gap: 1.6rem);
+        padding: 1.4rem 2rem;
+    }
+
+    &--error {
+        border-left: 4px solid #ff4d4d;
+        .alert__icon {
+            color: #ff4d4d;
+        }
+    }
+    &--success {
+        border-left: 4px solid var(--nn-primary);
+        .alert__icon {
+            color: var(--nn-primary);
+        }
+    }
+
+    &__message {
+        font-size: 1.4rem;
+        font-weight: 500;
+        color: var(--nn-text);
+        flex: 1;
+    }
+
+    &__close {
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: rgba(var(--nn-text-rgb), 0.3);
+        @include flex(center, center);
+        transition: color 0.2s;
+
+        &:hover {
+            color: var(--nn-text);
+        }
+        mat-icon {
+            font-size: 1.8rem;
+            width: 1.8rem;
+            height: 1.8rem;
+        }
+    }
+
+    &__progress {
+        height: 3px;
+        width: 100%;
+        background: rgba(var(--nn-text-rgb), 0.1);
+        transform-origin: left;
+        animation: alertProgress 5s linear forwards;
+    }
+}
+
+@keyframes alertSlideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+@keyframes alertProgress {
+    from {
+        transform: scaleX(1);
+    }
+    to {
+        transform: scaleX(0);
+    }
+}

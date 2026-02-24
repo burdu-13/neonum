@@ -17,3 +17,14 @@ $neonum-theme: mat.define-theme(
         ),
     )
 );
+
+:root {
+    --mdc-filled-button-container-shape: 0.8rem;
+    --mdc-outlined-button-container-shape: 0.8rem;
+    --mdc-text-button-container-shape: 0.4rem;
+
+    --mdc-outlined-text-field-container-shape: 0.8rem;
+
+    --mat-sys-primary: var(--nn-primary);
+    --mat-sys-surface: var(--nn-surface);
+}
