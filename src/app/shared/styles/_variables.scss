@@ -1,21 +1,44 @@
 :root {
     --nn-bg: #050505;
     --nn-surface: #121212;
-    --nn-surface-rgb: 18, 18, 18;
-    --nn-primary: #00e5ff;
-    --nn-primary-rgb: 0, 229, 255;
     --nn-text: #ececec;
     --nn-border: #222222;
 
-    --nn-space-xs: 0.4rem;
-    --nn-space-sm: 0.8rem;
-    --nn-space-md: 1.6rem;
-    --nn-space-lg: 3.2rem;
-    --nn-space-xl: 6.4rem;
+    --nn-green-100: #d1fae5;
+    --nn-green-200: #a7f3d0;
+    --nn-green-300: #6ee7b7;
+    --nn-green-400: #34d399;
+    --nn-green-500: #10b981;
+    --nn-green-600: #059669;
+    --nn-green-700: #047857;
+
+    --nn-magenta-100: #fce7f3;
+    --nn-magenta-200: #fbcfe8;
+    --nn-magenta-300: #f9a8d4;
+    --nn-magenta-400: #f472b6;
+    --nn-magenta-500: #ec4899;
+    --nn-magenta-600: #db2777;
+    --nn-magenta-700: #be185d;
+
+    --nn-text-rgb: 236, 236, 236;
+    --nn-green-rgb: 16, 185, 129;
 }
 
+$green-100: var(--nn-green-100);
+$green-200: var(--nn-green-200);
+$green-300: var(--nn-green-300);
+$green-400: var(--nn-green-400);
+$green-500: var(--nn-green-500);
+$green-600: var(--nn-green-600);
+$green-700: var(--nn-green-700);
+
+$magenta-100: var(--nn-magenta-100);
+$magenta-200: var(--nn-magenta-200);
+$magenta-300: var(--nn-magenta-300);
+$magenta-400: var(--nn-magenta-400);
+$magenta-500: var(--nn-magenta-500);
+$magenta-600: var(--nn-magenta-600);
+$magenta-700: var(--nn-magenta-700);
+
 $nn-bg: var(--nn-bg);
-$nn-surface: var(--nn-surface);
-$nn-primary: var(--nn-primary);
 $nn-text: var(--nn-text);
-$nn-border: var(--nn-border);
