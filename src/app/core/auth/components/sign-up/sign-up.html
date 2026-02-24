@@ -1,1 +1,45 @@
-<p>sign-up works!</p>
+<section class="register">
+    <div class="register__card">
+        <div class="register__icon-box">
+            <mat-icon class="register__icon">movie_filter</mat-icon>
+        </div>
+
+        <header class="register__header">
+            <h1 class="register__title">Join the Cinema</h1>
+            <p class="register__subtitle">Registration required via TMDB</p>
+        </header>
+
+        <div class="register__content">
+            <p class="register__text">
+                To protect your privacy and security, Neonum does not store local credentials.
+            </p>
+            <p class="register__text">
+                Please complete your registration on the official TMDB registry to start tracking
+                your films.
+            </p>
+        </div>
+
+        <a
+            mat-flat-button
+            color="primary"
+            class="register__main-btn"
+            [href]="tmdbSignupUrl"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            Open Registry Portal
+            <mat-icon>open_in_new</mat-icon>
+        </a>
+
+        <div class="register__actions">
+            <button
+                mat-button
+                type="button"
+                (click)="onBackToLogin()"
+                class="register__action-btn"
+            >
+                Return to Login
+            </button>
+        </div>
+    </div>
+</section>

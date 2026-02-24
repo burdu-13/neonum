@@ -1,5 +1,9 @@
 <section class="login">
     <div class="login__card">
+        <div class="login__icon-box">
+            <mat-icon class="login__icon">account_circle</mat-icon>
+        </div>
+
         <header class="login__header">
             <h1 class="login__title">Sign In</h1>
             <p class="login__subtitle">Continue your cinematic journey</p>
@@ -43,7 +47,7 @@
                 class="login__main-btn"
                 [disabled]="loginForm.invalid"
             >
-                Authorize Session
+                Log In
             </button>
         </form>
 
@@ -60,8 +64,8 @@
             <button
                 mat-button
                 type="button"
-                (click)="registerClicked.emit()"
-                class="login__action-btn login__action-btn--outline"
+                (click)="onRegisterNavigate()"
+                class="login__action-btn"
             >
                 Create Account
             </button>

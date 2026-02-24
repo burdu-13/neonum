@@ -9,10 +9,10 @@ import { Router, RouterOutlet } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthContainer {
-    private readonly _router = inject(Router);
+    private readonly router = inject(Router);
 
     public navigateToRegister(): void {
-        this._router.navigate(['/auth/sign-up']);
+        this.router.navigate(['/auth/sign-up']);
     }
 
     public handleGuestLogin(): void {}

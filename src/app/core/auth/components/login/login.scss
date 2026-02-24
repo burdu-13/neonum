@@ -11,11 +11,46 @@
         @include glass(0.4, 2.5rem);
         @include flex(center, stretch, column, $gap: 3.2rem);
         width: 100%;
-        max-width: 44rem;
+        max-width: 46rem;
         padding: 4.8rem;
         border-radius: 1.2rem;
         border: 1px solid var(--nn-border);
         box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.5);
+    }
+
+    &__icon-box {
+        @include flex(center, center);
+        width: 6.4rem;
+        height: 6.4rem;
+        margin: 0 auto;
+        background: rgba(var(--nn-primary-rgb), 0.1);
+        border-radius: 50%;
+        color: var(--nn-primary);
+
+        .login__icon {
+            font-size: 3.2rem;
+            width: 3.2rem;
+            height: 3.2rem;
+        }
+    }
+
+    &__header {
+        text-align: center;
+    }
+
+    &__title {
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: var(--nn-text);
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.02em;
+    }
+
+    &__subtitle {
+        font-size: 1.4rem;
+        color: rgba(var(--nn-text-rgb), 0.4);
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
     }
 
     &__form {
@@ -25,6 +60,7 @@
     &__main-btn {
         height: 5.2rem;
         border-radius: 0.8rem;
+        font-size: 1.6rem;
         margin-top: 1.2rem;
         font-weight: 700;
         letter-spacing: 0.05rem;
@@ -38,7 +74,7 @@
 
     &__action-btn {
         flex: 1;
-        height: 4rem;
+        height: 4.4rem;
         border-radius: 0.8rem;
         font-size: 1.2rem;
         font-weight: 600;
