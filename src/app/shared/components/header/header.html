@@ -1,0 +1,33 @@
+<header class="header">
+  <div class="header__wrapper">
+    
+    <div class="header__brand">
+      <div class="header__brand__indicator"></div>
+      <span class="header__brand__text">NEONUM</span>
+    </div>
+
+    <nav class="header__menu">
+      <ul class="header__menu__list">
+        <li class="header__menu__item">
+          <a routerLink="/" routerLinkActive="header__menu__link--active" [routerLinkActiveOptions]="{exact: true}" class="header__menu__link">MARKET</a>
+        </li>
+        <li class="header__menu__item">
+          <a routerLink="/watchlist" routerLinkActive="header__menu__link--active" class="header__menu__link">WATCHLIST</a>
+        </li>
+        <li class="header__menu__item">
+          <a routerLink="/assets" routerLinkActive="header__menu__link--active" class="header__menu__link">ASSETS</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header__controls">
+      <button class="header__controls__button" aria-label="Search">
+        <mat-icon class="header__controls__icon">search</mat-icon>
+      </button>
+      <button class="header__controls__button" aria-label="Account">
+        <mat-icon class="header__controls__icon">person_outline</mat-icon>
+      </button>
+    </div>
+
+  </div>
+</header>
