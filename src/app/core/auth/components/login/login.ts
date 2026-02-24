@@ -9,6 +9,7 @@ import { Auth } from '../../services/auth';
 import { catchError, EMPTY, tap } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from '../../../../shared/services/alert/alert';
+import { UserStore } from '../../../../info/user-info/user.store';
 @Component({
     selector: 'app-login',
     imports: [
@@ -26,9 +27,7 @@ import { AlertService } from '../../../../shared/services/alert/alert';
 export class Login {
     private readonly fb = inject(FormBuilder);
     private readonly router = inject(Router);
-    private readonly authService = inject(Auth);
-    private readonly snackBar = inject(MatSnackBar);
-    private readonly alertService = inject(AlertService);
+    public readonly store = inject(UserStore);
 
     public readonly loginForm: FormGroup = this.fb.nonNullable.group({
         username: ['', [Validators.required]],
@@ -39,28 +38,10 @@ export class Login {
     public readonly guestClicked = output<void>();
 
     public onLogin(): void {
-        if (this.loginForm.invalid) return;
-
-        this.authService
-            .login(this.loginForm.getRawValue())
-            .pipe(
-                tap(() => {
-                    this.alertService.showAlert(
-                        'Access Granted. Welcome to the Mainframe.',
-                        'success',
-                    );
-                    this.loginSubmitted.emit();
-                    this.router.navigate(['/']);
-                }),
-                catchError((err) => {
-                    this.alertService.showAlert(
-                        'Authorization failed. Please check your TMDB credentials.',
-                        'error',
-                    );
-                    return EMPTY;
-                }),
-            )
-            .subscribe();
+        if (this.loginForm.valid) {
+            this.store.login(this.loginForm.getRawValue());
+            this.loginSubmitted.emit();
+        }
     }
 
     public onRegisterNavigate(): void {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../../environments/environment';
-import { Observable, switchMap, tap } from 'rxjs';
+import { map, Observable, switchMap, tap } from 'rxjs';
 import { AuthCredentials, SessionResponse, TokenResponse } from '../models/auth.model';
 
 @Injectable({ providedIn: 'root' })
@@ -23,13 +23,17 @@ export class Auth {
     }
 
     private validateToken(credentials: AuthCredentials, token: string): Observable<TokenResponse> {
-        return this.http.post<TokenResponse>(
-            `${this.proxyUrl}?path=authentication/token/validate_with_login`,
-            {
+        return this.http
+            .post<TokenResponse>(`${this.proxyUrl}?path=authentication/token/validate_with_login`, {
                 ...credentials,
                 request_token: token,
-            },
-        );
+            })
+            .pipe(
+                map((res) => {
+                    if (!res.success) throw new Error('Invalid Credentials');
+                    return res;
+                }),
+            );
     }
 
     private createSession(token: string): Observable<SessionResponse> {

@@ -1,0 +1,69 @@
+import { inject } from '@angular/core';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { Router } from '@angular/router';
+import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { AuthCredentials } from '../../core/auth/models/auth.model';
+import { Auth } from '../../core/auth/services/auth';
+import { AlertService } from '../../shared/services/alert/alert';
+
+export interface UserState {
+    sessionId: string | null;
+    isLoading: boolean;
+    isAuthenticated: boolean;
+}
+
+const initialState: UserState = {
+    sessionId: localStorage.getItem('neonum_session_id'),
+    isLoading: false,
+    isAuthenticated: !!localStorage.getItem('neonum_session_id'),
+};
+
+export const UserStore = signalStore(
+    { providedIn: 'root' },
+    withState(initialState),
+    withMethods(
+        (
+            store,
+            authService = inject(Auth),
+            alertService = inject(AlertService),
+            router = inject(Router),
+        ) => ({
+            login: rxMethod<AuthCredentials>(
+                pipe(
+                    tap(() => patchState(store, { isLoading: true })),
+                    switchMap((credentials) =>
+                        authService.login(credentials).pipe(
+                            tap((session) => {
+                                patchState(store, {
+                                    sessionId: session.session_id,
+                                    isAuthenticated: true,
+                                    isLoading: false,
+                                });
+                                alertService.showAlert(
+                                    'Access Granted. Welcome to Neonum.',
+                                    'success',
+                                );
+                                router.navigate(['/']);
+                            }),
+                            catchError(() => {
+                                patchState(store, { isLoading: false });
+                                alertService.showAlert(
+                                    'Authorization failed. Check credentials.',
+                                    'error',
+                                );
+                                return EMPTY;
+                            }),
+                        ),
+                    ),
+                ),
+            ),
+
+            logout(): void {
+                localStorage.removeItem('neonum_session_id');
+                patchState(store, { sessionId: null, isAuthenticated: false });
+                router.navigate(['/auth/login']);
+            },
+        }),
+    ),
+);

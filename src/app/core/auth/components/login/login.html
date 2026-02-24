@@ -47,7 +47,11 @@
                 class="login__main-btn"
                 [disabled]="loginForm.invalid"
             >
-                Log In
+                @if (store.isLoading()) {
+                    <span>Logging In...</span>
+                } @else {
+                    <span>Log In</span>
+                }
             </button>
         </form>
 
