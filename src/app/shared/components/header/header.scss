@@ -85,6 +85,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
 
+            &--active {
+                border-color: var(--nn-primary);
+                color: var(--nn-primary);
+                background-color: rgba(var(--nn-primary-rgb), 0.05);
+                box-shadow: 0 0 1rem rgba(var(--nn-primary-rgb), 0.2);
+            }
+
             &:hover {
                 background-color: var(--nn-surface);
                 border-color: var(--nn-primary);
