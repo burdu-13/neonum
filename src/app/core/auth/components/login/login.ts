@@ -5,6 +5,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { Auth } from '../../services/auth';
+import { catchError, EMPTY, tap } from 'rxjs';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 @Component({
     selector: 'app-login',
     imports: [
@@ -13,6 +16,7 @@ import { Router } from '@angular/router';
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        MatSnackBarModule,
     ],
     templateUrl: './login.html',
     styleUrl: './login.scss',
@@ -21,6 +25,8 @@ import { Router } from '@angular/router';
 export class Login {
     private readonly fb = inject(FormBuilder);
     private readonly router = inject(Router);
+    private readonly authService = inject(Auth);
+    private readonly snackBar = inject(MatSnackBar);
 
     public readonly loginForm: FormGroup = this.fb.nonNullable.group({
         username: ['', [Validators.required]],
@@ -31,9 +37,29 @@ export class Login {
     public readonly guestClicked = output<void>();
 
     public onLogin(): void {
-        if (this.loginForm.valid) {
-            this.loginSubmitted.emit();
-        }
+        if (this.loginForm.invalid) return;
+
+        this.authService
+            .login(this.loginForm.getRawValue())
+            .pipe(
+                tap(() => {
+                    this.loginSubmitted.emit();
+                    this.router.navigate(['/']);
+                }),
+
+                catchError((err) => {
+                    this.showErrorNotification();
+                    return EMPTY;
+                }),
+            )
+            .subscribe();
+    }
+
+    private showErrorNotification(): void {
+        this.snackBar.open('Authorization failed. Check your TMDB credentials.', 'Close', {
+            duration: 4000,
+            panelClass: ['error-snackbar'],
+        });
     }
 
     public onRegisterNavigate(): void {
