@@ -7,4 +7,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     styleUrl: './sign-up.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SignUp {}
+export class SignUp {
+    public readonly tmdbSignupUrl: string = 'https://www.themoviedb.org/signup';
+}

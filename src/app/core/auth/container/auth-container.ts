@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-auth-container',
@@ -8,4 +8,12 @@ import { RouterOutlet } from '@angular/router';
     styleUrl: './auth-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AuthContainer {}
+export class AuthContainer {
+    private readonly _router = inject(Router);
+
+    public navigateToRegister(): void {
+        this._router.navigate(['/auth/sign-up']);
+    }
+
+    public handleGuestLogin(): void {}
+}

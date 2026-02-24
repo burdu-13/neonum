@@ -1,8 +1,12 @@
 :root {
-    --nn-bg: #050505;
-    --nn-surface: #121212;
-    --nn-text: #ececec;
-    --nn-border: #222222;
+    --nn-bg: #0d0d0f;
+    --nn-surface: #1a1a1e;
+    --nn-surface-rgb: 26, 26, 30;
+    --nn-primary: #00e5ff;
+    --nn-primary-rgb: 0, 229, 255;
+    --nn-text: #f0f0f2;
+    --nn-text-rgb: 240, 240, 242;
+    --nn-border: rgba(255, 255, 255, 0.05);
 
     --nn-green-100: #d1fae5;
     --nn-green-200: #a7f3d0;

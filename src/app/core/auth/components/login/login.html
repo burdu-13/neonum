@@ -1,1 +1,70 @@
-<h1>HELLO</h1>
+<section class="login">
+    <div class="login__card">
+        <header class="login__header">
+            <h1 class="login__title">Sign In</h1>
+            <p class="login__subtitle">Continue your cinematic journey</p>
+        </header>
+
+        <form
+            [formGroup]="loginForm"
+            (ngSubmit)="onLogin()"
+            class="login__form"
+        >
+            <mat-form-field
+                appearance="outline"
+                class="login__field"
+            >
+                <mat-label>Username</mat-label>
+                <input
+                    matInput
+                    formControlName="username"
+                    placeholder="Enter your username"
+                />
+                <mat-icon matSuffix>person</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field
+                appearance="outline"
+                class="login__field"
+            >
+                <mat-label>Password</mat-label>
+                <input
+                    matInput
+                    formControlName="password"
+                    type="password"
+                    placeholder="Enter your password"
+                />
+                <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+
+            <button
+                mat-flat-button
+                color="primary"
+                class="login__main-btn"
+                [disabled]="loginForm.invalid"
+            >
+                Authorize Session
+            </button>
+        </form>
+
+        <div class="login__actions">
+            <button
+                mat-button
+                type="button"
+                (click)="guestClicked.emit()"
+                class="login__action-btn"
+            >
+                Guest Session
+            </button>
+
+            <button
+                mat-button
+                type="button"
+                (click)="registerClicked.emit()"
+                class="login__action-btn login__action-btn--outline"
+            >
+                Create Account
+            </button>
+        </div>
+    </div>
+</section>
