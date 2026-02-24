@@ -1,0 +1,16 @@
+@use './shared/styles/variables' as *;
+@use './shared/styles/mixins' as *;
+
+.app-shell {
+    @include flex($direction: column);
+    min-height: 100vh;
+    background-color: var(--nn-bg);
+}
+
+.app-main {
+    flex: 1;
+    width: 100%;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding: clamp(1.6rem, 5vw, 4.8rem);
+}
