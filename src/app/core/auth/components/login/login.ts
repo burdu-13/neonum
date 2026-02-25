@@ -9,7 +9,7 @@ import { Auth } from '../../services/auth';
 import { catchError, EMPTY, tap } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from '../../../../shared/services/alert/alert';
-import { UserStore } from '../../../../info/user-info/user.store';
+import { UserStore } from '../../../../store/user-info/user.store';
 @Component({
     selector: 'app-login',
     imports: [
