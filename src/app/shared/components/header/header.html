@@ -1,85 +1,168 @@
-<header class="header">
+<header
+    class="header"
+    [class.header--menu-open]="isMenuOpen()"
+>
     <div class="header__frame">
         <div
             class="header__brand"
             routerLink="/"
+            (click)="closeMenu()"
         >
+            <div class="header__brand-indicator"></div>
             <span class="header__brand-text">NEONUM</span>
         </div>
 
-        <nav class="header__nav">
-            <ul class="header__nav-list">
-                @if (store.isAuthenticated()) {
+        @if (bp.isLargeTablet() || bp.isDesktop()) {
+            <nav class="header__nav">
+                <ul class="header__nav-list">
+                    @if (store.isAuthenticated()) {
+                        <li class="header__nav-item">
+                            <a
+                                routerLink="/dashboard"
+                                routerLinkActive="active"
+                                class="header__nav-link"
+                            >
+                                DASHBOARD
+                            </a>
+                        </li>
+                    }
                     <li class="header__nav-item">
                         <a
-                            routerLink="/dashboard"
+                            routerLink="/movies"
                             routerLinkActive="active"
                             class="header__nav-link"
                         >
-                            DASHBOARD
+                            MOVIES
                         </a>
                     </li>
-                }
-                <li class="header__nav-item">
-                    <a
-                        routerLink="/movies"
-                        routerLinkActive="active"
-                        class="header__nav-link"
-                    >
-                        MOVIES
-                    </a>
-                </li>
-                <li class="header__nav-item">
-                    <a
-                        routerLink="/tv-shows"
-                        routerLinkActive="active"
-                        class="header__nav-link"
-                    >
-                        SERIES
-                    </a>
-                </li>
-                @if (store.isAuthenticated() && store.account()) {
                     <li class="header__nav-item">
                         <a
-                            routerLink="/watchlist"
+                            routerLink="/tv-shows"
                             routerLinkActive="active"
                             class="header__nav-link"
                         >
-                            WATCHLIST
+                            SERIES
                         </a>
                     </li>
-                }
-            </ul>
-        </nav>
+                    @if (store.isAuthenticated() && store.account()) {
+                        <li class="header__nav-item">
+                            <a
+                                routerLink="/watchlist"
+                                routerLinkActive="active"
+                                class="header__nav-link"
+                            >
+                                WATCHLIST
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
 
         <div class="header__meta">
             <button
                 class="header__search-trigger"
-                aria-label="Search Archive"
+                aria-label="Search"
             >
                 <mat-icon>search</mat-icon>
             </button>
 
-            <div class="header__auth-slot">
+            @if (bp.isDesktop() && store.isAuthenticated()) {
+                <div class="header__profile-pill">
+                    <span class="profile-name">{{ store.account()?.username ?? 'GUEST' }}</span>
+                    <button
+                        (click)="store.logout()"
+                        class="logout-action"
+                    >
+                        <mat-icon>power_settings_new</mat-icon>
+                    </button>
+                </div>
+            }
+
+            @if (!bp.isDesktop() && !bp.isLargeTablet()) {
+                <button
+                    class="header__menu-toggle"
+                    (click)="toggleMenu()"
+                >
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
+            }
+        </div>
+    </div>
+
+    <div class="header__overlay">
+        <button
+            class="header__overlay-close"
+            (click)="closeMenu()"
+            aria-label="Close menu"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <div class="header__overlay-content">
+            <nav class="header__nav--mobile">
+                <ul class="header__nav-list">
+                    @for (
+                        link of [
+                            {
+                                path: '/dashboard',
+                                label: 'DASHBOARD',
+                                show: store.isAuthenticated(),
+                            },
+                            { path: '/movies', label: 'MOVIES', show: true },
+                            { path: '/tv-shows', label: 'SERIES', show: true },
+                            {
+                                path: '/watchlist',
+                                label: 'WATCHLIST',
+                                show: store.isAuthenticated() && store.account(),
+                            },
+                        ];
+                        track link.label;
+                        let i = $index
+                    ) {
+                        @if (link.show) {
+                            <li
+                                class="header__nav-item"
+                                [style.animation-delay]="i * 0.08 + 's'"
+                            >
+                                <a
+                                    [routerLink]="link.path"
+                                    (click)="closeMenu()"
+                                    routerLinkActive="active"
+                                    class="header__nav-link"
+                                >
+                                    {{ link.label }}
+                                </a>
+                            </li>
+                        }
+                    }
+                </ul>
+            </nav>
+
+            <div class="header__overlay-footer">
                 @if (store.isAuthenticated()) {
-                    <div class="header__profile-card">
-                        <span class="profile-name">
-                            {{ store.account()?.username ?? 'GUEST' }}
-                        </span>
-                        <button
-                            (click)="store.logout()"
-                            class="logout-action"
-                            title="Terminate Session"
-                        >
-                            <mat-icon class="logout-action__icon">power_settings_new</mat-icon>
-                        </button>
+                    <div class="mobile-profile">
+                        <span class="label">SESSION STATUS: ACTIVE</span>
+                        <div class="user-row">
+                            <span class="name">{{ store.account()?.username ?? 'GUEST' }}</span>
+                            <button
+                                (click)="store.logout(); closeMenu()"
+                                class="logout-btn"
+                            >
+                                <mat-icon>logout</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 } @else {
                     <button
-                        class="login-trigger"
+                        class="login-btn-large"
                         routerLink="/auth/login"
+                        (click)="closeMenu()"
                     >
-                        LOGIN
+                        INITIALIZE_SESSION
                     </button>
                 }
             </div>
