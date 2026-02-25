@@ -1,7 +1,16 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, catchError, EMPTY, forkJoin } from 'rxjs';
+import {
+    pipe,
+    switchMap,
+    tap,
+    catchError,
+    EMPTY,
+    forkJoin,
+    filter,
+    distinctUntilChanged,
+} from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
 import { Movie, MovieDetails } from '../../shared/models/movie.model';
@@ -45,18 +54,17 @@ export const MovieStore = signalStore(
             detailService = inject(MovieDetailService),
             alertService = inject(AlertService),
         ) => ({
-            clearSelectedMovie(): void {
-                patchState(store, {
-                    selectedMovie: null,
-                    isDetailLoading: true,
-                    detailError: null,
-                });
-            },
             loadAllMovies: rxMethod<void>(
                 pipe(
-                    tap(() => patchState(store, { isLoading: true })),
-                    switchMap(() =>
-                        forkJoin({
+                    tap(() => {
+                        if (store.trending().length === 0) {
+                            patchState(store, { isLoading: true });
+                        }
+                    }),
+                    switchMap(() => {
+                        if (store.trending().length > 0) return EMPTY;
+
+                        return forkJoin({
                             trending: movieService.getTrendingMovies(),
                             popular: movieService.getPopularMovies(),
                             topRated: movieService.getTopRatedMovies(),
@@ -73,70 +81,84 @@ export const MovieStore = signalStore(
                                 patchState(store, { isLoading: false });
                                 return EMPTY;
                             }),
-                        ),
-                    ),
+                        );
+                    }),
                 ),
             ),
 
             loadMovieDetail: rxMethod<string>(
                 pipe(
-                    tap(() => patchState(store, { isDetailLoading: true, detailError: null })),
-                    switchMap((id) =>
-                        detailService.getMovieDetails(id).pipe(
+                    filter((id) => !!id),
+
+                    distinctUntilChanged(),
+                    tap((id) => {
+                        if (store.selectedMovie()?.id !== Number(id)) {
+                            patchState(store, {
+                                isDetailLoading: true,
+                                detailError: null,
+                                selectedMovie: null,
+                            });
+                        }
+                    }),
+                    switchMap((id) => {
+                        if (store.selectedMovie()?.id === Number(id)) {
+                            patchState(store, { isDetailLoading: false });
+                            return EMPTY;
+                        }
+
+                        return detailService.getMovieDetails(id).pipe(
                             tap((movie) => {
                                 patchState(store, {
                                     selectedMovie: movie as MovieDetails,
                                     isDetailLoading: false,
                                 });
-
-                                if (movie.account_states) {
-                                    const { watchlist, favorite } = movie.account_states;
-                                    const mId = movie.id;
-
-                                    if (watchlist && !store.watchlistIds().includes(mId)) {
-                                        patchState(store, {
-                                            watchlistIds: [...store.watchlistIds(), mId],
-                                        });
-                                    }
-
-                                    if (favorite && !store.favoriteIds().includes(mId)) {
-                                        patchState(store, {
-                                            favoriteIds: [...store.favoriteIds(), mId],
-                                        });
-                                    }
-                                }
                             }),
-                            catchError((err) => {
-                                patchState(store, {
-                                    isDetailLoading: false,
-                                    detailError: 'Cinematic asset could not be retrieved.',
-                                });
+                            catchError(() => {
+                                patchState(store, { isDetailLoading: false, detailError: 'Error' });
                                 return EMPTY;
                             }),
-                        ),
-                    ),
+                        );
+                    }),
                 ),
             ),
-
             toggleWatchlist: rxMethod<{ id: number; status: boolean }>(
                 pipe(
                     switchMap(({ id, status }) => {
-                        const current = store.watchlistIds();
-                        const updated = status
-                            ? [...current, id]
-                            : current.filter((mId) => mId !== id);
+                        const currentIds = store.watchlistIds();
+                        const currentMovies = store.watchlistMovies();
 
-                        patchState(store, { watchlistIds: updated });
+                        const updatedIds = status
+                            ? [...currentIds, id]
+                            : currentIds.filter((mId) => mId !== id);
+
+                        let updatedMovies = [...currentMovies];
+                        if (status) {
+                            const movieToAdd =
+                                [...store.trending(), ...store.popular(), ...store.topRated()].find(
+                                    (m) => m.id === id,
+                                ) || store.selectedMovie();
+                            if (movieToAdd) updatedMovies.push(movieToAdd as Movie);
+                        } else {
+                            updatedMovies = updatedMovies.filter((m) => m.id !== id);
+                        }
+
+                        patchState(store, {
+                            watchlistIds: updatedIds,
+                            watchlistMovies: updatedMovies,
+                        });
 
                         return movieService.updateWatchlist(id, status).pipe(
                             tap(() =>
                                 alertService.showAlert(
-                                    status ? 'Added to Watchlist' : 'Removed from Watchlist',
+                                    status ? 'Added to Watchlist' : 'Removed',
                                     'success',
                                 ),
                             ),
                             catchError(() => {
-                                patchState(store, { watchlistIds: current });
+                                patchState(store, {
+                                    watchlistIds: currentIds,
+                                    watchlistMovies: currentMovies,
+                                });
                                 alertService.showAlert('Failed to update watchlist.', 'error');
                                 return EMPTY;
                             }),
@@ -148,22 +170,41 @@ export const MovieStore = signalStore(
             toggleFavorite: rxMethod<{ id: number; status: boolean }>(
                 pipe(
                     switchMap(({ id, status }) => {
-                        const current = store.favoriteIds();
-                        const updated = status
-                            ? [...current, id]
-                            : current.filter((mId) => mId !== id);
+                        const currentIds = store.favoriteIds();
+                        const currentMovies = store.favoriteMovies();
 
-                        patchState(store, { favoriteIds: updated });
+                        const updatedIds = status
+                            ? [...currentIds, id]
+                            : currentIds.filter((mId) => mId !== id);
+
+                        let updatedMovies = [...currentMovies];
+                        if (status) {
+                            const movieToAdd =
+                                [...store.trending(), ...store.popular(), ...store.topRated()].find(
+                                    (m) => m.id === id,
+                                ) || store.selectedMovie();
+                            if (movieToAdd) updatedMovies.push(movieToAdd as Movie);
+                        } else {
+                            updatedMovies = updatedMovies.filter((m) => m.id !== id);
+                        }
+
+                        patchState(store, {
+                            favoriteIds: updatedIds,
+                            favoriteMovies: updatedMovies,
+                        });
 
                         return movieService.updateFavorite(id, status).pipe(
                             tap(() =>
                                 alertService.showAlert(
-                                    status ? 'Added to Favorites' : 'Removed from Favorites',
+                                    status ? 'Added to Favorites' : 'Removed',
                                     'success',
                                 ),
                             ),
                             catchError(() => {
-                                patchState(store, { favoriteIds: current });
+                                patchState(store, {
+                                    favoriteIds: currentIds,
+                                    favoriteMovies: currentMovies,
+                                });
                                 return EMPTY;
                             }),
                         );
@@ -173,8 +214,11 @@ export const MovieStore = signalStore(
 
             loadCollections: rxMethod<void>(
                 pipe(
-                    switchMap(() =>
-                        forkJoin({
+                    switchMap(() => {
+                        if (store.watchlistMovies().length > 0 || store.favoriteMovies().length > 0)
+                            return EMPTY;
+
+                        return forkJoin({
                             watchlist: movieService.getWatchlistMovies(),
                             favorites: movieService.getFavoriteMovies(),
                         }).pipe(
@@ -186,10 +230,14 @@ export const MovieStore = signalStore(
                                     favoriteIds: favorites.results.map((m) => m.id),
                                 });
                             }),
-                        ),
-                    ),
+                        );
+                    }),
                 ),
             ),
+
+            reset(): void {
+                patchState(store, initialState);
+            },
         }),
     ),
 );

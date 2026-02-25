@@ -30,11 +30,7 @@ export class MovieDetailerContainer {
     constructor() {
         effect(() => {
             const currentId = this.id();
-            if (currentId) {
-                this.movieStore.clearSelectedMovie();
-                window.scrollTo({ top: 0, behavior: 'instant' });
-                this.movieStore.loadMovieDetail(currentId);
-            }
+            this.movieStore.loadMovieDetail(currentId);
         });
     }
 
