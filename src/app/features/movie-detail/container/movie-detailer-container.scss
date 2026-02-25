@@ -1,0 +1,159 @@
+@use '../../../shared/styles/mixins' as *;
+@use '../../../shared/styles/variables' as *;
+
+.detail-gallery {
+    background: var(--nn-bg);
+    min-height: 100dvh;
+    color: var(--nn-text);
+    padding-bottom: 12rem;
+    animation: fadeIn 0.8s ease-out forwards;
+
+    &__skeleton {
+        width: 100%;
+    }
+    .skeleton-hero {
+        width: 100%;
+        margin-bottom: 6rem;
+    }
+
+    &__hero {
+        position: relative;
+        width: 100%;
+        min-height: 75vh;
+        background-size: cover;
+        background-position: top center;
+        @include flex(flex-end, center, column);
+
+        &-fade {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                var(--nn-bg) 0%,
+                rgba(var(--nn-surface-rgb), 0.6) 40%,
+                transparent 100%
+            );
+        }
+
+        &-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 144rem;
+            margin: 0 auto;
+            padding: 0 2.4rem 4rem;
+
+            @include mq('md') {
+                padding: 0 6.4rem 6rem;
+            }
+        }
+    }
+
+    &__hero-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 3.2rem;
+        align-items: flex-end;
+
+        @include mq('md') {
+            grid-template-columns: 28rem 1fr;
+            gap: 4.8rem;
+        }
+    }
+
+    &__poster-wrapper {
+        border-radius: 1.6rem;
+        overflow: hidden;
+        box-shadow: 0 2.4rem 4.8rem rgba(0, 0, 0, 0.6);
+        aspect-ratio: 2/3;
+        width: 20rem;
+        display: none;
+        margin: 0;
+
+        @include mq('md') {
+            display: block;
+            width: 100%;
+        }
+
+        .detail-gallery__poster {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    &__typography {
+        @include flex(flex-end, flex-start, column);
+    }
+
+    &__title {
+        font-size: clamp(4rem, 6vw, 7.2rem);
+        font-weight: 800;
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+        margin: 0 0 1.2rem 0;
+    }
+
+    &__tagline {
+        font-size: clamp(1.6rem, 2vw, 2.2rem);
+        font-weight: 400;
+        color: var(--nn-icon-muted);
+        font-style: italic;
+        margin: 0 0 3.2rem 0;
+    }
+
+    &__metadata {
+        @include flex(flex-start, center, $gap: 1.6rem);
+        margin-bottom: 2.4rem;
+        flex-wrap: wrap;
+    }
+
+    &__genres {
+        @include flex(flex-start, center, $gap: 1.2rem);
+        flex-wrap: wrap;
+    }
+
+    &__body {
+        max-width: 144rem;
+        margin: 0 auto;
+        padding: 6rem 2.4rem 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 6rem;
+
+        @include mq('lg') {
+            padding: 8rem 6.4rem 0;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 8rem;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            font-weight: 600;
+            margin-bottom: 2.4rem;
+            letter-spacing: 0.05rem;
+        }
+    }
+
+    &__overview p {
+        font-size: 1.6rem;
+        line-height: 1.8;
+        color: var(--nn-icon-muted);
+    }
+
+    &__error {
+        @include flex(center, center);
+        min-height: 50vh;
+        color: var(--nn-error);
+        font-size: 1.6rem;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

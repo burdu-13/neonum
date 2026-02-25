@@ -1,1 +1,142 @@
-<p>movie-detailer-container works!</p>
+@let movie = store.movie();
+
+<main class="detail-gallery">
+    @if (store.isLoading()) {
+        <div
+            class="detail-gallery__skeleton"
+            aria-busy="true"
+            aria-label="Loading cinematic asset"
+        >
+            <div class="skeleton-hero">
+                <app-skeleton
+                    width="100%"
+                    height="75vh"
+                    radius="0"
+                />
+            </div>
+
+            <div class="detail-gallery__body">
+                <div class="skeleton-overview">
+                    <app-skeleton
+                        width="40%"
+                        height="3.2rem"
+                        style="margin-bottom: 2.4rem; display: block"
+                    />
+                    <app-skeleton
+                        width="100%"
+                        height="1.6rem"
+                        style="margin-bottom: 0.8rem; display: block"
+                    />
+                    <app-skeleton
+                        width="95%"
+                        height="1.6rem"
+                        style="margin-bottom: 0.8rem; display: block"
+                    />
+                    <app-skeleton
+                        width="90%"
+                        height="1.6rem"
+                        style="display: block"
+                    />
+                </div>
+
+                <div class="skeleton-cast">
+                    <app-skeleton
+                        width="40%"
+                        height="3.2rem"
+                        style="margin-bottom: 2.4rem; display: block"
+                    />
+                    <div class="cast-grid">
+                        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                            <div class="cast-card">
+                                <app-skeleton
+                                    width="8rem"
+                                    height="8rem"
+                                    radius="50%"
+                                    style="margin-bottom: 1.2rem; display: block"
+                                />
+                                <app-skeleton
+                                    width="60%"
+                                    height="1.2rem"
+                                    style="margin-bottom: 0.4rem; display: block"
+                                />
+                                <app-skeleton
+                                    width="40%"
+                                    height="1rem"
+                                    style="display: block"
+                                />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    } @else if (movie) {
+        <header
+            class="detail-gallery__hero"
+            [style.backgroundImage]="
+                'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'
+            "
+            role="banner"
+        >
+            <div class="detail-gallery__hero-fade"></div>
+
+            <div class="detail-gallery__hero-content">
+                <div class="detail-gallery__hero-grid">
+                    <figure class="detail-gallery__poster-wrapper">
+                        <img
+                            [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
+                            [alt]="'Poster for ' + movie.title"
+                            class="detail-gallery__poster"
+                        />
+                    </figure>
+
+                    <div class="detail-gallery__typography">
+                        <h1 class="detail-gallery__title">{{ movie.title }}</h1>
+
+                        @if (movie.tagline) {
+                            <p class="detail-gallery__tagline">{{ movie.tagline }}</p>
+                        }
+
+                        <div class="detail-gallery__metadata">
+                            <app-meta-badge
+                                icon="star"
+                                [text]="movie.vote_average | number: '1.1-1'"
+                                [highlight]="true"
+                            />
+                            <app-meta-badge [text]="movie.release_date | date: 'yyyy'" />
+                            <app-meta-badge [text]="movie.runtime + ' MIN'" />
+                        </div>
+
+                        <div
+                            class="detail-gallery__genres"
+                            aria-label="Genres"
+                        >
+                            @for (genre of movie.genres; track genre.id) {
+                                <app-category-pill [label]="genre.name" />
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="detail-gallery__body">
+            <article
+                class="detail-gallery__overview"
+                aria-labelledby="synopsis-heading"
+            >
+                <h2 id="synopsis-heading">The Synopsis</h2>
+                <p>{{ movie.overview }}</p>
+            </article>
+
+            <app-cast-grid [cast]="topCast" />
+        </div>
+    } @else if (store.error()) {
+        <div
+            class="detail-gallery__error"
+            role="alert"
+        >
+            <p>{{ store.error() }}</p>
+        </div>
+    }
+</main>

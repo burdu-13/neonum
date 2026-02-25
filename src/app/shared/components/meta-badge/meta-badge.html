@@ -1,0 +1,9 @@
+<span
+    class="meta-badge"
+    [class.meta-badge--highlight]="highlight()"
+>
+    @if (icon()) {
+        <mat-icon class="meta-icon">{{ icon() }}</mat-icon>
+    }
+    {{ text() }}
+</span>
