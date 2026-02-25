@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { CastActor } from './models/cast.model';
+import { CastMember } from '../../../dashboard/models/movie.model';
 
 @Component({
     selector: 'app-cast-grid',
@@ -10,5 +10,5 @@ import { CastActor } from './models/cast.model';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CastGrid {
-    public readonly cast = input.required<CastActor[]>();
+    public readonly cast = input.required<CastMember[]>();
 }

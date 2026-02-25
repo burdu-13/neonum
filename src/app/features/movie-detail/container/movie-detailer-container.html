@@ -201,6 +201,10 @@
 
             <app-cast-grid [cast]="topCast" />
         </div>
+        @let similar = store.movie()?.similar?.results;
+        @if (similar) {
+            <app-similar-movies [movies]="similar" />
+        }
     } @else if (store.error()) {
         <div
             class="detail-gallery__error"

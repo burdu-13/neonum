@@ -3,9 +3,10 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
 import { MovieDetailService } from './services/movie-detail';
+import { MovieDetails } from '../dashboard/models/movie.model';
 
 export interface MovieDetailState {
-    movie: any | null;
+    movie: MovieDetails | null;
     isLoading: boolean;
     error: string | null;
 }
@@ -24,7 +25,9 @@ export const MovieDetailStore = signalStore(
                 tap(() => patchState(store, { isLoading: true, error: null })),
                 switchMap((id) =>
                     movieApi.getMovieDetails(id).pipe(
-                        tap((movie) => patchState(store, { movie, isLoading: false })),
+                        tap((movie) =>
+                            patchState(store, { movie: movie as MovieDetails, isLoading: false }),
+                        ),
                         catchError((err) => {
                             console.error('Asset retrieval failed:', err);
                             patchState(store, {

@@ -6,10 +6,11 @@ import { MetaBadge } from '../../../shared/components/meta-badge/meta-badge';
 import { CategoryPill } from '../../../shared/components/category-pill/category-pill';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { CastGrid } from '../components/cast-grid/cast-grid';
+import { SimilarMovies } from "../components/similar-movies/similar-movies";
 
 @Component({
     selector: 'app-movie-detailer-container',
-    imports: [MatIconModule, CommonModule, MetaBadge, CategoryPill, Skeleton, CastGrid],
+    imports: [MatIconModule, CommonModule, MetaBadge, CategoryPill, Skeleton, CastGrid, SimilarMovies],
     providers: [MovieDetailStore],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
@@ -23,6 +24,7 @@ export class MovieDetailerContainer {
         effect(() => {
             const currentId = this.id();
             if (currentId) {
+                window.scrollTo({ top: 0, behavior: 'instant' });
                 this.store.loadMovie(currentId);
             }
         });
