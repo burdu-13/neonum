@@ -202,6 +202,29 @@
             <app-cast-grid [cast]="topCast" />
         </div>
 
+        <div class="detail-gallery__actions">
+            @let isWatchlisted = movieStore.watchlistIds().includes(movie.id);
+            @let isFavorited = movieStore.favoriteIds().includes(movie.id);
+
+            <button
+                class="action-btn"
+                [class.action-btn--active]="isWatchlisted"
+                (click)="movieStore.toggleWatchlist({ id: movie.id, status: !isWatchlisted })"
+            >
+                <mat-icon>{{ isWatchlisted ? 'bookmark' : 'bookmark_border' }}</mat-icon>
+                <span>{{ isWatchlisted ? 'IN WATCHLIST' : 'WATCHLIST' }}</span>
+            </button>
+
+            <button
+                class="action-btn action-btn--fav"
+                [class.action-btn--active]="isFavorited"
+                (click)="movieStore.toggleFavorite({ id: movie.id, status: !isFavorited })"
+            >
+                <mat-icon>{{ isFavorited ? 'favorite' : 'favorite_border' }}</mat-icon>
+                <span>{{ isFavorited ? 'FAVORITE' : 'MARK FAVORITE' }}</span>
+            </button>
+        </div>
+
         @let similar = movieStore.selectedMovie()?.similar?.results;
         @if (similar) {
             <app-similar-movies [movies]="similar" />

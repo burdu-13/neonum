@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Movie } from '../../../dashboard/models/movie.model';
+import { Movie } from '../../../../shared/models/movie.model';
 import { MovieCard } from "../../../dashboard/components/movie-card/movie-card";
 
 @Component({

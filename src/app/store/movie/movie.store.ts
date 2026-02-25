@@ -4,7 +4,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, catchError, EMPTY, forkJoin } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
-import { Movie, MovieDetails } from '../../features/dashboard/models/movie.model';
+import { Movie, MovieDetails } from '../../shared/models/movie.model';
 import { AlertService } from '../../shared/services/alert/alert';
 
 interface MovieState {
@@ -41,6 +41,13 @@ export const MovieStore = signalStore(
             detailService = inject(MovieDetailService),
             alertService = inject(AlertService),
         ) => ({
+            clearSelectedMovie(): void {
+                patchState(store, {
+                    selectedMovie: null,
+                    isDetailLoading: true,
+                    detailError: null,
+                });
+            },
             loadAllMovies: rxMethod<void>(
                 pipe(
                     tap(() => patchState(store, { isLoading: true })),
@@ -73,13 +80,31 @@ export const MovieStore = signalStore(
                     switchMap((id) =>
                         detailService.getMovieDetails(id).pipe(
                             tap((movie) => {
+                                // 1. Update the detailed view
                                 patchState(store, {
                                     selectedMovie: movie as MovieDetails,
                                     isDetailLoading: false,
                                 });
+
+                                // 2. Sync global signals using the fetched account_states
+                                if (movie.account_states) {
+                                    const { watchlist, favorite } = movie.account_states;
+                                    const mId = movie.id;
+
+                                    if (watchlist && !store.watchlistIds().includes(mId)) {
+                                        patchState(store, {
+                                            watchlistIds: [...store.watchlistIds(), mId],
+                                        });
+                                    }
+
+                                    if (favorite && !store.favoriteIds().includes(mId)) {
+                                        patchState(store, {
+                                            favoriteIds: [...store.favoriteIds(), mId],
+                                        });
+                                    }
+                                }
                             }),
                             catchError((err) => {
-                                console.error('Asset retrieval failed:', err);
                                 patchState(store, {
                                     isDetailLoading: false,
                                     detailError: 'Cinematic asset could not be retrieved.',

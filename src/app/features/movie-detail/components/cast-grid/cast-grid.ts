@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { CastMember } from '../../../dashboard/models/movie.model';
+import { CastMember } from '../../../../shared/models/movie.model';
 
 @Component({
     selector: 'app-cast-grid',

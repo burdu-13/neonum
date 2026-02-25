@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Movie } from '../../models/movie.model';
+import { Movie } from '../../../../shared/models/movie.model';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 

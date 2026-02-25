@@ -35,4 +35,30 @@ export interface MovieDetails extends Movie {
     genres: { id: number; name: string }[];
     credits: Credits;
     similar: { results: Movie[] };
+    account_states?: AccountStates;
+}
+
+export interface AccountStates {
+    favorite: boolean;
+    watchlist: boolean;
+    id: number;
+    rated: boolean | { value: number };
+}
+
+export interface TmdbStatusResponse {
+    success: boolean;
+    status_code: number;
+    status_message: string;
+}
+
+export interface WatchlistRequest {
+    media_type: 'movie' | 'tv';
+    media_id: number;
+    watchlist: boolean;
+}
+
+export interface FavoriteRequest {
+    media_type: 'movie' | 'tv';
+    media_id: number;
+    favorite: boolean;
 }
