@@ -11,7 +11,6 @@ export interface Movie {
     adult: boolean;
 }
 
-// Add this to resolve the 'MovieResponse' error
 export interface MovieResponse {
     page: number;
     results: Movie[];
@@ -19,7 +18,6 @@ export interface MovieResponse {
     total_results: number;
 }
 
-// Ensure these are also exported for the detail view
 export interface CastMember {
     id: number;
     name: string;

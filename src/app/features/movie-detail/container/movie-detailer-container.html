@@ -1,7 +1,7 @@
-@let movie = store.movie();
+@let movie = movieStore.selectedMovie();
 
 <main class="detail-gallery">
-    @if (store.isLoading()) {
+    @if (movieStore.isLoading()) {
         <header
             class="detail-gallery__hero"
             role="banner"
@@ -201,16 +201,17 @@
 
             <app-cast-grid [cast]="topCast" />
         </div>
-        @let similar = store.movie()?.similar?.results;
+
+        @let similar = movieStore.selectedMovie()?.similar?.results;
         @if (similar) {
             <app-similar-movies [movies]="similar" />
         }
-    } @else if (store.error()) {
+    } @else if (movieStore.detailError()) {
         <div
             class="detail-gallery__error"
             role="alert"
         >
-            <p>{{ store.error() }}</p>
+            <p>{{ movieStore.detailError() }}</p>
         </div>
     }
 </main>
