@@ -31,34 +31,71 @@ export const UserStore = signalStore(
             alertService = inject(AlertService),
             router = inject(Router),
         ) => ({
+            restoreSession: rxMethod<void>(
+                pipe(
+                    switchMap(() =>
+                        authService.getAccountDetails().pipe(
+                            tap((account) => {
+                                patchState(store, { account, isAuthenticated: true });
+                            }),
+                            catchError((err) => {
+                                console.error('Background profile fetch failed:', err);
+
+                                if (err.status === 401) {
+                                    localStorage.removeItem('neonum_session_id');
+                                    patchState(store, {
+                                        sessionId: null,
+                                        account: null,
+                                        isAuthenticated: false,
+                                    });
+                                }
+                                return EMPTY;
+                            }),
+                        ),
+                    ),
+                ),
+            ),
+
             login: rxMethod<AuthCredentials>(
                 pipe(
                     tap(() => patchState(store, { isLoading: true })),
                     switchMap((credentials) =>
                         authService.login(credentials).pipe(
-                            switchMap((session) =>
-                                authService.getAccountDetails(session.session_id).pipe(
+                            tap((session) => {
+                                localStorage.removeItem('is_guest');
+                                patchState(store, { sessionId: session.session_id });
+                            }),
+                            switchMap(() =>
+                                authService.getAccountDetails().pipe(
                                     tap((account) => {
                                         patchState(store, {
-                                            sessionId: session.session_id,
-                                            account: account,
+                                            account,
                                             isAuthenticated: true,
                                             isLoading: false,
                                         });
                                         alertService.showAlert(
-                                            `Welcome, ${account.username}!`,
+                                            `Welcome back, ${account.username}`,
                                             'success',
                                         );
-                                        router.navigate(['/']);
+                                        router.navigate(['/dashboard']);
+                                    }),
+                                    catchError(() => {
+                                        patchState(store, { isLoading: false });
+                                        alertService.showAlert(
+                                            "Login successful, but we couldn't load your profile.",
+                                            'error',
+                                        );
+                                        return EMPTY;
                                     }),
                                 ),
                             ),
-                            catchError(() => {
+                            catchError((err) => {
                                 patchState(store, { isLoading: false });
-                                alertService.showAlert(
-                                    'Login failed. Check your TMDB credentials.',
-                                    'error',
-                                );
+                                const message =
+                                    err.status === 401
+                                        ? 'Invalid username or password.'
+                                        : 'The cinematic mainframe is currently unreachable.';
+                                alertService.showAlert(message, 'error');
                                 return EMPTY;
                             }),
                         ),
@@ -92,9 +129,20 @@ export const UserStore = signalStore(
 
             logout(): void {
                 localStorage.removeItem('neonum_session_id');
-                patchState(store, { sessionId: null, isAuthenticated: false });
+                localStorage.removeItem('is_guest');
+                patchState(store, { sessionId: null, account: null, isAuthenticated: false });
                 router.navigate(['/auth/login']);
             },
         }),
     ),
+
+    withHooks({
+        onInit(store) {
+            const isGuest = localStorage.getItem('is_guest') === 'true';
+
+            if (store.sessionId() && !isGuest) {
+                store.restoreSession();
+            }
+        },
+    }),
 );

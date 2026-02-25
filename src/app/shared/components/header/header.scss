@@ -1,116 +1,424 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-.header {
-    @include glass(0.92, 1.5rem);
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 6.4rem;
-    border-bottom: 0.1rem solid var(--nn-border);
-    z-index: 1000;
+$touch-target: 4.4rem;
 
-    &__wrapper {
+.header {
+    @include glass(0.85, 2.4rem);
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 7.2rem;
+    z-index: 1000;
+    border-bottom: 0.1rem solid var(--nn-border);
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+
+    &__frame {
         @include flex(space-between, center);
         height: 100%;
         max-width: 144rem;
         margin: 0 auto;
-        padding: 0 clamp(1.2rem, 3vw, var(--nn-space-lg));
+        padding: 0 2rem;
+        position: relative;
+        z-index: 1100;
+
+        @include mq('md') {
+            padding: 0 3.2rem;
+        }
     }
 
     &__brand {
-        @include flex(flex-start, center, $gap: var(--nn-space-sm));
-        cursor: pointer;
+        @include flex(flex-start, center, $gap: 1.2rem);
+        text-decoration: none;
+        min-height: $touch-target;
 
-        &__indicator {
-            width: 0.6rem;
-            height: 0.6rem;
-            background-color: var(--nn-primary);
-            border-radius: 50%;
-            box-shadow: 0 0 1.2rem var(--nn-primary);
+        &-indicator {
+            width: 0.8rem;
+            height: 0.8rem;
+            background: var(--nn-primary);
+            box-shadow: 0 0 1.5rem var(--nn-primary);
         }
 
-        &__text {
-            font-size: clamp(1.8rem, 4vw, 2.1rem);
-            font-weight: 700;
-            letter-spacing: -0.08rem;
+        &-text {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -0.05rem;
             color: var(--nn-text);
         }
     }
 
-    &__menu {
-        height: 100%;
+    &__nav {
+        flex: 1;
+        @include flex(center, center);
 
-        &__list {
-            @include flex(center, center, $gap: var(--nn-space-md));
+        &-list {
+            @include flex(center, center, $gap: 4rem);
             list-style: none;
-            height: 100%;
             margin: 0;
             padding: 0;
         }
 
-        &__link {
-            font-size: 1.2rem;
-            font-weight: 600;
-            letter-spacing: 0.05rem;
+        &-link {
+            display: inline-flex;
+            align-items: center;
+            min-height: $touch-target;
+            padding: 0 0.4rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.2rem;
+            color: var(--nn-nav-inactive);
             text-decoration: none;
-            color: rgba(255, 255, 255, 0.4);
-            padding: 0.6rem 1.2rem;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom: 0.2rem solid transparent;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
 
             &:hover {
                 color: var(--nn-text);
-                background-color: rgba(255, 255, 255, 0.03);
             }
 
-            &--active {
-                color: var(--nn-primary);
-                border-bottom-color: var(--nn-primary);
-            }
-        }
+            &.active {
+                color: var(--nn-text);
 
-        @media (max-width: 768px) {
-            display: none;
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0.6rem;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 0.4rem;
+                    height: 0.4rem;
+                    background: var(--nn-primary);
+                    border-radius: 50%;
+                    box-shadow: 0 0 1.2rem var(--nn-primary);
+                }
+            }
         }
     }
 
-    &__controls {
-        @include flex(flex-end, center, $gap: var(--nn-space-sm));
+    &__meta {
+        @include flex(flex-end, center, $gap: 1.6rem);
+    }
 
-        &__button {
+    &__search-trigger {
+        @include flex(center, center);
+        min-width: $touch-target;
+        min-height: $touch-target;
+        background: transparent;
+        border: none;
+        color: var(--nn-text);
+        cursor: pointer;
+        border-radius: 0.4rem;
+        transition:
+            background 0.2s ease,
+            opacity 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        &:active {
+            opacity: 0.7;
+        }
+
+        mat-icon {
+            font-size: 2.2rem;
+            width: 2.2rem;
+            height: 2.2rem;
+            line-height: 1;
+        }
+    }
+
+    &__profile-pill {
+        @include flex(flex-start, center, $gap: 1.2rem);
+        background: var(--nn-surface);
+        border: 0.1rem solid var(--nn-border);
+        border-radius: 10rem;
+        padding: 0 0.8rem 0 1.6rem;
+        height: 4rem;
+        max-width: 24rem;
+
+        .profile-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.1rem;
+            color: var(--nn-text);
+            @include text-truncate;
+        }
+
+        .logout-action {
             @include flex(center, center);
+            width: 3.2rem;
+            height: 3.2rem;
+            background: transparent;
+            border: none;
+            color: var(--nn-nav-inactive);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: var(--nn-text);
+                background: rgba(255, 255, 255, 0.08);
+            }
+
+            mat-icon {
+                font-size: 1.8rem;
+                width: 1.8rem;
+                height: 1.8rem;
+                line-height: 1;
+            }
+        }
+    }
+
+    &__menu-toggle {
+        @include flex(center, center);
+        min-width: $touch-target;
+        min-height: $touch-target;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.3s ease;
+        padding: 0;
+        z-index: 1200;
+
+        .hamburger {
+            width: 2.4rem;
+            height: 1.4rem;
+            position: relative;
+            pointer-events: none;
+
+            span {
+                display: block;
+                width: 100%;
+                height: 0.2rem;
+                background: var(--nn-text);
+                position: absolute;
+                transition: all 0.3s ease;
+
+                &:first-child {
+                    top: 0;
+                }
+
+                &:last-child {
+                    bottom: 0;
+                    width: 60%;
+                    right: 0;
+                }
+            }
+        }
+    }
+
+    &__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100dvh;
+        background: var(--nn-bg);
+        z-index: 1200;
+        transform: translateX(100%);
+        transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        @include flex(center, center);
+        pointer-events: none;
+
+        &-close {
+            position: absolute;
+            top: 1.2rem;
+            right: 2rem;
+            @include flex(center, center);
+            min-width: $touch-target;
+            min-height: $touch-target;
+            background: transparent;
+            border: none;
+            color: var(--nn-text);
+            cursor: pointer;
+            z-index: 1200;
+            border-radius: 0.4rem;
+            transition: background 0.2s ease;
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.06);
+            }
+
+            mat-icon {
+                font-size: 2.8rem;
+                width: 2.8rem;
+                height: 2.8rem;
+                line-height: 1;
+            }
+        }
+
+        &-content {
+            width: 100%;
+            padding: 0 4rem;
+
+            @media (min-width: 480px) {
+                padding: 0 4.8rem;
+            }
+        }
+
+        .header__nav--mobile {
+            .header__nav-list {
+                @include flex(flex-start, flex-start, column, $gap: 4rem);
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .header__nav-item {
+                opacity: 0;
+                transform: translateX(3rem);
+            }
+
+            .header__nav-link {
+                display: inline-block;
+                font-size: clamp(3.2rem, 10vw, 4.8rem);
+                font-weight: 900;
+                letter-spacing: -0.2rem;
+                color: var(--nn-text);
+                text-decoration: none;
+                padding: 0.4rem 0;
+                transition: opacity 0.2s ease;
+
+                &:active {
+                    opacity: 0.7;
+                }
+
+                &.active {
+                    color: var(--nn-primary);
+                }
+            }
+        }
+    }
+
+    &__overlay-footer {
+        margin-top: 6rem;
+        padding-top: 3.2rem;
+        border-top: 0.1rem solid var(--nn-border);
+        opacity: 0;
+        transform: translateY(2rem);
+
+        .mobile-profile {
+            .label {
+                font-size: 1rem;
+                letter-spacing: 0.2rem;
+                color: var(--nn-primary);
+                opacity: 0.5;
+                text-transform: uppercase;
+            }
+
+            .user-row {
+                @include flex(space-between, center);
+                margin-top: 1.6rem;
+            }
+
+            .name {
+                font-size: 2.8rem;
+                font-weight: 800;
+                color: var(--nn-text);
+                word-break: break-word;
+            }
+
+            .logout-btn {
+                @include flex(center, center);
+                background: var(--nn-surface);
+                border: 0.1rem solid var(--nn-border);
+                color: var(--nn-text);
+                width: 4.8rem;
+                height: 4.8rem;
+                border-radius: 0.4rem;
+                cursor: pointer;
+                transition: all 0.2s ease;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    border-color: var(--nn-text);
+                }
+
+                mat-icon {
+                    font-size: 2.4rem;
+                    width: 2.4rem;
+                    height: 2.4rem;
+                    line-height: 1;
+                }
+            }
+        }
+
+        .login-btn-large {
+            @include flex(center, center);
+            width: 100%;
+            min-height: 5.6rem;
             background: transparent;
             border: 0.1rem solid var(--nn-border);
             color: var(--nn-text);
-            width: 3.8rem;
-            height: 3.8rem;
-            border-radius: 0.4rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 0.2rem;
+            text-transform: uppercase;
             cursor: pointer;
-            transition: all 0.2s ease;
-
-            &--active {
-                border-color: var(--nn-primary);
-                color: var(--nn-primary);
-                background-color: rgba(var(--nn-primary-rgb), 0.05);
-                box-shadow: 0 0 1rem rgba(var(--nn-primary-rgb), 0.2);
-            }
+            border-radius: 0.4rem;
+            transition: all 0.25s ease;
 
             &:hover {
-                background-color: var(--nn-surface);
+                background: var(--nn-primary);
                 border-color: var(--nn-primary);
-                color: var(--nn-primary);
+                color: var(--nn-bg);
+            }
+
+            &:active {
+                opacity: 0.8;
             }
         }
+    }
 
-        &__icon {
-            font-size: 1.8rem;
-            width: 1.8rem;
-            height: 1.8rem;
+    &--menu-open {
+        .header__overlay {
+            transform: translateX(0);
+            pointer-events: auto;
         }
 
-        @media (max-width: 360px) {
-            gap: 0.8rem;
+        .header__menu-toggle {
+            opacity: 0;
+            pointer-events: none;
         }
+
+        .header__nav-item,
+        .header__overlay-footer {
+            animation: slideInFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards 0.3s;
+        }
+    }
+
+    &__login-btn {
+        @include flex(center, center);
+        min-height: 4rem;
+        padding: 0 2.4rem;
+        background: var(--nn-primary);
+        color: var(--nn-bg);
+        border: none;
+        border-radius: 0.4rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-0.1rem);
+        }
+
+        &:active {
+            transform: translateY(0);
+            opacity: 0.8;
+        }
+    }
+}
+
+@keyframes slideInFade {
+    to {
+        opacity: 1;
+        transform: translate(0);
     }
 }

@@ -29,23 +29,18 @@ export class Auth {
     }
 
     private validateToken(credentials: AuthCredentials, token: string): Observable<TokenResponse> {
-        return this.http
-            .post<TokenResponse>(`${this.proxyUrl}?path=authentication/token/validate_with_login`, {
-                ...credentials,
+        return this.http.post<TokenResponse>(
+            `${this.proxyUrl}?path=authentication/token/validate_with_login`,
+            {
+                username: credentials.username,
+                password: credentials.password,
                 request_token: token,
-            })
-            .pipe(
-                map((res) => {
-                    if (!res.success) throw new Error('Invalid Credentials');
-                    return res;
-                }),
-            );
+            },
+        );
     }
 
-    public getAccountDetails(sessionId: string): Observable<AccountDetails> {
-        return this.http.get<AccountDetails>(
-            `${this.proxyUrl}?path=account&session_id=${sessionId}`,
-        );
+    public getAccountDetails(): Observable<AccountDetails> {
+        return this.http.get<AccountDetails>(`${this.proxyUrl}?path=account`);
     }
 
     public loginAsGuest(): Observable<GuestSessionResponse> {

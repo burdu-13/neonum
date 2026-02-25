@@ -1,0 +1,64 @@
+<main class="dashboard">
+    <header class="dashboard__hero">
+        <div class="dashboard__hero-wrapper">
+            <h1 class="dashboard__title">Discover.</h1>
+            <p class="dashboard__subtitle">Curated masterpieces and global cinema premieres.</p>
+        </div>
+        <div class="dashboard__hero-fade"></div>
+    </header>
+
+    <div class="dashboard__content">
+        @for (
+            section of [
+                { label: 'Trending This Week', data: movieStore.trending() },
+                { label: 'Popular Choices', data: movieStore.popular() },
+                { label: 'Critically Acclaimed', data: movieStore.topRated() },
+            ];
+            track section.label
+        ) {
+            <section class="dashboard__section">
+                <div class="dashboard__section-header">
+                    <h2 class="dashboard__section-title">{{ section.label }}</h2>
+                </div>
+
+                <div class="dashboard__grid">
+                    @defer (when !movieStore.isLoading()) {
+                        @for (movie of section.data; track movie.id; let i = $index) {
+                            <app-movie-card
+                                [movie]="movie"
+                                class="dashboard__card-reveal"
+                                [style.animation-delay]="i * 0.04 + 's'"
+                            />
+                        } @empty {
+                            <div class="dashboard__empty-state">
+                                <p>No cinematic assets available in this category.</p>
+                            </div>
+                        }
+                    } @placeholder {
+                        @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track item) {
+                            <div class="skeleton-card">
+                                <app-skeleton
+                                    height="100%"
+                                    width="100%"
+                                    radius="1.2rem"
+                                    class="skeleton-poster"
+                                />
+                                <div class="skeleton-meta">
+                                    <app-skeleton
+                                        width="70%"
+                                        height="1.6rem"
+                                    />
+                                    <app-skeleton
+                                        width="30%"
+                                        height="1.2rem"
+                                        style="margin-top: 0.8rem; display: block"
+                                    />
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </section>
+        }
+    </div>
+</main>
