@@ -1,59 +1,88 @@
 <header class="header">
-    <div class="header__wrapper">
-        <div class="header__brand">
-            <div class="header__brand__indicator"></div>
-            <span class="header__brand__text">NEONUM</span>
+    <div class="header__frame">
+        <div
+            class="header__brand"
+            routerLink="/"
+        >
+            <span class="header__brand-text">NEONUM</span>
         </div>
 
-        <nav class="header__menu">
-            <ul class="header__menu__list">
-                <li class="header__menu__item">
+        <nav class="header__nav">
+            <ul class="header__nav-list">
+                @if (store.isAuthenticated()) {
+                    <li class="header__nav-item">
+                        <a
+                            routerLink="/dashboard"
+                            routerLinkActive="active"
+                            class="header__nav-link"
+                        >
+                            DASHBOARD
+                        </a>
+                    </li>
+                }
+                <li class="header__nav-item">
                     <a
-                        routerLink="/"
-                        routerLinkActive="header__menu__link--active"
-                        [routerLinkActiveOptions]="{ exact: true }"
-                        class="header__menu__link"
+                        routerLink="/movies"
+                        routerLinkActive="active"
+                        class="header__nav-link"
                     >
-                        MARKET
+                        MOVIES
                     </a>
                 </li>
-                <li class="header__menu__item">
+                <li class="header__nav-item">
                     <a
-                        routerLink="/watchlist"
-                        routerLinkActive="header__menu__link--active"
-                        class="header__menu__link"
+                        routerLink="/tv-shows"
+                        routerLinkActive="active"
+                        class="header__nav-link"
                     >
-                        WATCHLIST
+                        SERIES
                     </a>
                 </li>
-                <li class="header__menu__item">
-                    <a
-                        routerLink="/assets"
-                        routerLinkActive="header__menu__link--active"
-                        class="header__menu__link"
-                    >
-                        ASSETS
-                    </a>
-                </li>
+                @if (store.isAuthenticated() && store.account()) {
+                    <li class="header__nav-item">
+                        <a
+                            routerLink="/watchlist"
+                            routerLinkActive="active"
+                            class="header__nav-link"
+                        >
+                            WATCHLIST
+                        </a>
+                    </li>
+                }
             </ul>
         </nav>
 
-        <div class="header__controls">
+        <div class="header__meta">
             <button
-                class="header__controls__button"
-                aria-label="Search"
+                class="header__search-trigger"
+                aria-label="Search Archive"
             >
-                <mat-icon class="header__controls__icon">search</mat-icon>
+                <mat-icon>search</mat-icon>
             </button>
 
-            <button
-                class="header__controls__button"
-                routerLink="/auth/login"
-                routerLinkActive="header__controls__button--active"
-                aria-label="Account"
-            >
-                <mat-icon class="header__controls__icon">person_outline</mat-icon>
-            </button>
+            <div class="header__auth-slot">
+                @if (store.isAuthenticated()) {
+                    <div class="header__profile-card">
+                        <span class="profile-name">
+                            {{ store.account()?.username ?? 'GUEST' }}
+                        </span>
+                        <button
+                            (click)="store.logout()"
+                            class="logout-action"
+                            title="Terminate Session"
+                        >
+                            <mat-icon class="logout-action__icon">power_settings_new</mat-icon>
+                        </button>
+                    </div>
+                } @else {
+                    <button
+                        class="login-trigger"
+                        routerLink="/auth/login"
+                    >
+                        LOGIN
+                    </button>
+                }
+            </div>
         </div>
     </div>
 </header>

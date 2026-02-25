@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
+import { UserStore } from '../../../store/user-info/user.store';
 
 @Component({
     selector: 'app-header',
@@ -9,4 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
     styleUrl: './header.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Header {}
+export class Header {
+    public readonly store = inject(UserStore);
+}
