@@ -12,6 +12,18 @@ export class MovieService {
     private readonly proxyUrl = environment.proxyUrl;
 
     public getTrendingMovies(): Observable<MovieResponse> {
-        return this.http.get<MovieResponse>(`${this.proxyUrl}?path=trending/movie/week`);
+        return this.fetchFromProxy('trending/movie/week');
+    }
+
+    public getPopularMovies(): Observable<MovieResponse> {
+        return this.fetchFromProxy('movie/popular');
+    }
+
+    public getTopRatedMovies(): Observable<MovieResponse> {
+        return this.fetchFromProxy('movie/top_rated');
+    }
+
+    private fetchFromProxy(path: string): Observable<MovieResponse> {
+        return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
 }

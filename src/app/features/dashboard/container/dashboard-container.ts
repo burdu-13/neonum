@@ -1,11 +1,11 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { UserStore } from '../../../store/user-info/user.store';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
-import { MovieCard } from "../components/movie-card/movie-card";
-import { Skeleton } from "../../../shared/components/skeleton/skeleton";
+import { MovieCard } from '../components/movie-card/movie-card';
+import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 
 @Component({
     selector: 'app-dashboard-container',
@@ -13,11 +13,11 @@ import { Skeleton } from "../../../shared/components/skeleton/skeleton";
     templateUrl: './dashboard-container.html',
     styleUrl: './dashboard-container.scss',
 })
-export class DashboardContainer {
+export class DashboardContainer implements OnInit {
     public readonly store = inject(UserStore);
     public readonly movieStore = inject(MovieStore);
 
     public ngOnInit(): void {
-        this.movieStore.loadTrending();
+        this.movieStore.loadAllMovies();
     }
 }
