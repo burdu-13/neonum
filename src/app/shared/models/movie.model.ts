@@ -9,6 +9,7 @@ export interface Movie {
     genre_ids: number[];
     popularity: number;
     adult: boolean;
+    videos: MovieVideoResponse;
 }
 
 export interface MovieResponse {
@@ -36,6 +37,18 @@ export interface MovieDetails extends Movie {
     credits: Credits;
     similar: { results: Movie[] };
     account_states?: AccountStates;
+}
+
+export interface MovieVideo {
+    id: string;
+    key: string;
+    name: string;
+    site: string;
+    type: 'Trailer' | 'Teaser' | 'Clip' | 'Featurette' | 'Behind the Scenes';
+}
+
+export interface MovieVideoResponse {
+    results: MovieVideo[];
 }
 
 export interface AccountStates {

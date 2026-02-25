@@ -1,0 +1,25 @@
+<div
+    class="trailer-overlay"
+    (click)="close.emit()"
+>
+    <div
+        class="trailer-container"
+        (click)="$event.stopPropagation()"
+    >
+        <button
+            class="trailer-close"
+            (click)="close.emit()"
+        >
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <div class="trailer-aspect-ratio">
+            <iframe
+                [src]="'https://www.youtube.com/embed/' + trailerKey() | safeUrl"
+                frameborder="0"
+                allow="autoplay; encrypted-media"
+                allowfullscreen
+            ></iframe>
+        </div>
+    </div>
+</div>

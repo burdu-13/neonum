@@ -223,6 +223,24 @@
                 <mat-icon>{{ isFavorited ? 'favorite' : 'favorite_border' }}</mat-icon>
                 <span>{{ isFavorited ? 'FAVORITE' : 'MARK FAVORITE' }}</span>
             </button>
+
+            @if (trailerKey()) {
+                <button
+                    mat-flat-button
+                    color="primary"
+                    (click)="isTrailerOpen.set(true)"
+                >
+                    <mat-icon>play_arrow</mat-icon>
+                    Watch Trailer
+                </button>
+            }
+
+            @if (isTrailerOpen()) {
+                <app-movie-trailer
+                    [trailerKey]="trailerKey()!"
+                    (close)="isTrailerOpen.set(false)"
+                />
+            }
         </div>
 
         @let similar = movieStore.selectedMovie()?.similar?.results;
