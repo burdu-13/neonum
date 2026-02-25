@@ -14,11 +14,14 @@ export interface UserState {
     isAuthenticated: boolean;
 }
 
+const sessionId = localStorage.getItem('neonum_session_id');
+const isGuest = localStorage.getItem('is_guest') === 'true';
+
 const initialState: UserState = {
-    sessionId: localStorage.getItem('neonum_session_id'),
-    isLoading: false,
+    sessionId: sessionId,
+    isLoading: !!sessionId && !isGuest,
     account: null,
-    isAuthenticated: !!localStorage.getItem('neonum_session_id'),
+    isAuthenticated: !!sessionId,
 };
 
 export const UserStore = signalStore(
@@ -36,7 +39,11 @@ export const UserStore = signalStore(
                     switchMap(() =>
                         authService.getAccountDetails().pipe(
                             tap((account) => {
-                                patchState(store, { account, isAuthenticated: true });
+                                patchState(store, {
+                                    account,
+                                    isAuthenticated: true,
+                                    isLoading: false,
+                                });
                             }),
                             catchError((err) => {
                                 console.error('Background profile fetch failed:', err);
@@ -47,7 +54,10 @@ export const UserStore = signalStore(
                                         sessionId: null,
                                         account: null,
                                         isAuthenticated: false,
+                                        isLoading: false,
                                     });
+                                } else {
+                                    patchState(store, { isLoading: false });
                                 }
                                 return EMPTY;
                             }),

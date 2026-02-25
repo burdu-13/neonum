@@ -15,7 +15,14 @@
         @if (bp.isLargeTablet() || bp.isDesktop()) {
             <nav class="header__nav">
                 <ul class="header__nav-list">
-                    @if (store.isAuthenticated() && store.account()) {
+                    @if (store.isLoading()) {
+                        <li class="header__nav-item">
+                            <app-skeleton
+                                width="9rem"
+                                height="1.6rem"
+                            />
+                        </li>
+                    } @else if (store.isAuthenticated() && store.account()) {
                         <li class="header__nav-item">
                             <a
                                 routerLink="/dashboard"
@@ -26,6 +33,7 @@
                             </a>
                         </li>
                     }
+
                     <li class="header__nav-item">
                         <a
                             routerLink="/movies"
@@ -44,7 +52,15 @@
                             SERIES
                         </a>
                     </li>
-                    @if (store.isAuthenticated() && store.account()) {
+
+                    @if (store.isLoading()) {
+                        <li class="header__nav-item">
+                            <app-skeleton
+                                width="9rem"
+                                height="1.6rem"
+                            />
+                        </li>
+                    } @else if (store.isAuthenticated() && store.account()) {
                         <li class="header__nav-item">
                             <a
                                 routerLink="/watchlist"
@@ -68,7 +84,13 @@
             </button>
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {
-                @if (store.isAuthenticated() && store.account()) {
+                @if (store.isLoading()) {
+                    <app-skeleton
+                        width="14rem"
+                        height="4rem"
+                        radius="10rem"
+                    />
+                } @else if (store.isAuthenticated() && store.account()) {
                     <div class="header__profile-pill">
                         <span class="profile-name">{{ store.account()?.username }}</span>
                         <button
@@ -99,81 +121,6 @@
                     </div>
                 </button>
             }
-        </div>
-    </div>
-
-    <div class="header__overlay">
-        <button
-            class="header__overlay-close"
-            (click)="closeMenu()"
-            aria-label="Close menu"
-        >
-            <mat-icon>close</mat-icon>
-        </button>
-
-        <div class="header__overlay-content">
-            <nav class="header__nav--mobile">
-                <ul class="header__nav-list">
-                    @for (
-                        link of [
-                            {
-                                path: '/dashboard',
-                                label: 'DASHBOARD',
-                                show: store.isAuthenticated() && store.account(),
-                            },
-                            { path: '/movies', label: 'MOVIES', show: true },
-                            { path: '/tv-shows', label: 'SERIES', show: true },
-                            {
-                                path: '/watchlist',
-                                label: 'WATCHLIST',
-                                show: store.isAuthenticated() && store.account(),
-                            },
-                        ];
-                        track link.label;
-                        let i = $index
-                    ) {
-                        @if (link.show) {
-                            <li
-                                class="header__nav-item"
-                                [style.animation-delay]="i * 0.08 + 's'"
-                            >
-                                <a
-                                    [routerLink]="link.path"
-                                    (click)="closeMenu()"
-                                    routerLinkActive="active"
-                                    class="header__nav-link"
-                                >
-                                    {{ link.label }}
-                                </a>
-                            </li>
-                        }
-                    }
-                </ul>
-            </nav>
-
-            <div class="header__overlay-footer">
-                @if (store.isAuthenticated() && store.account()) {
-                    <div class="mobile-profile">
-                        <div class="user-row">
-                            <span class="name">{{ store.account()?.username }}</span>
-                            <button
-                                (click)="store.logout(); closeMenu()"
-                                class="logout-btn"
-                            >
-                                <mat-icon>logout</mat-icon>
-                            </button>
-                        </div>
-                    </div>
-                } @else {
-                    <button
-                        class="login-btn-large"
-                        routerLink="/auth/login"
-                        (click)="closeMenu()"
-                    >
-                        LOGIN
-                    </button>
-                }
-            </div>
         </div>
     </div>
 </header>

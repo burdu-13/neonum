@@ -6,14 +6,17 @@
     min-height: 100dvh;
     color: var(--nn-text);
     padding-bottom: 12rem;
-    animation: fadeIn 0.8s ease-out forwards;
 
-    &__skeleton {
-        width: 100%;
-    }
-    .skeleton-hero {
-        width: 100%;
-        margin-bottom: 6rem;
+    &__skeleton-cast-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+        gap: 2.4rem;
+
+        .skeleton-cast-card {
+            @include flex(flex-start, center, column);
+            text-align: center;
+            margin: 0;
+        }
     }
 
     &__hero {
@@ -146,14 +149,5 @@
         min-height: 50vh;
         color: var(--nn-error);
         font-size: 1.6rem;
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
     }
 }

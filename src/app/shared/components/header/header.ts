@@ -3,10 +3,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { UserStore } from '../../../store/user-info/user.store';
 import { BreakpointService } from '../../services/breakpoint-service/breakpoint-service';
+import { Skeleton } from "../skeleton/skeleton";
 
 @Component({
     selector: 'app-header',
-    imports: [RouterLink, RouterLinkActive, MatIconModule],
+    imports: [RouterLink, RouterLinkActive, MatIconModule, Skeleton],
     templateUrl: './header.html',
     styleUrl: './header.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
