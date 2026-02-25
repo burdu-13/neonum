@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { Router } from '@angular/router';
-import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
+import { catchError, delay, EMPTY, pipe, switchMap, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { AccountDetails, AuthCredentials } from '../../core/auth/models/auth.model';
 import { Auth } from '../../core/auth/services/auth';
@@ -36,29 +36,41 @@ export const UserStore = signalStore(
                     tap(() => patchState(store, { isLoading: true })),
                     switchMap((credentials) =>
                         authService.login(credentials).pipe(
-                            switchMap((session) =>
-                                authService.getAccountDetails(session.session_id).pipe(
+                            tap((session) => patchState(store, { sessionId: session.session_id })),
+                            switchMap(() =>
+                                authService.getAccountDetails().pipe(
                                     tap((account) => {
                                         patchState(store, {
-                                            sessionId: session.session_id,
                                             account: account,
                                             isAuthenticated: true,
                                             isLoading: false,
                                         });
                                         alertService.showAlert(
-                                            `Access Granted. Welcome, ${account.username}`,
+                                            `Welcome back, ${account.username}`,
                                             'success',
                                         );
                                         router.navigate(['/dashboard']);
                                     }),
+                                    catchError((err) => {
+                                        patchState(store, { isLoading: false });
+
+                                        alertService.showAlert(
+                                            "Login successful, but we couldn't load your profile. Please refresh.",
+                                            'error',
+                                        );
+                                        return EMPTY;
+                                    }),
                                 ),
                             ),
-                            catchError(() => {
+                            catchError((err) => {
                                 patchState(store, { isLoading: false });
-                                alertService.showAlert(
-                                    'Authorization failed. Check credentials.',
-                                    'error',
-                                );
+
+                                const message =
+                                    err.status === 401
+                                        ? 'Invalid username or password. Please verify your TMDB credentials.'
+                                        : 'The cinematic mainframe is currently unreachable. Check your connection.';
+
+                                alertService.showAlert(message, 'error');
                                 return EMPTY;
                             }),
                         ),
