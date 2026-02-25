@@ -1,0 +1,67 @@
+@use '../../styles/mixins' as *;
+
+.nn-btn {
+    @include flex(center, center, $gap: 0.8rem);
+    padding: 1.2rem 2.4rem;
+    border-radius: 0.8rem;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    border: 0.1rem solid var(--nn-border);
+    white-space: nowrap;
+
+    &__icon {
+        font-size: 1.8rem;
+        width: 1.8rem;
+        height: 1.8rem;
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    &--surface {
+        background: rgba(var(--nn-surface-rgb), 0.3);
+        color: var(--nn-text);
+        &:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: var(--nn-primary);
+        }
+        &.nn-btn--active {
+            background: var(--nn-primary);
+            color: var(--nn-bg);
+            border-color: var(--nn-primary);
+            box-shadow: 0 0.8rem 2.4rem rgba(var(--nn-primary-rgb), 0.3);
+        }
+    }
+
+    &--primary {
+        background: var(--nn-primary);
+        color: var(--nn-bg);
+        border-color: var(--nn-primary);
+        &:hover:not(:disabled) {
+            transform: translateY(-0.2rem);
+            box-shadow: 0 0.8rem 2.4rem rgba(var(--nn-primary-rgb), 0.4);
+        }
+    }
+
+    &--danger {
+        background: rgba(var(--nn-surface-rgb), 0.3);
+        color: var(--nn-text);
+        &.nn-btn--active {
+            background: #ef4444;
+            border-color: #ef4444;
+            color: #fff;
+            box-shadow: 0 0.8rem 2.4rem rgba(239, 68, 68, 0.3);
+        }
+    }
+
+    &--icon-only {
+        padding: 1.2rem;
+        border-radius: 50%;
+    }
+}

@@ -206,35 +206,29 @@
             @let isWatchlisted = movieStore.watchlistIds().includes(movie.id);
             @let isFavorited = movieStore.favoriteIds().includes(movie.id);
 
-            <button
-                class="action-btn"
-                [class.action-btn--active]="isWatchlisted"
-                (click)="movieStore.toggleWatchlist({ id: movie.id, status: !isWatchlisted })"
-            >
-                <mat-icon>{{ isWatchlisted ? 'bookmark' : 'bookmark_border' }}</mat-icon>
-                <span>{{ isWatchlisted ? 'IN WATCHLIST' : 'WATCHLIST' }}</span>
-            </button>
+            <app-nn-button
+                [label]="isWatchlisted ? 'In Watchlist' : 'Watchlist'"
+                [icon]="isWatchlisted ? 'bookmark' : 'bookmark_border'"
+                [isActive]="isWatchlisted"
+                (clicked)="movieStore.toggleWatchlist({ id: movie.id, status: !isWatchlisted })"
+            />
 
-            <button
-                class="action-btn action-btn--fav"
-                [class.action-btn--active]="isFavorited"
-                (click)="movieStore.toggleFavorite({ id: movie.id, status: !isFavorited })"
-            >
-                <mat-icon>{{ isFavorited ? 'favorite' : 'favorite_border' }}</mat-icon>
-                <span>{{ isFavorited ? 'FAVORITE' : 'MARK FAVORITE' }}</span>
-            </button>
+            <app-nn-button
+                [label]="isFavorited ? 'Favorite' : 'Mark Favorite'"
+                [icon]="isFavorited ? 'favorite' : 'favorite_border'"
+                [isActive]="isFavorited"
+                variant="danger"
+                (clicked)="movieStore.toggleFavorite({ id: movie.id, status: !isFavorited })"
+            />
 
             @if (trailerKey()) {
-                <button
-                    mat-flat-button
-                    color="primary"
-                    (click)="isTrailerOpen.set(true)"
-                >
-                    <mat-icon>play_arrow</mat-icon>
-                    Watch Trailer
-                </button>
+                <app-nn-button
+                    label="Watch Trailer"
+                    icon="play_arrow"
+                    variant="primary"
+                    (clicked)="isTrailerOpen.set(true)"
+                />
             }
-
             @if (isTrailerOpen()) {
                 <app-movie-trailer
                     [trailerKey]="trailerKey()!"

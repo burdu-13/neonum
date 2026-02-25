@@ -16,6 +16,7 @@ import { CastGrid } from '../components/cast-grid/cast-grid';
 import { SimilarMovies } from '../components/similar-movies/similar-movies';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieTrailer } from "../../../shared/components/movie-trailer/movie-trailer";
+import { NnButton } from "../../../shared/components/nn-button/nn-button";
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -27,7 +28,8 @@ import { MovieTrailer } from "../../../shared/components/movie-trailer/movie-tra
     Skeleton,
     CastGrid,
     SimilarMovies,
-    MovieTrailer
+    MovieTrailer,
+    NnButton
 ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
