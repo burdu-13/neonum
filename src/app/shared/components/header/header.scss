@@ -386,6 +386,34 @@ $touch-target: 4.4rem;
             animation: slideInFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards 0.3s;
         }
     }
+
+    &__login-btn {
+        @include flex(center, center);
+        min-height: 4rem;
+        padding: 0 2.4rem;
+        background: var(--nn-primary);
+        color: var(--nn-bg);
+        border: none;
+        border-radius: 0.4rem;
+        font-size: 1.1rem;
+        font-weight: 800;
+        letter-spacing: 0.1rem;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.9;
+            transform: translateY(-0.1rem);
+        }
+
+        &:active {
+            transform: translateY(0);
+            opacity: 0.8;
+        }
+    }
 }
 
 @keyframes slideInFade {

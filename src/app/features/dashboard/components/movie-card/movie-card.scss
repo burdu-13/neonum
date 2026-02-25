@@ -2,15 +2,19 @@
 @use '../../../../shared/styles/variables' as *;
 
 .movie-card {
-    width: 20rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
     cursor: pointer;
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
-        transform: translateY(-0.8rem);
+        .movie-card__poster {
+            transform: scale(1.05);
+        }
 
-        .movie-card__overlay {
+        .movie-card__badge {
             opacity: 1;
+            transform: translateY(0);
         }
     }
 
@@ -20,50 +24,62 @@
         overflow: hidden;
         aspect-ratio: 2/3;
         background: var(--nn-surface);
-        border: 0.1rem solid var(--nn-border);
+        box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.2);
+        transition: box-shadow 0.4s ease;
+        margin-bottom: 1.6rem;
     }
 
     &__poster {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        will-change: transform;
     }
 
-    &__overlay {
-        @include abs-center;
-        width: 100%;
-        height: 100%;
-        @include flex(center, center);
-        background: rgba(0, 0, 0, 0.4);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-    }
-
-    &__rating {
-        @include glass(0.8, 0.8rem);
-        padding: 0.4rem 0.8rem;
-        border-radius: 0.4rem;
-        color: var(--nn-primary);
+    &__badge {
+        position: absolute;
+        top: 1.2rem;
+        right: 1.2rem;
+        @include glass(0.7, 1.2rem);
+        @include flex(center, center, $gap: 0.4rem);
+        padding: 0.6rem 1rem;
+        border-radius: 2rem;
+        color: var(--nn-text);
         font-weight: 700;
         font-size: 1.2rem;
+
+        opacity: 0;
+        transform: translateY(-0.8rem);
+        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+
+        .star-icon {
+            font-size: 1.4rem;
+            width: 1.4rem;
+            height: 1.4rem;
+            color: #fbbf24;
+        }
     }
 
     &__info {
-        padding-top: 1.2rem;
+        padding: 0 0.4rem;
+        @include flex(flex-start, flex-start, column, $gap: 0.4rem);
     }
 
     &__title {
         @include text-truncate;
+        width: 100%;
         margin: 0;
-        font-size: 1.4rem;
+        font-size: 1.5rem;
         font-weight: 600;
+        letter-spacing: 0.02rem;
         color: var(--nn-text);
     }
 
     &__year {
-        margin-top: 0.4rem;
-        font-size: 1.2rem;
-        color: var(--nn-text);
-        opacity: 0.5;
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 400;
+        color: var(--nn-icon-muted);
     }
 }

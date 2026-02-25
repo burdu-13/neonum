@@ -15,7 +15,7 @@
         @if (bp.isLargeTablet() || bp.isDesktop()) {
             <nav class="header__nav">
                 <ul class="header__nav-list">
-                    @if (store.isAuthenticated()) {
+                    @if (store.isAuthenticated() && store.account()) {
                         <li class="header__nav-item">
                             <a
                                 routerLink="/dashboard"
@@ -67,16 +67,25 @@
                 <mat-icon>search</mat-icon>
             </button>
 
-            @if (bp.isDesktop() && store.isAuthenticated()) {
-                <div class="header__profile-pill">
-                    <span class="profile-name">{{ store.account()?.username ?? 'GUEST' }}</span>
+            @if (bp.isLargeTablet() || bp.isDesktop()) {
+                @if (store.isAuthenticated() && store.account()) {
+                    <div class="header__profile-pill">
+                        <span class="profile-name">{{ store.account()?.username }}</span>
+                        <button
+                            (click)="store.logout()"
+                            class="logout-action"
+                        >
+                            <mat-icon>power_settings_new</mat-icon>
+                        </button>
+                    </div>
+                } @else {
                     <button
-                        (click)="store.logout()"
-                        class="logout-action"
+                        class="header__login-btn"
+                        routerLink="/auth/login"
                     >
-                        <mat-icon>power_settings_new</mat-icon>
+                        LOGIN
                     </button>
-                </div>
+                }
             }
 
             @if (!bp.isDesktop() && !bp.isLargeTablet()) {
@@ -110,7 +119,7 @@
                             {
                                 path: '/dashboard',
                                 label: 'DASHBOARD',
-                                show: store.isAuthenticated(),
+                                show: store.isAuthenticated() && store.account(),
                             },
                             { path: '/movies', label: 'MOVIES', show: true },
                             { path: '/tv-shows', label: 'SERIES', show: true },
@@ -143,11 +152,10 @@
             </nav>
 
             <div class="header__overlay-footer">
-                @if (store.isAuthenticated()) {
+                @if (store.isAuthenticated() && store.account()) {
                     <div class="mobile-profile">
-                        <span class="label">SESSION STATUS: ACTIVE</span>
                         <div class="user-row">
-                            <span class="name">{{ store.account()?.username ?? 'GUEST' }}</span>
+                            <span class="name">{{ store.account()?.username }}</span>
                             <button
                                 (click)="store.logout(); closeMenu()"
                                 class="logout-btn"
@@ -162,7 +170,7 @@
                         routerLink="/auth/login"
                         (click)="closeMenu()"
                     >
-                        INITIALIZE_SESSION
+                        LOGIN
                     </button>
                 }
             </div>
