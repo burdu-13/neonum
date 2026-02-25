@@ -17,6 +17,8 @@ interface MovieState {
     isLoading: boolean;
     isDetailLoading: boolean;
     detailError: string | null;
+    watchlistMovies: Movie[];
+    favoriteMovies: Movie[];
 }
 
 const initialState: MovieState = {
@@ -29,6 +31,8 @@ const initialState: MovieState = {
     isLoading: false,
     isDetailLoading: false,
     detailError: null,
+    watchlistMovies: [],
+    favoriteMovies: [],
 };
 
 export const MovieStore = signalStore(
@@ -80,13 +84,11 @@ export const MovieStore = signalStore(
                     switchMap((id) =>
                         detailService.getMovieDetails(id).pipe(
                             tap((movie) => {
-                                // 1. Update the detailed view
                                 patchState(store, {
                                     selectedMovie: movie as MovieDetails,
                                     isDetailLoading: false,
                                 });
 
-                                // 2. Sync global signals using the fetched account_states
                                 if (movie.account_states) {
                                     const { watchlist, favorite } = movie.account_states;
                                     const mId = movie.id;
@@ -166,6 +168,26 @@ export const MovieStore = signalStore(
                             }),
                         );
                     }),
+                ),
+            ),
+
+            loadCollections: rxMethod<void>(
+                pipe(
+                    switchMap(() =>
+                        forkJoin({
+                            watchlist: movieService.getWatchlistMovies(),
+                            favorites: movieService.getFavoriteMovies(),
+                        }).pipe(
+                            tap(({ watchlist, favorites }) => {
+                                patchState(store, {
+                                    watchlistMovies: watchlist.results,
+                                    favoriteMovies: favorites.results,
+                                    watchlistIds: watchlist.results.map((m) => m.id),
+                                    favoriteIds: favorites.results.map((m) => m.id),
+                                });
+                            }),
+                        ),
+                    ),
                 ),
             ),
         }),

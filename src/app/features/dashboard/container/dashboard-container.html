@@ -8,6 +8,25 @@
     </header>
 
     <div class="dashboard__content">
+        @if (movieStore.watchlistMovies().length > 0 || movieStore.isLoading()) {
+            <app-movie-shelf
+                title="Your Watchlist"
+                [movies]="movieStore.watchlistMovies()"
+                [isLoading]="movieStore.isLoading()"
+                [isPersonal]="true"
+                emptyMessage="Your cinematic queue is currently empty."
+            />
+        }
+
+        @if (movieStore.favoriteMovies().length > 0 || movieStore.isLoading()) {
+            <app-movie-shelf
+                title="Personal Favorites"
+                [movies]="movieStore.favoriteMovies()"
+                [isLoading]="movieStore.isLoading()"
+                [isPersonal]="true"
+            />
+        }
+
         @for (
             section of [
                 { label: 'Trending This Week', data: movieStore.trending() },
@@ -31,14 +50,14 @@
                             />
                         } @empty {
                             <div class="dashboard__empty-state">
-                                <p>No cinematic assets available in this category.</p>
+                                <p>No cinematic assets available.</p>
                             </div>
                         }
                     } @placeholder {
-                        @for (item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]; track item) {
+                        @for (item of [1, 2, 3, 4, 5, 6]; track item) {
                             <div class="skeleton-card">
                                 <app-skeleton
-                                    height="100%"
+                                    height="35rem"
                                     width="100%"
                                     radius="1.2rem"
                                     class="skeleton-poster"

@@ -59,6 +59,20 @@ export class MovieService {
         );
     }
 
+    public getWatchlistMovies(): Observable<MovieResponse> {
+        const accountId = this.userStore.account()?.id;
+        return this.http.get<MovieResponse>(
+            `${this.proxyUrl}?path=account/${accountId}/watchlist/movies`,
+        );
+    }
+
+    public getFavoriteMovies(): Observable<MovieResponse> {
+        const accountId = this.userStore.account()?.id;
+        return this.http.get<MovieResponse>(
+            `${this.proxyUrl}?path=account/${accountId}/favorite/movies`,
+        );
+    }
+
     private fetchFromProxy(path: string): Observable<MovieResponse> {
         return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
