@@ -1,0 +1,30 @@
+<section
+    class="cast-section"
+    aria-labelledby="cast-heading"
+>
+    <h2 id="cast-heading">Leading Cast</h2>
+    <div class="cast-grid">
+        @for (actor of cast(); track actor.id) {
+            <figure class="cast-card">
+                @if (actor.profile_path) {
+                    <img
+                        [src]="'https://image.tmdb.org/t/p/w185' + actor.profile_path"
+                        [alt]="actor.name"
+                        loading="lazy"
+                    />
+                } @else {
+                    <div
+                        class="cast-avatar-fallback"
+                        aria-hidden="true"
+                    >
+                        <mat-icon>person</mat-icon>
+                    </div>
+                }
+                <figcaption class="cast-caption">
+                    <span class="actor-name">{{ actor.name }}</span>
+                    <span class="character-name">{{ actor.character }}</span>
+                </figcaption>
+            </figure>
+        }
+    </div>
+</section>

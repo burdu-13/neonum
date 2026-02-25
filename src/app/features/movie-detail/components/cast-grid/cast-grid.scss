@@ -1,0 +1,61 @@
+@use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
+
+.cast-section {
+    h2 {
+        font-size: 2.4rem;
+        font-weight: 600;
+        margin-bottom: 2.4rem;
+        letter-spacing: 0.05rem;
+        color: var(--nn-text);
+    }
+}
+
+.cast-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    gap: 2.4rem;
+
+    .cast-card {
+        @include flex(flex-start, center, column);
+        text-align: center;
+        margin: 0;
+
+        img,
+        .cast-avatar-fallback {
+            width: 8rem;
+            height: 8rem;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 1.2rem;
+            background: var(--nn-surface);
+            box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.2);
+        }
+
+        .cast-avatar-fallback {
+            @include flex(center, center);
+            mat-icon {
+                color: var(--nn-icon-muted);
+                font-size: 3.2rem;
+                width: 3.2rem;
+                height: 3.2rem;
+            }
+        }
+
+        .cast-caption {
+            @include flex(flex-start, center, column);
+
+            .actor-name {
+                font-size: 1.3rem;
+                font-weight: 600;
+                margin-bottom: 0.4rem;
+                color: var(--nn-text);
+            }
+
+            .character-name {
+                font-size: 1.1rem;
+                color: var(--nn-icon-muted);
+            }
+        }
+    }
+}

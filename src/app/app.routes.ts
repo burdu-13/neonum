@@ -10,6 +10,13 @@ export const routes: Routes = [
         loadChildren: () =>
             import('./features/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     },
+    {
+        path: 'movie/:id',
+        loadComponent: () =>
+            import('./features/movie-detail/container/movie-detailer-container').then(
+                (c) => c.MovieDetailerContainer,
+            ),
+    },
     { path: '', redirectTo: 'auth', pathMatch: 'full' },
     { path: '**', redirectTo: 'auth' },
 ];

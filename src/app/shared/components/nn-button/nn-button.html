@@ -1,0 +1,19 @@
+<button
+    [type]="type()"
+    [disabled]="disabled() || isLoading()"
+    class="nn-btn"
+    [class]="'nn-btn--' + variant()"
+    [class.nn-btn--active]="isActive()"
+    [class.nn-btn--icon-only]="!label()"
+    (click)="clicked.emit($event)"
+>
+    @if (icon() && !isLoading()) {
+        <mat-icon class="nn-btn__icon">{{ icon() }}</mat-icon>
+    }
+
+    @if (isLoading()) {
+        <span class="nn-btn__loader"></span>
+    } @else if (label()) {
+        <span class="nn-btn__label">{{ label() }}</span>
+    }
+</button>

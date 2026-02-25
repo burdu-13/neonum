@@ -1,10 +1,13 @@
-<article class="movie-card">
+<article
+    class="movie-card"
+    [routerLink]="['/movie', movie().id]"
+    tabindex="0"
+>
     <div class="movie-card__poster-wrapper">
         <img
             [src]="'https://image.tmdb.org/t/p/w500' + movie().poster_path"
             [alt]="movie().title"
             class="movie-card__poster"
-            loading="lazy"
         />
         <div class="movie-card__badge">
             <mat-icon class="star-icon">star</mat-icon>

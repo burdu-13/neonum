@@ -1,0 +1,9 @@
+@use '../../styles/variables' as *;
+.category-pill {
+    padding: 0.4rem 1.2rem;
+    border: 0.1rem solid var(--nn-border);
+    border-radius: 2rem;
+    font-size: 1.2rem;
+    color: var(--nn-icon-muted);
+    white-space: nowrap;
+}

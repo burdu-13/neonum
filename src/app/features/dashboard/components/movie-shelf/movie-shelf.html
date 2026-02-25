@@ -1,0 +1,35 @@
+<section
+    class="shelf"
+    [class.shelf--personal]="isPersonal()"
+>
+    <div class="shelf__header">
+        <h2 class="shelf__title">{{ title() }}</h2>
+    </div>
+
+    <div class="shelf__grid">
+        @if (movies().length > 0) {
+            @for (movie of movies(); track movie.id; let i = $index) {
+                <app-movie-card
+                    [movie]="movie"
+                    class="shelf__card-reveal"
+                    [style.animation-delay]="i * 0.04 + 's'"
+                />
+            }
+        } @else if (isLoading()) {
+            @for (item of [1, 2, 3, 4]; track item) {
+                <div class="skeleton-card">
+                    <app-skeleton
+                        height="35rem"
+                        width="100%"
+                        radius="1.2rem"
+                        class="skeleton-poster"
+                    />
+                </div>
+            }
+        } @else {
+            <div class="shelf__empty-state">
+                <p>{{ emptyMessage() }}</p>
+            </div>
+        }
+    </div>
+</section>
