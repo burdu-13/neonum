@@ -5,10 +5,16 @@
     width: 100%;
     @include flex($direction: column);
     cursor: pointer;
+    outline: none;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
         .movie-card__badge {
             @include flex;
+        }
+
+        .movie-card__poster {
+            transform: scale(1.05);
         }
     }
 
@@ -17,15 +23,18 @@
         border-radius: 1.2rem;
         overflow: hidden;
         aspect-ratio: 2/3;
-        background: var(--nn-surface);
+        background: var(--nn-surface-light);
         box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.2);
         margin-bottom: 1.6rem;
+        will-change: transform;
     }
 
     &__poster {
         width: 100%;
         height: 100%;
         object-fit: cover;
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        content-visibility: auto;
     }
 
     &__badge {
@@ -40,6 +49,7 @@
         font-weight: 700;
         font-size: 1.2rem;
         display: none;
+        z-index: 2;
 
         .star-icon {
             font-size: 1.4rem;
