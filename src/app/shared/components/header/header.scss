@@ -12,6 +12,19 @@ $touch: 4.4rem;
     border-bottom: 0.1rem solid var(--nn-border);
     transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 
+    &__search-trigger {
+        @include flex($align: center);
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
     &__frame {
         @include flex(space-between, center);
         height: 100%;

@@ -1,20 +1,27 @@
 @use '../../../shared/styles/mixins' as *;
 
 .search-page {
+    width: 100%;
     max-width: 144rem;
     margin: 0 auto;
     padding: 12rem 2.4rem 8rem;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    box-sizing: border-box;
 
     @include mq('md') {
-        padding-top: 8rem;
+        padding: 8rem 1.6rem 4rem;
     }
 
     .search-header {
+        width: 100%;
         margin-bottom: 6.4rem;
         @include flex(center, center);
+
+        @include mq('md') {
+            margin-bottom: 3.2rem;
+        }
     }
 
     .search-bar-wrapper {
@@ -23,7 +30,7 @@
         max-width: 72rem;
     }
 
-    .search-loader {
+    .search-progress-bar {
         position: absolute;
         bottom: 0;
         left: 2rem;
@@ -32,44 +39,52 @@
         background: rgba(var(--nn-primary-rgb), 0.1);
         overflow: hidden;
 
-        .loader-track {
-            width: 40%;
+        &__fill {
+            width: 30%;
             height: 100%;
             background: var(--nn-primary);
-            box-shadow: 0 0 1.2rem var(--nn-primary);
-            animation: scan 1.5s infinite ease-in-out;
+            box-shadow: 0 0 1rem var(--nn-primary);
         }
     }
 
     .search-layout {
         display: grid;
-        grid-template-columns: 24rem 1fr;
         gap: 6.4rem;
         flex: 1;
+    }
 
-        @include mq('md') {
-            grid-template-columns: 1fr;
-            gap: 4rem;
+    .search-sidebar {
+        .sidebar-content {
+            position: sticky;
+            top: 12rem;
+            @include flex(flex-start, stretch, column, $gap: 2.4rem);
+
+            @include mq('md') {
+                position: static;
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 0.8rem;
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
         }
     }
 
-    .sidebar-sticky {
-        position: sticky;
-        top: 12rem;
-        @include flex(flex-start, stretch, column, $gap: 2.4rem);
-    }
-
-    .sidebar-title {
+    .sidebar-label {
         font-size: 1.2rem;
         font-weight: 800;
         text-transform: uppercase;
-        letter-spacing: 0.2rem;
         color: var(--nn-text-muted);
         opacity: 0.6;
+
+        @include mq('md') {
+            display: none;
+        }
     }
 
-    .search-content {
-        min-height: 40rem;
+    .search-results {
+        min-width: 0;
     }
 
     .results-grid {
@@ -78,48 +93,28 @@
         gap: 3.2rem;
 
         @include mq('sm') {
-            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
             gap: 1.6rem;
         }
     }
 
     .skeleton-card {
         @include flex(flex-start, stretch, column, $gap: 1.6rem);
-
-        .skeleton-info {
+        &__meta {
             @include flex(flex-start, stretch, column, $gap: 0.8rem);
         }
     }
 
-    .status-view {
+    .centered-state {
         @include flex(center, center);
-        height: 100%;
-        min-height: 50vh;
-        animation: fadeIn 0.4s ease-out;
+        min-height: 40rem;
     }
 
-    .results-list {
+    .results-stack {
         @include flex(flex-start, stretch, column, $gap: 6.4rem);
-        animation: fadeIn 0.4s ease-out;
-    }
-}
 
-@keyframes scan {
-    0% {
-        transform: translateX(-150%);
-    }
-    100% {
-        transform: translateX(300%);
-    }
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(1rem);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+        @include mq('sm') {
+            gap: 4.8rem;
+        }
     }
 }

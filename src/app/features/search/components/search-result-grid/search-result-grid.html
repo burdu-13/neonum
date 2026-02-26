@@ -5,8 +5,8 @@
         <app-cast-grid [cast]="actors()" />
     } @else {
         <div class="results-grid">
-            @for (item of items(); track item.id) {
-                <app-movie-card [movie]="$any(item)" />
+            @for (item of displayItems(); track item.id) {
+                <app-movie-card [movie]="item" />
             }
         </div>
     }

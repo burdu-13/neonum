@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import {
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    inject,
+    OnDestroy,
+    OnInit,
+} from '@angular/core';
 import { SearchStore } from '../../../store/search/search.store';
 import { CommonModule } from '@angular/common';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
@@ -27,7 +34,7 @@ import { checkSearchEmptiness } from '../utils/search.utils';
     styleUrl: './search-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SearchContainer {
+export class SearchContainer implements OnInit, OnDestroy {
     private readonly searchStore = inject(SearchStore);
 
     public readonly searchControl = new FormControl('', { nonNullable: true });
@@ -78,6 +85,10 @@ export class SearchContainer {
 
     public ngOnInit(): void {
         this.searchControl.setValue(this.searchStore.query(), { emitEvent: false });
+    }
+
+    public ngOnDestroy(): void {
+        this.searchStore.clearStore();
     }
 
     public onTypeChange(type: 'multi' | 'movie' | 'tv' | 'person'): void {

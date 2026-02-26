@@ -117,4 +117,6 @@ export interface TVShow {
     original_language: string;
     original_name: string;
     media_type: 'tv';
+    release_date?: string;
+    title?: string;
 }

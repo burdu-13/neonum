@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Movie } from '../../../../shared/models/movie.model';
+import { Movie, TVShow } from '../../../../shared/models/movie.model';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
@@ -12,5 +12,5 @@ import { RouterLink } from '@angular/router';
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieCard {
-    public readonly movie = input.required<Movie>();
+    public readonly movie = input.required<Movie | TVShow>();
 }

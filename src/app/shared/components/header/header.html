@@ -75,10 +75,15 @@
         }
 
         <div class="header__meta">
-            <app-nn-button
-                icon="search"
-                variant="surface"
-            />
+            <a
+                routerLink="/search"
+                class="header__search-trigger"
+            >
+                <app-nn-button
+                    icon="search"
+                    variant="surface"
+                />
+            </a>
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {
                 @if (store.isLoading()) {

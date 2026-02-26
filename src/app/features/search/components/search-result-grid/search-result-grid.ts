@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { MovieCard } from '../../../dashboard/components/movie-card/movie-card';
 import { CastGrid } from '../../../movie-detail/components/cast-grid/cast-grid';
 import { CastMember, Movie, TVShow } from '../../../../shared/models/movie.model';
@@ -15,4 +15,6 @@ export class SearchResultGrid {
     public readonly type = input.required<'movie' | 'tv' | 'person'>();
     public readonly items = input<Movie[] | TVShow[]>([]);
     public readonly actors = input<CastMember[]>([]);
+
+    protected readonly displayItems = computed<(Movie | TVShow)[]>(() => this.items());
 }

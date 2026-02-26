@@ -10,6 +10,7 @@ import {
     forkJoin,
     filter,
     distinctUntilChanged,
+    exhaustMap,
 } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
@@ -280,9 +281,9 @@ export const MovieStore = signalStore(
 
             loadCollections: rxMethod<void>(
                 pipe(
-                    switchMap(() => {
-                        if (store.collectionsLoaded() || store.isDetailLoading()) return EMPTY;
+                    filter(() => !store.collectionsLoaded() && !store.isDetailLoading()),
 
+                    exhaustMap(() => {
                         patchState(store, { isDetailLoading: true });
 
                         return forkJoin({

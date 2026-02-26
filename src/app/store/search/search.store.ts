@@ -92,5 +92,7 @@ export const SearchStore = signalStore(
                 }),
             ),
         ),
+
+        clearStore: () => patchState(store, initialState),
     })),
 );
