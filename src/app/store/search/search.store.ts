@@ -14,6 +14,7 @@ import {
 import { Movie, TVShow } from '../../shared/models/movie.model';
 import { ActorDetails } from '../../shared/models/actor.model';
 import { SearchApiService } from '../../features/search/services/search-api-service';
+import { SearchResultItem } from '../../shared/models/search.model';
 
 interface SearchState {
     query: string;
@@ -38,6 +39,22 @@ const initialState: SearchState = {
 export const SearchStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
+    withComputed((store) => ({
+        filteredResults: computed(() => {
+            const type = store.searchType();
+            const movies = store.movieResults();
+            const tv = store.tvResults();
+            const actors = store.actorResults();
+
+            if (type === 'movie') return movies;
+            if (type === 'tv') return tv;
+            if (type === 'person') return actors;
+
+            return [...movies, ...tv, ...actors].sort(
+                (a, b) => (b.popularity || 0) - (a.popularity || 0),
+            );
+        }),
+    })),
     withMethods((store, searchService = inject(SearchApiService)) => ({
         updateQuery: (query: string) => patchState(store, { query }),
 
@@ -49,19 +66,26 @@ export const SearchStore = signalStore(
                 debounceTime(400),
                 distinctUntilChanged(),
                 filter((q) => q.length > 2),
-                tap(() => patchState(store, { isLoading: true })),
+                tap(() => patchState(store, { isLoading: true, error: null })),
                 switchMap((query) => {
                     return searchService.multiSearch(query).pipe(
-                        tap((results) => {
+                        tap((results: SearchResultItem[]) => {
                             patchState(store, {
-                                movieResults: results.filter((r) => r.media_type === 'movie'),
-                                tvResults: results.filter((r) => r.media_type === 'tv'),
-                                actorResults: results.filter((r) => r.media_type === 'person'),
+                                movieResults: results.filter(
+                                    (r) => r.media_type === 'movie',
+                                ) as Movie[],
+                                tvResults: results.filter((r) => r.media_type === 'tv') as TVShow[],
+                                actorResults: results.filter(
+                                    (r) => r.media_type === 'person',
+                                ) as ActorDetails[],
                                 isLoading: false,
                             });
                         }),
                         catchError(() => {
-                            patchState(store, { isLoading: false, error: 'Search failed.' });
+                            patchState(store, {
+                                isLoading: false,
+                                error: 'Asset retrieval failed.',
+                            });
                             return EMPTY;
                         }),
                     );

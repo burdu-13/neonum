@@ -29,11 +29,12 @@ export class SearchContainer {
 
     public readonly isEmpty = computed(() => {
         const s = this.searchStore;
+        const query = s.query();
         return (
             !s.isLoading() &&
-            s.query().length > 2 &&
+            query.length > 2 &&
             s.movieResults().length === 0 &&
-            s.actorResults().length === 0 &&
+            this.actorResults().length === 0 &&
             s.tvResults().length === 0
         );
     });
