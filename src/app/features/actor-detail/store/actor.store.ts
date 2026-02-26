@@ -27,13 +27,39 @@ export const ActorStore = signalStore(
             const id = store.activeActorId();
             return id ? store.detailsCache()[id] || null : null;
         }),
+    })),
+    withComputed((store) => ({
         knownFor: computed<ActorCredit[]>(() => {
-            const actor = store.detailsCache()[store.activeActorId() ?? 0];
+            const id = store.activeActorId();
+            const actor = id ? store.detailsCache()[id] : null;
+
             if (!actor) return [];
 
-            return [...actor.combined_credits.cast]
+            const creditsKey = Object.keys(actor).find((k) => k.startsWith('combined_credits'));
+            const credits = creditsKey ? (actor as any)[creditsKey] : null;
+
+            if (!credits?.cast) return [];
+
+            return [...credits.cast]
                 .sort((a, b) => (b.vote_count || 0) - (a.vote_count || 0))
-                .slice(0, 8);
+                .slice(0, 15)
+                .map(
+                    (credit) =>
+                        ({
+                            ...credit,
+                            title: credit.title || credit.name || 'Untitled Asset',
+                            release_date: credit.release_date || credit.first_air_date || '',
+                            overview: credit.overview || 'No description available.',
+                            poster_path: credit.poster_path || '',
+                            backdrop_path: credit.backdrop_path || '',
+                            genre_ids: credit.genre_ids || [],
+                            popularity: credit.popularity || 0,
+                            adult: credit.adult || false,
+                            vote_average: credit.vote_average || 0,
+                            vote_count: credit.vote_count || 0,
+                            videos: credit.videos || { results: [] },
+                        }) as ActorCredit,
+                );
         }),
     })),
     withMethods((store, actorService = inject(ActorApiService)) => ({
@@ -60,7 +86,7 @@ export const ActorStore = signalStore(
                             patchState(store, {
                                 detailsCache: {
                                     ...store.detailsCache(),
-                                    [actor.id]: actor,
+                                    [Number(actor.id)]: actor,
                                 },
                                 isLoading: false,
                             });
