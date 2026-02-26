@@ -1,11 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { SearchStore } from '../../../store/search/search.store';
 import { CommonModule } from '@angular/common';
-import { MatIcon } from '@angular/material/icon';
-import { MovieCard } from '../../dashboard/components/movie-card/movie-card';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { NnEmptyState } from '../../../shared/components/nn-empty-state/nn-empty-state';
-import { CastGrid } from '../../movie-detail/components/cast-grid/cast-grid';
 import { CastMember } from '../../../shared/models/movie.model';
 import { SearchResultGrid } from '../components/search-result-grid/search-result-grid';
 import { SearchFilters } from '../components/search-filters/search-filters';
@@ -59,7 +56,8 @@ export class SearchContainer {
                 actors: this.actorResults(),
             },
             this.isLoading(),
-            this.searchControl.value.length,
+            this.searchControl.value,
+            this.searchStore.query(),
         ),
     );
 

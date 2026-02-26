@@ -4,8 +4,6 @@
     max-width: 144rem;
     margin: 0 auto;
     padding: 12rem 2.4rem 8rem;
-
-    // Fix: Ensure the page fills the viewport to push the footer down
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -15,28 +13,63 @@
     }
 
     .search-header {
-        margin-bottom: 8rem;
-        @include flex(center, center, column, $gap: 4.8rem);
-
-        @include mq('sm') {
-            margin-bottom: 4rem;
-            gap: 2.4rem;
-        }
+        margin-bottom: 6.4rem;
+        @include flex(center, center);
     }
 
     .search-bar-wrapper {
+        position: relative;
         width: 100%;
-        max-width: 80rem;
-        transition: transform 0.3s ease;
+        max-width: 72rem;
+    }
 
-        &:focus-within {
-            transform: translateY(-0.2rem);
+    .search-loader {
+        position: absolute;
+        bottom: 0;
+        left: 2rem;
+        right: 2rem;
+        height: 2px;
+        background: rgba(var(--nn-primary-rgb), 0.1);
+        overflow: hidden;
+
+        .loader-track {
+            width: 40%;
+            height: 100%;
+            background: var(--nn-primary);
+            box-shadow: 0 0 1.2rem var(--nn-primary);
+            animation: scan 1.5s infinite ease-in-out;
         }
     }
 
-    .search-results {
-        flex: 1; // Allows the results area to grow and fill remaining space
-        animation: fadeIn 0.5s ease-out;
+    .search-layout {
+        display: grid;
+        grid-template-columns: 24rem 1fr;
+        gap: 6.4rem;
+        flex: 1;
+
+        @include mq('md') {
+            grid-template-columns: 1fr;
+            gap: 4rem;
+        }
+    }
+
+    .sidebar-sticky {
+        position: sticky;
+        top: 12rem;
+        @include flex(flex-start, stretch, column, $gap: 2.4rem);
+    }
+
+    .sidebar-title {
+        font-size: 1.2rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        color: var(--nn-text-muted);
+        opacity: 0.6;
+    }
+
+    .search-content {
+        min-height: 40rem;
     }
 
     .results-grid {
@@ -45,9 +78,38 @@
         gap: 3.2rem;
 
         @include mq('sm') {
-            grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
             gap: 1.6rem;
         }
+    }
+
+    .skeleton-card {
+        @include flex(flex-start, stretch, column, $gap: 1.6rem);
+
+        .skeleton-info {
+            @include flex(flex-start, stretch, column, $gap: 0.8rem);
+        }
+    }
+
+    .status-view {
+        @include flex(center, center);
+        height: 100%;
+        min-height: 50vh;
+        animation: fadeIn 0.4s ease-out;
+    }
+
+    .results-list {
+        @include flex(flex-start, stretch, column, $gap: 6.4rem);
+        animation: fadeIn 0.4s ease-out;
+    }
+}
+
+@keyframes scan {
+    0% {
+        transform: translateX(-150%);
+    }
+    100% {
+        transform: translateX(300%);
     }
 }
 

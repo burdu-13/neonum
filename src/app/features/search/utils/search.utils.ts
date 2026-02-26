@@ -1,12 +1,16 @@
 import { CastMember, Movie, TVShow } from '../../../shared/models/movie.model';
+import { MediaType } from '../../../shared/models/search.model';
 
 export const checkSearchEmptiness = (
-    type: 'multi' | 'movie' | 'tv' | 'person',
+    type: MediaType,
     results: { movies: Movie[]; tv: TVShow[]; actors: CastMember[] },
     isLoading: boolean,
-    queryLength: number,
+    currentInput: string,
+    storeQuery: string,
 ): boolean => {
-    if (isLoading || queryLength <= 2) return false;
+    if (isLoading || !currentInput || currentInput !== storeQuery) {
+        return false;
+    }
 
     const hasMovies = results.movies.length > 0;
     const hasTV = results.tv.length > 0;

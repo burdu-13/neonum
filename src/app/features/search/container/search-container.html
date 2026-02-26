@@ -4,60 +4,96 @@
             <app-nn-input
                 [formControl]="searchControl"
                 [iconPath]="searchIconPath"
-                placeholder="Search movies, actors or TV shows..."
+                placeholder="Search for movies, actors or TV shows..."
             />
+            @if (isLoading()) {
+                <div class="search-loader">
+                    <div class="loader-track"></div>
+                </div>
+            }
         </div>
-
-        <app-search-filters
-            [activeType]="searchType()"
-            (filterChanged)="onTypeChange($event)"
-        />
     </header>
 
-    <div class="search-results">
-        @if (isLoading()) {
-            <div class="results-grid">
-                @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
-                    <app-skeleton
-                        height="35rem"
-                        radius="1.6rem"
-                    />
-                }
+    <div class="search-layout">
+        <aside class="search-sidebar">
+            <div class="sidebar-sticky">
+                <h3 class="sidebar-title">Filter By</h3>
+                <app-search-filters
+                    [activeType]="searchType()"
+                    (filterChanged)="onTypeChange($event)"
+                />
             </div>
-        } @else {
-            @let type = searchType();
+        </aside>
 
-            @if ((type === 'multi' || type === 'movie') && movieResults().length) {
-                <app-search-result-grid
-                    title="Movies"
-                    type="movie"
-                    [items]="movieResults()"
-                />
-            }
+        <div class="search-content">
+            @if (isLoading()) {
+                <div class="results-grid">
+                    @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
+                        <div class="skeleton-card">
+                            <app-skeleton
+                                height="32rem"
+                                radius="1.6rem"
+                            />
+                            <div class="skeleton-info">
+                                <app-skeleton
+                                    height="2rem"
+                                    width="85%"
+                                    radius="0.4rem"
+                                />
+                                <app-skeleton
+                                    height="1.6rem"
+                                    width="45%"
+                                    radius="0.4rem"
+                                />
+                            </div>
+                        </div>
+                    }
+                </div>
+            } @else if (!searchControl.value) {
+                <div class="status-view">
+                    <app-nn-empty-state
+                        title="Search"
+                        description="Enter a title or name to search in the database."
+                        icon="search"
+                    />
+                </div>
+            } @else if (isEmpty()) {
+                <div class="status-view">
+                    <app-nn-empty-state
+                        title="No Matches Found"
+                        description="The query '{{ searchControl.value }}' yielded zero results."
+                        icon="search_off"
+                    />
+                </div>
+            } @else {
+                <div class="results-list">
+                    @let type = searchType();
 
-            @if ((type === 'multi' || type === 'tv') && tvResults().length) {
-                <app-search-result-grid
-                    title="TV Shows"
-                    type="tv"
-                    [items]="tvResults()"
-                />
-            }
+                    @if ((type === 'multi' || type === 'movie') && movieResults().length) {
+                        <app-search-result-grid
+                            title="Movies"
+                            type="movie"
+                            [items]="movieResults()"
+                        />
+                    }
 
-            @if ((type === 'multi' || type === 'person') && actorResults().length) {
-                <app-search-result-grid
-                    title="Actors"
-                    type="person"
-                    [actors]="actorResults()"
-                />
-            }
+                    @if ((type === 'multi' || type === 'tv') && tvResults().length) {
+                        <app-search-result-grid
+                            title="TV Shows"
+                            type="tv"
+                            [items]="tvResults()"
+                        />
+                    }
 
-            @if (isEmpty()) {
-                <app-nn-empty-state
-                    title="No Results Found"
-                    description="We couldn't find any matches for your current search criteria."
-                    icon="search_off"
-                />
+                    @if ((type === 'multi' || type === 'person') && actorResults().length) {
+                        <app-search-result-grid
+                            title="Actors"
+                            type="person"
+                            [actors]="actorResults()"
+                        />
+                    }
+                </div>
             }
-        }
+        </div>
     </div>
 </main>
