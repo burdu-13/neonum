@@ -101,3 +101,22 @@ export interface ReviewResponse {
     results: Review[];
     total_results: number;
 }
+
+export interface TVShow {
+    id: number;
+    name: string;
+    overview: string;
+    poster_path: string;
+    backdrop_path: string;
+    first_air_date: string;
+    vote_average: number;
+    vote_count: number;
+    genre_ids: number[];
+    popularity: number;
+    origin_country: string[];
+    original_language: string;
+    original_name: string;
+    media_type: 'tv';
+    release_date?: string;
+    title?: string;
+}
