@@ -51,6 +51,13 @@
                     {{ expandedReviewIds().has(review.id) ? 'Show less' : 'Read full assessment' }}
                 </button>
             </article>
+        }@empty {
+            <app-nn-empty-state 
+                title="No Assessments Yet" 
+                description="This cinematic asset has not yet been analyzed by the collective."
+                icon="rate_review"
+                class="empty__state"
+            />
         }
     </div>
 

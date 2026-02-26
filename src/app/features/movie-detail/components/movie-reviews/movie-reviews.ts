@@ -4,10 +4,11 @@ import { MetaBadge } from '../../../../shared/components/meta-badge/meta-badge';
 import { Review } from '../../../../shared/models/movie.model';
 import { TmdbImagePipe } from '../../../../shared/pipes/tmdb-image-pipe';
 import { NnButton } from '../../../../shared/components/nn-button/nn-button';
+import { NnEmptyState } from "../../../../shared/components/nn-empty-state/nn-empty-state";
 
 @Component({
     selector: 'app-movie-reviews',
-    imports: [CommonModule, MetaBadge, TmdbImagePipe, NnButton],
+    imports: [CommonModule, MetaBadge, TmdbImagePipe, NnButton, NnEmptyState],
     templateUrl: './movie-reviews.html',
     styleUrl: './movie-reviews.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
