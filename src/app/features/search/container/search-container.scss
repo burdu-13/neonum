@@ -3,104 +3,61 @@
 .search-page {
     max-width: 144rem;
     margin: 0 auto;
-    padding: 14rem 2.4rem 6rem;
+    padding: 12rem 2.4rem 8rem;
+
+    // Fix: Ensure the page fills the viewport to push the footer down
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+
+    @include mq('md') {
+        padding-top: 8rem;
+    }
 
     .search-header {
-        margin-bottom: 6rem;
-        @include flex(center, center, column, $gap: 3.2rem);
+        margin-bottom: 8rem;
+        @include flex(center, center, column, $gap: 4.8rem);
+
+        @include mq('sm') {
+            margin-bottom: 4rem;
+            gap: 2.4rem;
+        }
     }
 
-    .search-input-wrapper {
+    .search-bar-wrapper {
         width: 100%;
-        max-width: 72rem;
-        background: rgba(var(--nn-surface-rgb), 0.4);
-        border: 1px solid var(--nn-border);
-        border-radius: 2rem;
-        padding: 1.4rem 2.4rem;
-        backdrop-filter: blur(2rem);
-        @include flex(center, center, $gap: 1.6rem);
+        max-width: 80rem;
+        transition: transform 0.3s ease;
 
         &:focus-within {
-            border-color: var(--nn-primary);
-            box-shadow: 0 0 3rem rgba(var(--nn-primary-rgb), 0.15);
-        }
-
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--nn-text);
-            font-size: 1.8rem;
-            outline: none;
-            &::placeholder {
-                color: var(--nn-icon-muted);
-            }
-        }
-
-        mat-icon {
-            color: var(--nn-primary);
+            transform: translateY(-0.2rem);
         }
     }
 
-    .search-filters {
-        @include flex(center, center, $gap: 1.2rem);
-    }
-
-    .filter-chip {
-        padding: 0.8rem 2rem;
-        border-radius: 5rem;
-        background: transparent;
-        border: 1px solid var(--nn-border);
-        color: var(--nn-text);
-        font-weight: 700;
-        cursor: pointer;
-        transition: all 0.2s ease;
-
-        &.active {
-            background: var(--nn-primary);
-            color: var(--nn-bg);
-            border-color: var(--nn-primary);
-        }
-    }
-
-    .section-title {
-        font-size: 1.8rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        color: var(--nn-text);
-        margin: 4rem 0 2.4rem;
+    .search-results {
+        flex: 1; // Allows the results area to grow and fill remaining space
+        animation: fadeIn 0.5s ease-out;
     }
 
     .results-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
         gap: 3.2rem;
-    }
 
-    .results-section {
-        margin-bottom: 6.4rem;
-
-        &:last-of-type {
-            margin-bottom: 0;
+        @include mq('sm') {
+            grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+            gap: 1.6rem;
         }
     }
+}
 
-    .section-title {
-        font-size: 1.4rem;
-        font-weight: 900;
-        text-transform: uppercase;
-        letter-spacing: 0.3rem;
-        color: var(--nn-primary);
-        margin-bottom: 3.2rem;
-        @include flex(center, flex-start, $gap: 1.6rem);
-
-        &::before {
-            content: '';
-            width: 0.4rem;
-            height: 1.6rem;
-            background: var(--nn-primary);
-            border-radius: 1rem;
-            box-shadow: 0 0 1rem var(--nn-primary);
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -4,7 +4,7 @@
             <app-nn-input
                 [formControl]="searchControl"
                 [iconPath]="searchIconPath"
-                placeholder="Search movies, series or entities..."
+                placeholder="Search movies, actors or TV shows..."
             />
         </div>
 
@@ -17,10 +17,10 @@
     <div class="search-results">
         @if (isLoading()) {
             <div class="results-grid">
-                @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
                     <app-skeleton
                         height="35rem"
-                        radius="1.2rem"
+                        radius="1.6rem"
                     />
                 }
             </div>
@@ -29,7 +29,7 @@
 
             @if ((type === 'multi' || type === 'movie') && movieResults().length) {
                 <app-search-result-grid
-                    title="CINEMA-REELS"
+                    title="Movies"
                     type="movie"
                     [items]="movieResults()"
                 />
@@ -37,7 +37,7 @@
 
             @if ((type === 'multi' || type === 'tv') && tvResults().length) {
                 <app-search-result-grid
-                    title="BROADCAST-SIGNALS"
+                    title="TV Shows"
                     type="tv"
                     [items]="tvResults()"
                 />
@@ -45,7 +45,7 @@
 
             @if ((type === 'multi' || type === 'person') && actorResults().length) {
                 <app-search-result-grid
-                    title="ENTITY-PROFILES"
+                    title="Actors"
                     type="person"
                     [actors]="actorResults()"
                 />
@@ -53,9 +53,9 @@
 
             @if (isEmpty()) {
                 <app-nn-empty-state
-                    title="ZERO MATCHES DETECTED"
-                    description="The query yielded no valid data within the mainframe parameters."
-                    icon="gpp_maybe"
+                    title="No Results Found"
+                    description="We couldn't find any matches for your current search criteria."
+                    icon="search_off"
                 />
             }
         }

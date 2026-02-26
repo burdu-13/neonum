@@ -1,4 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { MediaType } from '../../../../shared/models/search.model';
+import { SEARCH_FILTER_LABELS, SEARCH_FILTER_OPTIONS } from '../../config/search-filter.config';
 
 @Component({
     selector: 'app-search-filters',
@@ -8,24 +10,11 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFilters {
-    public readonly activeType = input.required<'multi' | 'movie' | 'tv' | 'person'>();
-    public readonly filterChanged = output<'multi' | 'movie' | 'tv' | 'person'>();
-
-    protected readonly filterOptions: ('multi' | 'movie' | 'tv' | 'person')[] = [
-        'multi',
-        'movie',
-        'tv',
-        'person',
-    ];
-
-    protected readonly labels: Record<string, string> = {
-        multi: 'ALL-STREAMS',
-        movie: 'CINEMA-REELS',
-        tv: 'BROADCAST-SIGNALS',
-        person: 'ENTITY-PROFILES',
-    };
-
-    public onFilterSelect(type: 'multi' | 'movie' | 'tv' | 'person'): void {
+    public readonly activeType = input.required<MediaType>();
+    public readonly filterChanged = output<MediaType>();
+    protected readonly filterOptions = SEARCH_FILTER_OPTIONS;
+    protected readonly labels = SEARCH_FILTER_LABELS;
+    public onFilterSelect(type: MediaType): void {
         this.filterChanged.emit(type);
     }
 }

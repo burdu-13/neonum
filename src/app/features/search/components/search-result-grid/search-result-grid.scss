@@ -9,21 +9,13 @@
 }
 
 .section-title {
-    font-size: 1.2rem;
-    font-weight: 900;
+    font-size: 1.4rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.4rem;
-    color: var(--nn-primary);
+    letter-spacing: 0.2rem;
+    color: var(--nn-text);
     margin-bottom: 3.2rem;
-    @include flex(center, flex-start, $gap: 1.6rem);
-
-    &::before {
-        content: '';
-        width: 3.2rem;
-        height: 0.1rem;
-        background: var(--nn-primary);
-        box-shadow: 0 0 1rem var(--nn-primary);
-    }
+    @include flex(center, flex-start);
 }
 
 .results-grid {
