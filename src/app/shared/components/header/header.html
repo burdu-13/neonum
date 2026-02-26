@@ -3,14 +3,13 @@
     [class.header--menu-open]="isMenuOpen()"
 >
     <div class="header__frame">
-        <div
+        <a
             class="header__brand"
-            routerLink="/"
+            routerLink="/dashboard"
             (click)="closeMenu()"
         >
-            <div class="header__brand-indicator"></div>
             <span class="header__brand-text">NEONUM</span>
-        </div>
+        </a>
 
         @if (bp.isLargeTablet() || bp.isDesktop()) {
             <nav class="header__nav">
@@ -76,12 +75,10 @@
         }
 
         <div class="header__meta">
-            <button
-                class="header__search-trigger"
-                aria-label="Search"
-            >
-                <mat-icon>search</mat-icon>
-            </button>
+            <app-nn-button
+                icon="search"
+                variant="surface"
+            />
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {
                 @if (store.isLoading()) {
@@ -93,20 +90,18 @@
                 } @else if (store.isAuthenticated() && store.account()) {
                     <div class="header__profile-pill">
                         <span class="profile-name">{{ store.account()?.username }}</span>
-                        <button
-                            (click)="store.logout()"
-                            class="logout-action"
-                        >
-                            <mat-icon>power_settings_new</mat-icon>
-                        </button>
+                        <app-nn-button
+                            icon="power_settings_new"
+                            variant="surface"
+                            (clicked)="store.logout()"
+                        />
                     </div>
                 } @else {
-                    <button
-                        class="header__login-btn"
-                        routerLink="/auth/login"
-                    >
-                        LOGIN
-                    </button>
+                    <app-nn-button
+                        label="LOGIN"
+                        variant="primary"
+                        (clicked)="goToLogin()"
+                    />
                 }
             }
 
@@ -114,6 +109,7 @@
                 <button
                     class="header__menu-toggle"
                     (click)="toggleMenu()"
+                    aria-label="Toggle Menu"
                 >
                     <div class="hamburger">
                         <span></span>
@@ -123,4 +119,85 @@
             }
         </div>
     </div>
+
+    @if (!bp.isDesktop() && !bp.isLargeTablet()) {
+        <div class="header__overlay">
+            <div class="header__overlay-close">
+                <app-nn-button
+                    icon="close"
+                    variant="surface"
+                    (clicked)="closeMenu()"
+                />
+            </div>
+            <div class="header__overlay-content">
+                <nav class="header__nav--mobile">
+                    <ul class="header__nav-list">
+                        <li class="header__nav-item">
+                            <a
+                                routerLink="/dashboard"
+                                routerLinkActive="active"
+                                class="header__nav-link"
+                                (click)="closeMenu()"
+                            >
+                                DASHBOARD
+                            </a>
+                        </li>
+                        <li class="header__nav-item">
+                            <a
+                                routerLink="/movies"
+                                routerLinkActive="active"
+                                class="header__nav-link"
+                                (click)="closeMenu()"
+                            >
+                                MOVIES
+                            </a>
+                        </li>
+                        <li class="header__nav-item">
+                            <a
+                                routerLink="/tv-shows"
+                                routerLinkActive="active"
+                                class="header__nav-link"
+                                (click)="closeMenu()"
+                            >
+                                SERIES
+                            </a>
+                        </li>
+                        @if (store.isAuthenticated() && store.account()) {
+                            <li class="header__nav-item">
+                                <a
+                                    routerLink="/watchlist"
+                                    routerLinkActive="active"
+                                    class="header__nav-link"
+                                    (click)="closeMenu()"
+                                >
+                                    WATCHLIST
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+                <div class="header__overlay-footer">
+                    @if (store.isAuthenticated() && store.account()) {
+                        <div class="mobile-profile">
+                            <span class="label">Logged in as</span>
+                            <div class="user-row">
+                                <span class="name">{{ store.account()?.username }}</span>
+                                <app-nn-button
+                                    icon="power_settings_new"
+                                    variant="surface"
+                                    (clicked)="store.logout(); closeMenu()"
+                                />
+                            </div>
+                        </div>
+                    } @else {
+                        <app-nn-button
+                            label="LOGIN"
+                            variant="primary"
+                            (clicked)="goToLogin()"
+                        />
+                    }
+                </div>
+            </div>
+        </div>
+    }
 </header>

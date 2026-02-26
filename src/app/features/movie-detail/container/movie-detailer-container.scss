@@ -34,6 +34,16 @@
                 line-height: 1.8;
                 color: var(--nn-icon-muted);
             }
+
+            &__cast-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+                gap: 2.4rem;
+
+                &__skeleton {
+                    @include flex(center, center);
+                }
+            }
         }
 
         &__feedback {

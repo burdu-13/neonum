@@ -1,7 +1,7 @@
 @use '../../styles/variables' as *;
 @use '../../styles/mixins' as *;
 
-$touch-target: 4.4rem;
+$touch: 4.4rem;
 
 .header {
     @include glass(0.85, 2.4rem);
@@ -27,16 +27,9 @@ $touch-target: 4.4rem;
     }
 
     &__brand {
-        @include flex(flex-start, center, $gap: 1.2rem);
+        @include flex(flex-start, center);
         text-decoration: none;
-        min-height: $touch-target;
-
-        &-indicator {
-            width: 0.8rem;
-            height: 0.8rem;
-            background: var(--nn-primary);
-            box-shadow: 0 0 1.5rem var(--nn-primary);
-        }
+        min-height: $touch;
 
         &-text {
             font-size: 2.2rem;
@@ -60,16 +53,14 @@ $touch-target: 4.4rem;
         &-link {
             display: inline-flex;
             align-items: center;
-            min-height: $touch-target;
-            padding: 0 0.4rem;
+            min-height: $touch;
             font-size: 1.1rem;
             font-weight: 700;
             letter-spacing: 0.2rem;
             color: var(--nn-nav-inactive);
             text-decoration: none;
-            text-transform: uppercase;
-            transition: color 0.3s ease;
             position: relative;
+            transition: color 0.3s ease;
 
             &:hover {
                 color: var(--nn-text);
@@ -98,32 +89,38 @@ $touch-target: 4.4rem;
         @include flex(flex-end, center, $gap: 1.6rem);
     }
 
-    &__search-trigger {
+    &__menu-toggle {
         @include flex(center, center);
-        min-width: $touch-target;
-        min-height: $touch-target;
+        min-width: $touch;
+        min-height: $touch;
         background: transparent;
         border: none;
-        color: var(--nn-text);
         cursor: pointer;
-        border-radius: 0.4rem;
-        transition:
-            background 0.2s ease,
-            opacity 0.2s ease;
+        padding: 0;
+        z-index: 1200;
 
-        &:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
+        .hamburger {
+            width: 2.4rem;
+            height: 1.4rem;
+            position: relative;
 
-        &:active {
-            opacity: 0.7;
-        }
+            span {
+                display: block;
+                height: 0.2rem;
+                background: var(--nn-text);
+                position: absolute;
+                width: 100%;
+                transition: all 0.3s ease;
 
-        mat-icon {
-            font-size: 2.2rem;
-            width: 2.2rem;
-            height: 2.2rem;
-            line-height: 1;
+                &:first-child {
+                    top: 0;
+                }
+                &:last-child {
+                    bottom: 0;
+                    width: 60%;
+                    right: 0;
+                }
+            }
         }
     }
 
@@ -132,78 +129,13 @@ $touch-target: 4.4rem;
         background: var(--nn-surface);
         border: 0.1rem solid var(--nn-border);
         border-radius: 10rem;
-        padding: 0 0.8rem 0 1.6rem;
-        height: 4rem;
-        max-width: 24rem;
+        padding: 0.4rem 0.4rem 0.4rem 1.6rem;
 
         .profile-name {
             font-size: 1.2rem;
             font-weight: 700;
-            letter-spacing: 0.1rem;
             color: var(--nn-text);
             @include text-truncate;
-        }
-
-        .logout-action {
-            @include flex(center, center);
-            width: 3.2rem;
-            height: 3.2rem;
-            background: transparent;
-            border: none;
-            color: var(--nn-nav-inactive);
-            cursor: pointer;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-
-            &:hover {
-                color: var(--nn-text);
-                background: rgba(255, 255, 255, 0.08);
-            }
-
-            mat-icon {
-                font-size: 1.8rem;
-                width: 1.8rem;
-                height: 1.8rem;
-                line-height: 1;
-            }
-        }
-    }
-
-    &__menu-toggle {
-        @include flex(center, center);
-        min-width: $touch-target;
-        min-height: $touch-target;
-        background: transparent;
-        border: none;
-        cursor: pointer;
-        transition: opacity 0.3s ease;
-        padding: 0;
-        z-index: 1200;
-
-        .hamburger {
-            width: 2.4rem;
-            height: 1.4rem;
-            position: relative;
-            pointer-events: none;
-
-            span {
-                display: block;
-                width: 100%;
-                height: 0.2rem;
-                background: var(--nn-text);
-                position: absolute;
-                transition: all 0.3s ease;
-
-                &:first-child {
-                    top: 0;
-                }
-
-                &:last-child {
-                    bottom: 0;
-                    width: 60%;
-                    right: 0;
-                }
-            }
         }
     }
 
@@ -224,148 +156,68 @@ $touch-target: 4.4rem;
             position: absolute;
             top: 1.2rem;
             right: 2rem;
-            @include flex(center, center);
-            min-width: $touch-target;
-            min-height: $touch-target;
-            background: transparent;
-            border: none;
-            color: var(--nn-text);
-            cursor: pointer;
             z-index: 1200;
-            border-radius: 0.4rem;
-            transition: background 0.2s ease;
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.06);
-            }
-
-            mat-icon {
-                font-size: 2.8rem;
-                width: 2.8rem;
-                height: 2.8rem;
-                line-height: 1;
-            }
         }
 
         &-content {
             width: 100%;
             padding: 0 4rem;
-
-            @media (min-width: 480px) {
+            @include mq('sm') {
                 padding: 0 4.8rem;
             }
         }
 
-        .header__nav--mobile {
-            .header__nav-list {
-                @include flex(flex-start, flex-start, column, $gap: 4rem);
-                list-style: none;
-                padding: 0;
-                margin: 0;
-            }
+        &-footer {
+            margin-top: 6rem;
+            padding-top: 3.2rem;
+            border-top: 0.1rem solid var(--nn-border);
+            opacity: 0;
+            transform: translateY(2rem);
+            @include flex(center, center);
+            width: 100%;
 
-            .header__nav-item {
-                opacity: 0;
-                transform: translateX(3rem);
-            }
+            .mobile-profile {
+                width: 100%;
 
-            .header__nav-link {
-                display: inline-block;
-                font-size: clamp(3.2rem, 10vw, 4.8rem);
-                font-weight: 900;
-                letter-spacing: -0.2rem;
-                color: var(--nn-text);
-                text-decoration: none;
-                padding: 0.4rem 0;
-                transition: opacity 0.2s ease;
-
-                &:active {
-                    opacity: 0.7;
-                }
-
-                &.active {
+                .label {
+                    font-size: 1rem;
                     color: var(--nn-primary);
+                    opacity: 0.5;
+                    text-transform: uppercase;
+                }
+                .user-row {
+                    @include flex(space-between, center);
+                    margin-top: 1.6rem;
+                }
+                .name {
+                    font-size: 2.8rem;
+                    font-weight: 800;
+                    color: var(--nn-text);
+                    word-break: break-word;
                 }
             }
         }
     }
-
-    &__overlay-footer {
-        margin-top: 6rem;
-        padding-top: 3.2rem;
-        border-top: 0.1rem solid var(--nn-border);
-        opacity: 0;
-        transform: translateY(2rem);
-
-        .mobile-profile {
-            .label {
-                font-size: 1rem;
-                letter-spacing: 0.2rem;
-                color: var(--nn-primary);
-                opacity: 0.5;
-                text-transform: uppercase;
-            }
-
-            .user-row {
-                @include flex(space-between, center);
-                margin-top: 1.6rem;
-            }
-
-            .name {
-                font-size: 2.8rem;
-                font-weight: 800;
-                color: var(--nn-text);
-                word-break: break-word;
-            }
-
-            .logout-btn {
-                @include flex(center, center);
-                background: var(--nn-surface);
-                border: 0.1rem solid var(--nn-border);
-                color: var(--nn-text);
-                width: 4.8rem;
-                height: 4.8rem;
-                border-radius: 0.4rem;
-                cursor: pointer;
-                transition: all 0.2s ease;
-
-                &:hover {
-                    background: rgba(255, 255, 255, 0.08);
-                    border-color: var(--nn-text);
-                }
-
-                mat-icon {
-                    font-size: 2.4rem;
-                    width: 2.4rem;
-                    height: 2.4rem;
-                    line-height: 1;
-                }
-            }
+    &__nav--mobile {
+        .header__nav-list {
+            @include flex(flex-start, flex-start, column, $gap: 4rem);
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-
-        .login-btn-large {
-            @include flex(center, center);
-            width: 100%;
-            min-height: 5.6rem;
-            background: transparent;
-            border: 0.1rem solid var(--nn-border);
+        .header__nav-item {
+            opacity: 0;
+            transform: translateX(3rem);
+        }
+        .header__nav-link {
+            font-size: clamp(3.2rem, 10vw, 4.8rem);
+            font-weight: 900;
             color: var(--nn-text);
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 0.2rem;
-            text-transform: uppercase;
-            cursor: pointer;
-            border-radius: 0.4rem;
-            transition: all 0.25s ease;
+            text-decoration: none;
+            padding: 0.4rem 0;
 
-            &:hover {
-                background: var(--nn-primary);
-                border-color: var(--nn-primary);
-                color: var(--nn-bg);
-            }
-
-            &:active {
-                opacity: 0.8;
+            &.active {
+                color: var(--nn-primary);
             }
         }
     }
@@ -375,43 +227,23 @@ $touch-target: 4.4rem;
             transform: translateX(0);
             pointer-events: auto;
         }
-
         .header__menu-toggle {
             opacity: 0;
             pointer-events: none;
         }
-
         .header__nav-item,
         .header__overlay-footer {
             animation: slideInFade 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards 0.3s;
         }
-    }
 
-    &__login-btn {
-        @include flex(center, center);
-        min-height: 4rem;
-        padding: 0 2.4rem;
-        background: var(--nn-primary);
-        color: var(--nn-bg);
-        border: none;
-        border-radius: 0.4rem;
-        font-size: 1.1rem;
-        font-weight: 800;
-        letter-spacing: 0.1rem;
-        text-transform: uppercase;
-        cursor: pointer;
-        transition:
-            transform 0.2s ease,
-            opacity 0.2s ease;
-
-        &:hover {
-            opacity: 0.9;
-            transform: translateY(-0.1rem);
-        }
-
-        &:active {
-            transform: translateY(0);
-            opacity: 0.8;
+        .hamburger span {
+            &:first-child {
+                transform: translateY(0.6rem) rotate(45deg);
+            }
+            &:last-child {
+                transform: translateY(-0.6rem) rotate(-45deg);
+                width: 100%;
+            }
         }
     }
 }

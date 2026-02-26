@@ -15,10 +15,11 @@ import { ReviewPayload } from '../../../shared/models/movie.model';
 import { MovieFeedback } from '../components/movie-feedback/movie-feedback';
 import { MovieActions } from '../components/movie-actions/movie-actions';
 import { MovieHero } from '../components/movie-hero/movie-hero';
+import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 
 @Component({
     selector: 'app-movie-detailer-container',
-    imports: [MatIconModule, CastGrid, MovieTrailer, MovieFeedback, MovieActions, MovieHero],
+    imports: [MatIconModule, CastGrid, MovieTrailer, MovieFeedback, MovieActions, MovieHero, Skeleton],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

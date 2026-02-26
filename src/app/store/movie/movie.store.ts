@@ -149,15 +149,18 @@ export const MovieStore = signalStore(
                     distinctUntilChanged(),
                     tap((id) => {
                         const mId = Number(id);
+
                         patchState(store, { activeDetailId: mId, reviewLimit: 6 });
+
                         if (!store.detailsCache()[mId]) {
-                            patchState(store, { isDetailLoading: true, detailError: null });
+                            patchState(store, { isLoading: true, detailError: null });
                         }
                     }),
                     switchMap((id) => {
                         const mId = Number(id);
+
                         if (store.detailsCache()[mId]) {
-                            patchState(store, { isDetailLoading: false });
+                            patchState(store, { isLoading: false });
                             return EMPTY;
                         }
 
@@ -168,12 +171,12 @@ export const MovieStore = signalStore(
                                         ...store.detailsCache(),
                                         [movie.id]: movie as MovieDetails,
                                     },
-                                    isDetailLoading: false,
+                                    isLoading: false,
                                 });
                             }),
                             catchError(() => {
                                 patchState(store, {
-                                    isDetailLoading: false,
+                                    isLoading: false,
                                     detailError: 'Error loading asset.',
                                 });
                                 return EMPTY;
