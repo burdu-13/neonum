@@ -40,6 +40,11 @@ export interface MovieDetails extends Movie {
     reviews: ReviewResponse;
 }
 
+export interface ReviewPayload {
+    content: string;
+    rating: number;
+}
+
 export interface MovieVideo {
     id: string;
     key: string;

@@ -1,4 +1,9 @@
 <div class="review-form">
+    <app-nn-rating
+        [value]="rating"
+        (valueChange)="rating = $event"
+    />
+
     <mat-form-field
         appearance="outline"
         class="review-form__field"
@@ -15,10 +20,10 @@
 
     <div class="review-form__actions">
         <app-nn-button
-            label="Submit Review"
+            label="Submit Assessment"
             variant="primary"
-            [disabled]="!reviewContent"
-            (clicked)="submit.emit(reviewContent)"
+            [disabled]="!reviewContent || rating === 0"
+            (clicked)="submit.emit({ content: reviewContent, rating: rating })"
         />
     </div>
 </div>

@@ -19,6 +19,7 @@ import { MovieTrailer } from '../../../shared/components/movie-trailer/movie-tra
 import { NnButton } from '../../../shared/components/nn-button/nn-button';
 import { MovieReviews } from '../components/movie-reviews/movie-reviews';
 import { MovieReviewForm } from '../components/movie-reviews/components/movie-review-form/movie-review-form';
+import { ReviewPayload } from '../../../shared/models/movie.model';
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -61,7 +62,10 @@ export class MovieDetailerContainer {
         return this.movieStore.selectedMovie()?.credits?.cast?.slice(0, 8) || [];
     }
 
-    public handleReviewSubmit(content: string, movieId: number) {
-        this.movieStore.submitRating({ id: movieId, rating: 8.5 });
+    public handleReviewSubmit(payload: ReviewPayload, movieId: number): void {
+        this.movieStore.submitRating({
+            id: movieId,
+            rating: payload.rating,
+        });
     }
 }
