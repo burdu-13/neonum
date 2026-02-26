@@ -4,10 +4,11 @@ import { NnEmptyState } from "../../../shared/components/nn-empty-state/nn-empty
 import { MovieCard } from "../../dashboard/components/movie-card/movie-card";
 import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 import { ActorHero } from "../components/actor-hero/actor-hero";
+import { ActorSidebar } from "../components/actor-sidebar/actor-sidebar";
 
 @Component({
     selector: 'app-actor-detail-container',
-    imports: [NnEmptyState, MovieCard, Skeleton, ActorHero],
+    imports: [NnEmptyState, MovieCard, Skeleton, ActorHero, ActorSidebar],
     templateUrl: './actor-detail-container.html',
     styleUrl: './actor-detail-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

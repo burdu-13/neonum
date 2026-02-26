@@ -9,10 +9,10 @@
 
     <div class="actor-detail__content">
         <aside class="actor-detail__sidebar">
-            <!-- <app-actor-sidebar
+            <app-actor-sidebar
                 [actor]="actor"
                 [isLoading]="isLoading"
-            /> -->
+            />
         </aside>
 
         <section class="actor-detail__main">
@@ -21,11 +21,11 @@
 
                 <div class="actor-detail__credits-grid">
                     @if (isLoading) {
-                        @for (i of [1, 2, 3, 4]; track i) {
+                        @for (i of [1, 2, 3, 4, 5, 6]; track i) {
                             <app-skeleton
                                 width="100%"
-                                height="28rem"
-                                radius="1.2rem"
+                                height="32rem"
+                                radius="1.6rem"
                             />
                         }
                     } @else {

@@ -36,7 +36,10 @@ export const ActorStore = signalStore(
             if (!actor) return [];
 
             const creditsKey = Object.keys(actor).find((k) => k.startsWith('combined_credits'));
-            const credits = creditsKey ? (actor as any)[creditsKey] : null;
+
+            const credits = creditsKey
+                ? (actor as unknown as Record<string, { cast: ActorCredit[] }>)[creditsKey]
+                : null;
 
             if (!credits?.cast) return [];
 

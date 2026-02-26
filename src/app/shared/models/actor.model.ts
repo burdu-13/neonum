@@ -16,6 +16,8 @@ export interface ActorDetails {
     place_of_birth: string;
     profile_path: string;
     gender: number;
+    popularity: number;
+    known_for_department: string;
     combined_credits: {
         cast: ActorCredit[];
     };
