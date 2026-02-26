@@ -1,0 +1,61 @@
+<main class="search-page">
+    <header class="search-header">
+        <div class="search-input-wrapper">
+            <mat-icon>search</mat-icon>
+            <input
+                type="text"
+                placeholder="Search the mainframe for assets..."
+                [value]="searchStore.query()"
+                (input)="onSearchChange($any($event.target).value)"
+            />
+        </div>
+
+        <div class="search-filters">
+            @for (type of ['multi', 'movie', 'tv', 'person']; track type) {
+                <button
+                    class="filter-chip"
+                    [class.active]="searchStore.searchType() === type"
+                    (click)="searchStore.updateType($any(type))"
+                >
+                    {{ type === 'multi' ? 'All' : (type | titlecase) }}
+                </button>
+            }
+        </div>
+    </header>
+
+    <div class="search-results">
+        @if (searchStore.isLoading()) {
+            <div class="results-grid">
+                @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                    <app-skeleton
+                        height="35rem"
+                        radius="1.2rem"
+                    />
+                }
+            </div>
+        } @else {
+            @if (searchStore.movieResults().length > 0) {
+                <section class="results-section">
+                    <h2 class="section-title">Cinematic Assets</h2>
+                    <div class="results-grid">
+                        @for (movie of searchStore.movieResults(); track movie.id) {
+                            <app-movie-card [movie]="movie" />
+                        }
+                    </div>
+                </section>
+            }
+
+            @if (searchStore.actorResults().length > 0) {
+                <app-cast-grid [cast]="actorResults()" />
+            }
+
+            @if (isEmpty()) {
+                <app-nn-empty-state
+                    title="No Matches Detected"
+                    description="The query yielded no results in the current database."
+                    icon="search_off"
+                />
+            }
+        }
+    </div>
+</main>
