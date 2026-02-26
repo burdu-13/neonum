@@ -17,6 +17,13 @@ export const routes: Routes = [
                 (c) => c.MovieDetailerContainer,
             ),
     },
+    {
+        path: 'actor/:id',
+        loadComponent: () =>
+            import('./features/actor-detail/container/actor-detail-container').then(
+                (c) => c.ActorDetailContainer,
+            ),
+    },
     { path: '', redirectTo: 'auth', pathMatch: 'full' },
     { path: '**', redirectTo: 'auth' },
 ];

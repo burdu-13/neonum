@@ -10,6 +10,7 @@ export interface Movie {
     popularity: number;
     adult: boolean;
     videos: MovieVideoResponse;
+    vote_count: number;
 }
 
 export interface MovieResponse {
