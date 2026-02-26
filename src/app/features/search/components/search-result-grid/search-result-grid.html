@@ -1,0 +1,13 @@
+<section class="results-section">
+    <h2 class="section-title">{{ title() }}</h2>
+
+    @if (type() === 'person') {
+        <app-cast-grid [cast]="actors()" />
+    } @else {
+        <div class="results-grid">
+            @for (item of items(); track item.id) {
+                <app-movie-card [movie]="$any(item)" />
+            }
+        </div>
+    }
+</section>

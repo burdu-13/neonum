@@ -76,4 +76,31 @@
         grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
         gap: 3.2rem;
     }
+
+    .results-section {
+        margin-bottom: 6.4rem;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .section-title {
+        font-size: 1.4rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: 0.3rem;
+        color: var(--nn-primary);
+        margin-bottom: 3.2rem;
+        @include flex(center, flex-start, $gap: 1.6rem);
+
+        &::before {
+            content: '';
+            width: 0.4rem;
+            height: 1.6rem;
+            background: var(--nn-primary);
+            border-radius: 1rem;
+            box-shadow: 0 0 1rem var(--nn-primary);
+        }
+    }
 }

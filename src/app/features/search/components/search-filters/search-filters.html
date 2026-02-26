@@ -1,0 +1,12 @@
+<div class="search-filters">
+    @for (type of filterOptions; track type) {
+        <button
+            type="button"
+            class="filter-chip"
+            [class.active]="activeType() === type"
+            (click)="onFilterSelect(type)"
+        >
+            {{ labels[type] }}
+        </button>
+    }
+</div>

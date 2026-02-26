@@ -1,0 +1,27 @@
+<div
+    class="nn-input"
+    [class.nn-input--focused]="isFocused()"
+    [class.nn-input--disabled]="isDisabled()"
+>
+    @if (iconPath()) {
+        <div class="nn-input__icon-wrapper">
+            <img
+                [src]="iconPath()"
+                alt=""
+                class="nn-input__icon"
+                aria-hidden="true"
+            />
+        </div>
+    }
+
+    <input
+        type="text"
+        class="nn-input__field"
+        [disabled]="isDisabled()"
+        [placeholder]="placeholder()"
+        [value]="value()"
+        (input)="onInput($event)"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+    />
+</div>

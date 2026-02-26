@@ -7,40 +7,70 @@ import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { NnEmptyState } from '../../../shared/components/nn-empty-state/nn-empty-state';
 import { CastGrid } from '../../movie-detail/components/cast-grid/cast-grid';
 import { CastMember } from '../../../shared/models/movie.model';
+import { SearchResultGrid } from '../components/search-result-grid/search-result-grid';
+import { SearchFilters } from '../components/search-filters/search-filters';
+import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NnInput } from '../../../shared/components/nn-input/nn-input';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-search-container',
-    imports: [CommonModule, MatIcon, MovieCard, Skeleton, NnEmptyState, CastGrid],
+    imports: [
+        CommonModule,
+        Skeleton,
+        NnEmptyState,
+        SearchResultGrid,
+        SearchFilters,
+        NnInput,
+        ReactiveFormsModule,
+    ],
     templateUrl: './search-container.html',
     styleUrl: './search-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchContainer {
-    protected readonly searchStore = inject(SearchStore);
+    private readonly searchStore = inject(SearchStore);
+
+    public readonly searchControl = new FormControl('', { nonNullable: true });
+    public readonly searchIconPath: string = 'assets/icons/search.svg';
+
+    public readonly isLoading = this.searchStore.isLoading;
+    public readonly searchType = this.searchStore.searchType;
+    public readonly movieResults = this.searchStore.movieResults;
+    public readonly tvResults = this.searchStore.tvResults;
 
     public readonly actorResults = computed<CastMember[]>(() =>
         this.searchStore.actorResults().map((actor) => ({
             id: actor.id,
             name: actor.name,
             profile_path: actor.profile_path,
-            character: actor.known_for_department || 'Artist',
+            character: actor.known_for_department || 'NEURAL-LINKED',
         })),
     );
 
-    public readonly isEmpty = computed(() => {
-        const s = this.searchStore;
-        const query = s.query();
+    public readonly isEmpty = computed<boolean>(() => {
+        const type = this.searchType();
+        const hasMovies = this.movieResults().length > 0;
+        const hasTV = this.tvResults().length > 0;
+        const hasActors = this.actorResults().length > 0;
+
+        if (this.isLoading() || this.searchControl.value.length <= 2) return false;
+
         return (
-            !s.isLoading() &&
-            query.length > 2 &&
-            s.movieResults().length === 0 &&
-            this.actorResults().length === 0 &&
-            s.tvResults().length === 0
+            (type === 'movie' && !hasMovies) ||
+            (type === 'tv' && !hasTV) ||
+            (type === 'person' && !hasActors) ||
+            (type === 'multi' && !hasMovies && !hasTV && !hasActors)
         );
     });
 
-    public onSearchChange(query: string): void {
-        this.searchStore.updateQuery(query);
-        this.searchStore.search(query);
+
+    public ngOnInit(): void {
+        this.searchControl.setValue(this.searchStore.query(), { emitEvent: false });
+    }
+
+    public onTypeChange(type: 'multi' | 'movie' | 'tv' | 'person'): void {
+        this.searchStore.updateType(type);
     }
 }
