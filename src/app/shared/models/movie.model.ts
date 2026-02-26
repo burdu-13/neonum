@@ -37,6 +37,7 @@ export interface MovieDetails extends Movie {
     credits: Credits;
     similar: { results: Movie[] };
     account_states?: AccountStates;
+    reviews: ReviewResponse;
 }
 
 export interface MovieVideo {
@@ -74,4 +75,23 @@ export interface FavoriteRequest {
     media_type: 'movie' | 'tv';
     media_id: number;
     favorite: boolean;
+}
+
+export interface Review {
+    author: string;
+    author_details: {
+        name: string;
+        username: string;
+        avatar_path: string | null;
+        rating: number | null;
+    };
+    content: string;
+    created_at: string;
+    id: string;
+    url: string;
+}
+
+export interface ReviewResponse {
+    results: Review[];
+    total_results: number;
 }
