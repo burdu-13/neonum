@@ -32,6 +32,7 @@ interface MovieState {
     detailsCache: Record<number, MovieDetails>;
     reviewLimit: number;
     activeDetailId: number | null;
+    collectionsLoaded: boolean;
 }
 
 const initialState: MovieState = {
@@ -49,6 +50,7 @@ const initialState: MovieState = {
     reviewLimit: 6,
     detailsCache: {},
     activeDetailId: null,
+    collectionsLoaded: false,
 };
 
 export const MovieStore = signalStore(
@@ -279,8 +281,9 @@ export const MovieStore = signalStore(
             loadCollections: rxMethod<void>(
                 pipe(
                     switchMap(() => {
-                        if (store.watchlistMovies().length > 0 || store.favoriteMovies().length > 0)
-                            return EMPTY;
+                        if (store.collectionsLoaded() || store.isDetailLoading()) return EMPTY;
+
+                        patchState(store, { isDetailLoading: true });
 
                         return forkJoin({
                             watchlist: movieService.getWatchlistMovies(),
@@ -292,7 +295,13 @@ export const MovieStore = signalStore(
                                     favoriteMovies: favorites.results,
                                     watchlistIds: watchlist.results.map((m) => m.id),
                                     favoriteIds: favorites.results.map((m) => m.id),
+                                    collectionsLoaded: true,
+                                    isDetailLoading: false,
                                 });
+                            }),
+                            catchError(() => {
+                                patchState(store, { isDetailLoading: false });
+                                return EMPTY;
                             }),
                         );
                     }),
