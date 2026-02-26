@@ -3,18 +3,12 @@
 
 .movie-card {
     width: 100%;
-    display: flex;
-    flex-direction: column;
+    @include flex($direction: column);
     cursor: pointer;
 
     &:hover {
-        .movie-card__poster {
-            transform: scale(1.05);
-        }
-
         .movie-card__badge {
-            opacity: 1;
-            transform: translateY(0);
+            @include flex;
         }
     }
 
@@ -25,7 +19,6 @@
         aspect-ratio: 2/3;
         background: var(--nn-surface);
         box-shadow: 0 0.8rem 2.4rem rgba(0, 0, 0, 0.2);
-        transition: box-shadow 0.4s ease;
         margin-bottom: 1.6rem;
     }
 
@@ -33,8 +26,6 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
-        will-change: transform;
     }
 
     &__badge {
@@ -48,10 +39,7 @@
         color: var(--nn-text);
         font-weight: 700;
         font-size: 1.2rem;
-
-        opacity: 0;
-        transform: translateY(-0.8rem);
-        transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        display: none;
 
         .star-icon {
             font-size: 1.4rem;
@@ -72,14 +60,12 @@
         margin: 0;
         font-size: 1.5rem;
         font-weight: 600;
-        letter-spacing: 0.02rem;
         color: var(--nn-text);
     }
 
     &__year {
         margin: 0;
         font-size: 1.3rem;
-        font-weight: 400;
         color: var(--nn-icon-muted);
     }
 }

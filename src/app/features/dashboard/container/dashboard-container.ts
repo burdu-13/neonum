@@ -6,7 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieCard } from '../components/movie-card/movie-card';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
-import { MovieShelf } from "../components/movie-shelf/movie-shelf";
+import { MovieShelf } from '../components/movie-shelf/movie-shelf';
 
 @Component({
     selector: 'app-dashboard-container',
@@ -15,18 +15,21 @@ import { MovieShelf } from "../components/movie-shelf/movie-shelf";
     styleUrl: './dashboard-container.scss',
 })
 export class DashboardContainer implements OnInit {
-    public readonly store = inject(UserStore);
+    public readonly userStore = inject(UserStore);
     public readonly movieStore = inject(MovieStore);
 
     constructor() {
         effect(() => {
-            if (this.store.isAuthenticated() && !this.store.isLoading()) {
+            const auth = this.userStore.isAuthenticated();
+            const loading = this.userStore.isLoading();
+
+            if (auth && !loading) {
                 this.movieStore.loadCollections();
             }
         });
     }
 
-    public ngOnInit(): void {
+    ngOnInit(): void {
         this.movieStore.loadAllMovies();
     }
 }

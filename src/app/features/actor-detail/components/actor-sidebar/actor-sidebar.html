@@ -1,0 +1,48 @@
+<section class="actor-sidebar">
+    <h3 class="actor-sidebar__title">Technical Specifications</h3>
+
+    <div class="actor-sidebar__group">
+        @if (isLoading()) {
+            @for (i of [1, 2, 3, 4]; track i) {
+                <div class="actor-sidebar__item">
+                    <app-skeleton
+                        width="40%"
+                        height="1.2rem"
+                        style="margin-bottom: 0.8rem"
+                    />
+                    <app-skeleton
+                        width="80%"
+                        height="1.6rem"
+                    />
+                </div>
+            }
+        } @else {
+            <div class="actor-sidebar__item">
+                <label>Known For</label>
+                <span>{{ actor()?.known_for_department || 'Acting' }}</span>
+            </div>
+
+            <div class="actor-sidebar__item">
+                <label>Gender</label>
+                <span>{{ actor()?.gender === 1 ? 'Female' : 'Male' }}</span>
+            </div>
+
+            <div class="actor-sidebar__item">
+                <label>Birthday</label>
+                <span>{{ actor()?.birthday | date: 'longDate' }}</span>
+            </div>
+
+            <div class="actor-sidebar__item">
+                <label>Place of Birth</label>
+                <span>{{ actor()?.place_of_birth || 'Unknown Origin' }}</span>
+            </div>
+
+            <div class="actor-sidebar__item">
+                <label>Popularity Index</label>
+                <span class="actor-sidebar__highlight">
+                    {{ actor()?.popularity | number: '1.1-1' }}
+                </span>
+            </div>
+        }
+    </div>
+</section>

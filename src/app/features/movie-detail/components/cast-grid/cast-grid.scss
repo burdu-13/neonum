@@ -20,6 +20,24 @@
         @include flex(flex-start, center, column);
         text-align: center;
         margin: 0;
+        cursor: pointer;
+        outline: none;
+        transition: transform 0.2s ease-in-out;
+
+        &:hover,
+        &:focus-visible {
+            transform: translateY(-0.4rem);
+
+            img,
+            .cast-avatar-fallback {
+                box-shadow: 0 0.8rem 1.6rem rgba(0, 0, 0, 0.3);
+                border-color: var(--nn-primary);
+            }
+
+            .actor-name {
+                color: var(--nn-primary);
+            }
+        }
 
         img,
         .cast-avatar-fallback {
@@ -30,6 +48,7 @@
             margin-bottom: 1.2rem;
             background: var(--nn-surface);
             box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.2);
+            transition: all 0.2s ease-in-out;
         }
 
         .cast-avatar-fallback {
