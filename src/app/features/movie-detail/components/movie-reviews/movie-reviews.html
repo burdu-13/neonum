@@ -3,34 +3,37 @@
 
     <div class="reviews__grid">
         @for (review of reviews(); track review.id) {
-            <article class="review-card">
-                <header class="review-card__header">
-                    <div class="review-card__user">
-                        @let avatarUrl = review.author_details.avatar_path | tmdbImage: 'w200';
+            <article
+                class="reviews__grid__card"
+                [class.reviews__grid__card--is-expanded]="expandedReviewIds().has(review.id)"
+                (click)="toggleExpand(review.id)"
+            >
+                <header class="reviews__grid__card__header">
+                    <div class="reviews__grid__card__header__user">
+                        @let avatarUrl = review.author_details.avatar_path | tmdbImage: 'w185';
 
                         @if (avatarUrl) {
                             <img
                                 [src]="avatarUrl"
                                 [alt]="review.author"
-                                class="review-card__avatar"
-                                loading="lazy"
+                                class="reviews__grid__card__header__user__avatar"
                             />
                         } @else {
-                            <div
-                                class="review-card__avatar-fallback"
-                                aria-hidden="true"
-                            >
+                            <div class="reviews__grid__card__header__user__avatar--fallback">
                                 {{ review.author.charAt(0).toUpperCase() }}
                             </div>
                         }
 
-                        <div class="review-card__info">
-                            <span class="review-card__author">{{ review.author }}</span>
-                            <span class="review-card__date">
+                        <div class="reviews__grid__card__header__user__info">
+                            <span class="reviews__grid__card__header__user__info__author">
+                                {{ review.author }}
+                            </span>
+                            <span class="reviews__grid__card__header__user__info__date">
                                 {{ review.created_at | date: 'mediumDate' }}
                             </span>
                         </div>
                     </div>
+
                     @if (review.author_details.rating) {
                         <app-meta-badge
                             [text]="review.author_details.rating.toString()"
@@ -39,14 +42,25 @@
                         />
                     }
                 </header>
-                <div class="review-card__content">
+
+                <div class="reviews__grid__card__content">
                     <p>{{ review.content }}</p>
                 </div>
+
+                <button class="reviews__grid__card__trigger">
+                    {{ expandedReviewIds().has(review.id) ? 'Show less' : 'Read full assessment' }}
+                </button>
             </article>
-        } @empty {
-            <div class="reviews__empty">
-                <p>No critical assessments found for this asset.</p>
-            </div>
         }
     </div>
+
+    @if (hasMore()) {
+        <div class="reviews__footer">
+            <app-nn-button
+                label="Load More Assessments"
+                variant="surface"
+                (clicked)="loadMore.emit()"
+            />
+        </div>
+    }
 </section>

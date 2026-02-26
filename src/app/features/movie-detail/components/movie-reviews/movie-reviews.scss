@@ -1,7 +1,7 @@
 @use '../../../../shared/styles/mixins' as *;
 
 .reviews {
-    margin-top: 4rem;
+    margin-top: 4.8rem;
 
     &__title {
         font-size: 2.4rem;
@@ -13,78 +13,111 @@
     &__grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 2.4rem;
+        gap: 3.2rem;
+        align-items: start;
 
         @include mq('md') {
             grid-template-columns: repeat(2, 1fr);
         }
-    }
-}
 
-.review-card {
-    background: rgba(var(--nn-surface-rgb), 0.2);
-    border: 0.1rem solid var(--nn-border);
-    border-radius: 1.2rem;
-    padding: 2.4rem;
+        &__card {
+            background: rgba(var(--nn-surface-rgb), 0.2);
+            border: 0.1rem solid var(--nn-border);
+            border-radius: 1.2rem;
+            padding: 2.4rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            @include flex(flex-start, stretch, column);
 
-    &__header {
-        @include flex(space-between, center);
-        margin-bottom: 1.6rem;
-    }
+            &:hover {
+                border-color: var(--nn-primary);
+                background: rgba(var(--nn-surface-rgb), 0.3);
+            }
 
-    &__user {
-        @include flex($align: center, $gap: 1.2rem);
-    }
+            &__header {
+                @include flex(space-between, center);
+                margin-bottom: 1.6rem;
 
-    &__avatar,
-    &__avatar-fallback {
-        width: 4rem;
-        height: 4rem;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
+                &__user {
+                    @include flex($align: center, $gap: 1.2rem);
 
-    &__avatar {
-        object-fit: cover;
-        border: 0.1rem solid var(--nn-border);
-        background: var(--nn-border);
-    }
+                    &__avatar {
+                        width: 4rem;
+                        height: 4rem;
+                        border-radius: 50%;
+                        object-fit: cover;
+                        border: 0.1rem solid var(--nn-border);
 
-    &__avatar-fallback {
-        @include flex(center, center);
-        background: rgba(var(--nn-primary-rgb), 0.1);
-        color: var(--nn-primary);
-        font-size: 1.6rem;
-        font-weight: 700;
-        border: 0.1rem solid rgba(var(--nn-primary-rgb), 0.3);
-        text-shadow: 0 0 1rem rgba(var(--nn-primary-rgb), 0.5);
-    }
+                        &--fallback {
+                            width: 4rem;
+                            height: 4rem;
+                            border-radius: 50%;
+                            @include flex(center, center);
+                            background: rgba(var(--nn-primary-rgb), 0.1);
+                            color: var(--nn-primary);
+                            font-size: 1.6rem;
+                            font-weight: 700;
+                            border: 0.1rem solid rgba(var(--nn-primary-rgb), 0.3);
+                        }
+                    }
 
-    &__info {
-        @include flex(flex-start, flex-start, column);
-    }
+                    &__info {
+                        @include flex(flex-start, flex-start, column);
 
-    &__author {
-        font-size: 1.4rem;
-        font-weight: 600;
-        color: var(--nn-text);
-    }
+                        &__author {
+                            font-size: 1.4rem;
+                            font-weight: 600;
+                            color: var(--nn-text);
+                        }
 
-    &__date {
-        font-size: 1.2rem;
-        color: var(--nn-icon-muted);
-    }
+                        &__info__date {
+                            font-size: 1.2rem;
+                            color: var(--nn-icon-muted);
+                        }
+                    }
+                }
+            }
 
-    &__content {
-        p {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            color: rgba(var(--nn-text-rgb), 0.8);
-            margin: 0;
-            display: -webkit-box;
-            -webkit-line-clamp: 5;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            &__content {
+                p {
+                    font-size: 1.5rem;
+                    line-height: 1.6;
+                    color: rgba(var(--nn-text-rgb), 0.8);
+                    margin: 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 4;
+                    line-clamp: 4;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                }
+            }
+
+            &--is-expanded {
+                .reviews__grid__card__content p {
+                    display: block;
+                    -webkit-line-clamp: initial;
+                    line-clamp: initial;
+                }
+            }
+
+            &__trigger {
+                background: none;
+                border: none;
+                padding: 0;
+                margin-top: 1.6rem;
+                color: var(--nn-primary);
+                font-size: 1.2rem;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.05rem;
+                cursor: pointer;
+                text-align: left;
+            }
         }
+    }
+
+    &__footer {
+        @include flex(center, center);
+        margin-top: 4.8rem;
     }
 }

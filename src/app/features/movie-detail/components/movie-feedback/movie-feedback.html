@@ -1,0 +1,16 @@
+<div class="movie-feedback">
+    <app-movie-reviews
+        [reviews]="reviews()"
+        [hasMore]="hasMore()"
+        (loadMore)="loadMore.emit()"
+    />
+
+    @if (!isRated()) {
+        <app-movie-review-form (submit)="submitReview.emit($event)" />
+    } @else {
+        <div class="movie-feedback__status--already-rated">
+            <mat-icon>check_circle</mat-icon>
+            <span>You have already assessed this cinematic asset.</span>
+        </div>
+    }
+</div>
