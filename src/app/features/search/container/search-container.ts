@@ -9,10 +9,11 @@ import { CastGrid } from '../../movie-detail/components/cast-grid/cast-grid';
 import { CastMember } from '../../../shared/models/movie.model';
 import { SearchResultGrid } from '../components/search-result-grid/search-result-grid';
 import { SearchFilters } from '../components/search-filters/search-filters';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NnInput } from '../../../shared/components/nn-input/nn-input';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { checkSearchEmptiness } from '../utils/search.utils';
 
 @Component({
     selector: 'app-search-container',
@@ -33,7 +34,7 @@ export class SearchContainer {
     private readonly searchStore = inject(SearchStore);
 
     public readonly searchControl = new FormControl('', { nonNullable: true });
-    public readonly searchIconPath: string = 'assets/icons/search.svg';
+    public readonly searchIconPath: string = 'images/svg/search/search.svg';
 
     public readonly isLoading = this.searchStore.isLoading;
     public readonly searchType = this.searchStore.searchType;
@@ -49,22 +50,33 @@ export class SearchContainer {
         })),
     );
 
-    public readonly isEmpty = computed<boolean>(() => {
-        const type = this.searchType();
-        const hasMovies = this.movieResults().length > 0;
-        const hasTV = this.tvResults().length > 0;
-        const hasActors = this.actorResults().length > 0;
+    public readonly isEmpty = computed<boolean>(() =>
+        checkSearchEmptiness(
+            this.searchType(),
+            {
+                movies: this.movieResults(),
+                tv: this.tvResults(),
+                actors: this.actorResults(),
+            },
+            this.isLoading(),
+            this.searchControl.value.length,
+        ),
+    );
 
-        if (this.isLoading() || this.searchControl.value.length <= 2) return false;
-
-        return (
-            (type === 'movie' && !hasMovies) ||
-            (type === 'tv' && !hasTV) ||
-            (type === 'person' && !hasActors) ||
-            (type === 'multi' && !hasMovies && !hasTV && !hasActors)
-        );
-    });
-
+    constructor() {
+        this.searchControl.valueChanges
+            .pipe(
+                debounceTime(400),
+                distinctUntilChanged(),
+                filter((val) => val.length > 2 || val.length === 0),
+                tap((value) => {
+                    this.searchStore.updateQuery(value);
+                    this.searchStore.search(value);
+                }),
+                takeUntilDestroyed(),
+            )
+            .subscribe();
+    }
 
     public ngOnInit(): void {
         this.searchControl.setValue(this.searchStore.query(), { emitEvent: false });
