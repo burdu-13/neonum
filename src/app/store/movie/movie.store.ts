@@ -235,6 +235,41 @@ export const MovieStore = signalStore(
                 ),
             ),
 
+            submitRating: rxMethod<{ id: number; rating: number }>(
+                pipe(
+                    switchMap(({ id, rating }) => {
+                        return movieService.addRating(id, rating).pipe(
+                            tap(() => {
+                                alertService.showAlert(
+                                    `Successfully rated asset: ${rating}/10`,
+                                    'success',
+                                );
+
+                                const movie = store.selectedMovie();
+                                if (movie && movie.id === id) {
+                                    patchState(store, {
+                                        selectedMovie: {
+                                            ...movie,
+                                            account_states: {
+                                                ...movie.account_states!,
+                                                rated: { value: rating },
+                                            },
+                                        },
+                                    });
+                                }
+                            }),
+                            catchError(() => {
+                                alertService.showAlert(
+                                    'Critical error: Rating could not be submitted.',
+                                    'error',
+                                );
+                                return EMPTY;
+                            }),
+                        );
+                    }),
+                ),
+            ),
+
             reset(): void {
                 patchState(store, initialState);
             },

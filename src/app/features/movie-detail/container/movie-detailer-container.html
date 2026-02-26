@@ -200,6 +200,19 @@
             </article>
 
             <app-cast-grid [cast]="topCast" />
+
+            <div class="detail-gallery__feedback">
+                <app-movie-reviews [reviews]="movie.reviews.results" />
+
+                @if (!movie.account_states?.rated) {
+                    <app-movie-review-form (submit)="handleReviewSubmit($event, movie.id)" />
+                } @else {
+                    <div class="detail-gallery__already-rated">
+                        <mat-icon>check_circle</mat-icon>
+                        <span>You have already assessed this cinematic asset.</span>
+                    </div>
+                }
+            </div>
         </div>
 
         <div class="detail-gallery__actions">

@@ -76,4 +76,12 @@ export class MovieService {
     private fetchFromProxy(path: string): Observable<MovieResponse> {
         return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
+
+    public addRating(movieId: number, rating: number): Observable<TmdbStatusResponse> {
+        const sessionId = this.userStore.sessionId();
+        return this.http.post<TmdbStatusResponse>(
+            `${this.proxyUrl}?path=movie/${movieId}/rating&session_id=${sessionId}`,
+            { value: rating },
+        );
+    }
 }

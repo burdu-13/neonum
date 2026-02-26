@@ -12,4 +12,14 @@ import { Review } from '../../../../shared/models/movie.model';
 })
 export class MovieReviews {
     public readonly reviews = input.required<Review[]>();
+
+    public getAvatarUrl(path: string | null): string | null {
+        if (!path) return null;
+
+        if (path.startsWith('http') || path.startsWith('https')) {
+            return path.startsWith('/http') ? path.substring(1) : path;
+        }
+
+        return `https://image.tmdb.org/t/p/w150${path}`;
+    }
 }
