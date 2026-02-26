@@ -1,0 +1,73 @@
+<section class="reviews">
+    <h2 class="reviews__title">Audience Assessments</h2>
+
+    <div class="reviews__grid">
+        @for (review of reviews(); track review.id) {
+            <article
+                class="reviews__grid__card"
+                [class.reviews__grid__card--is-expanded]="expandedReviewIds().has(review.id)"
+                (click)="toggleExpand(review.id)"
+            >
+                <header class="reviews__grid__card__header">
+                    <div class="reviews__grid__card__header__user">
+                        @let avatarUrl = review.author_details.avatar_path | tmdbImage: 'w185';
+
+                        @if (avatarUrl) {
+                            <img
+                                [src]="avatarUrl"
+                                [alt]="review.author"
+                                class="reviews__grid__card__header__user__avatar"
+                            />
+                        } @else {
+                            <div class="reviews__grid__card__header__user__avatar--fallback">
+                                {{ review.author.charAt(0).toUpperCase() }}
+                            </div>
+                        }
+
+                        <div class="reviews__grid__card__header__user__info">
+                            <span class="reviews__grid__card__header__user__info__author">
+                                {{ review.author }}
+                            </span>
+                            <span class="reviews__grid__card__header__user__info__date">
+                                {{ review.created_at | date: 'mediumDate' }}
+                            </span>
+                        </div>
+                    </div>
+
+                    @if (review.author_details.rating) {
+                        <app-meta-badge
+                            [text]="review.author_details.rating.toString()"
+                            icon="star"
+                            [highlight]="true"
+                        />
+                    }
+                </header>
+
+                <div class="reviews__grid__card__content">
+                    <p>{{ review.content }}</p>
+                </div>
+
+                <button class="reviews__grid__card__trigger">
+                    {{ expandedReviewIds().has(review.id) ? 'Show less' : 'Read full assessment' }}
+                </button>
+            </article>
+        }@empty {
+            <app-nn-empty-state 
+                title="No Assessments Yet" 
+                description="This cinematic asset has not yet been analyzed by the collective."
+                icon="rate_review"
+                class="empty__state"
+            />
+        }
+    </div>
+
+    @if (hasMore()) {
+        <div class="reviews__footer">
+            <app-nn-button
+                label="Load More Assessments"
+                variant="surface"
+                (clicked)="loadMore.emit()"
+            />
+        </div>
+    }
+</section>

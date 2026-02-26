@@ -1,0 +1,23 @@
+@use '../../../../shared/styles/mixins' as *;
+
+.movie-feedback {
+    @include flex($direction: column);
+    gap: 6.4rem;
+    width: 100%;
+
+    &__status--already-rated {
+        padding: 3.2rem;
+        background: rgba(var(--nn-primary-rgb), 0.05);
+        border: 0.1rem solid rgba(var(--nn-primary-rgb), 0.1);
+        border-radius: 1.2rem;
+        color: var(--nn-primary);
+        font-weight: 500;
+        @include flex(center, center, $gap: 1.2rem);
+
+        mat-icon {
+            font-size: 2.4rem;
+            width: 2.4rem;
+            height: 2.4rem;
+        }
+    }
+}

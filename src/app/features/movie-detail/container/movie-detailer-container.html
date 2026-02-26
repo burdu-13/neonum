@@ -1,84 +1,26 @@
 @let movie = movieStore.selectedMovie();
+@let isLoading = movieStore.isLoading();
 
 <main class="detail-gallery">
-    @if (movieStore.isLoading()) {
-        <header
-            class="detail-gallery__hero"
-            role="banner"
-            aria-busy="true"
-        >
-            <div class="detail-gallery__hero-fade"></div>
+    <app-movie-hero
+        [movie]="movie"
+        [isLoading]="isLoading"
+    >
+        <app-movie-actions
+            actions
+            [movie]="movie"
+            [watchlistIds]="movieStore.watchlistIds()"
+            [favoriteIds]="movieStore.favoriteIds()"
+            [hasTrailer]="!!trailerKey()"
+            (toggleWatchlist)="movieStore.toggleWatchlist($event)"
+            (toggleFavorite)="movieStore.toggleFavorite($event)"
+            (openTrailer)="isTrailerOpen.set(true)"
+        />
+    </app-movie-hero>
 
-            <div class="detail-gallery__hero-content">
-                <div class="detail-gallery__hero-grid">
-                    <figure class="detail-gallery__poster-wrapper">
-                        <app-skeleton
-                            width="100%"
-                            height="100%"
-                            radius="1.6rem"
-                        />
-                    </figure>
-
-                    <div class="detail-gallery__typography">
-                        <app-skeleton
-                            width="70%"
-                            height="clamp(4rem, 6vw, 7.2rem)"
-                            style="margin-bottom: 1.2rem; display: block"
-                        />
-                        <app-skeleton
-                            width="45%"
-                            height="clamp(1.6rem, 2vw, 2.2rem)"
-                            style="margin-bottom: 3.2rem; display: block"
-                        />
-
-                        <div class="detail-gallery__metadata">
-                            <app-skeleton
-                                width="8.5rem"
-                                height="3.5rem"
-                                radius="0.6rem"
-                            />
-                            <app-skeleton
-                                width="7.5rem"
-                                height="3.5rem"
-                                radius="0.6rem"
-                            />
-                            <app-skeleton
-                                width="9rem"
-                                height="3.5rem"
-                                radius="0.6rem"
-                            />
-                        </div>
-
-                        <div
-                            class="detail-gallery__genres"
-                            aria-label="Genres Loading"
-                        >
-                            <app-skeleton
-                                width="9rem"
-                                height="2.5rem"
-                                radius="2rem"
-                            />
-                            <app-skeleton
-                                width="11rem"
-                                height="2.5rem"
-                                radius="2rem"
-                            />
-                            <app-skeleton
-                                width="8rem"
-                                height="2.5rem"
-                                radius="2rem"
-                            />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="detail-gallery__body">
-            <article
-                class="detail-gallery__overview"
-                aria-labelledby="synopsis-heading-skeleton"
-            >
+    <div class="detail-gallery__body">
+        <article class="detail-gallery__body__section">
+            @if (isLoading) {
                 <app-skeleton
                     width="30%"
                     height="2.8rem"
@@ -95,158 +37,56 @@
                     style="margin-bottom: 0.8rem; display: block"
                 />
                 <app-skeleton
-                    width="90%"
-                    height="1.6rem"
-                    style="margin-bottom: 0.8rem; display: block"
-                />
-                <app-skeleton
                     width="60%"
                     height="1.6rem"
                     style="display: block"
                 />
-            </article>
+            } @else {
+                <h2>The Synopsis</h2>
+                <p>{{ movie?.overview }}</p>
+            }
+        </article>
 
-            <section
-                class="detail-gallery__cast"
-                aria-labelledby="cast-heading-skeleton"
-            >
+        @if (isLoading) {
+            <section class="detail-gallery__body__section">
                 <app-skeleton
                     width="25%"
                     height="2.8rem"
                     style="margin-bottom: 2.4rem; display: block"
                 />
-
-                <div class="detail-gallery__skeleton-cast-grid">
-                    @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
-                        <figure class="skeleton-cast-card">
+                <div class="detail-gallery__body__section__cast-grid">
+                    @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                        <div class="detail-gallery__body__section__cast-grid__skeleton">
                             <app-skeleton
                                 width="8rem"
                                 height="8rem"
                                 radius="50%"
-                                style="margin-bottom: 1.2rem; display: block"
                             />
-                            <app-skeleton
-                                width="60%"
-                                height="1.2rem"
-                                style="margin-bottom: 0.4rem; display: block"
-                            />
-                            <app-skeleton
-                                width="40%"
-                                height="1.1rem"
-                                style="display: block"
-                            />
-                        </figure>
+                        </div>
                     }
                 </div>
             </section>
-        </div>
-    } @else if (movie) {
-        <header
-            class="detail-gallery__hero"
-            [style.backgroundImage]="
-                'url(https://image.tmdb.org/t/p/original' + movie.backdrop_path + ')'
-            "
-            role="banner"
-        >
-            <div class="detail-gallery__hero-fade"></div>
-
-            <div class="detail-gallery__hero-content">
-                <div class="detail-gallery__hero-grid">
-                    <figure class="detail-gallery__poster-wrapper">
-                        <img
-                            [src]="'https://image.tmdb.org/t/p/w500' + movie.poster_path"
-                            [alt]="'Poster for ' + movie.title"
-                            class="detail-gallery__poster"
-                        />
-                    </figure>
-
-                    <div class="detail-gallery__typography">
-                        <h1 class="detail-gallery__title">{{ movie.title }}</h1>
-
-                        @if (movie.tagline) {
-                            <p class="detail-gallery__tagline">{{ movie.tagline }}</p>
-                        }
-
-                        <div class="detail-gallery__metadata">
-                            <app-meta-badge
-                                icon="star"
-                                [text]="movie.vote_average | number: '1.1-1'"
-                                [highlight]="true"
-                            />
-                            <app-meta-badge [text]="movie.release_date | date: 'yyyy'" />
-                            <app-meta-badge [text]="movie.runtime + ' MIN'" />
-                        </div>
-
-                        <div
-                            class="detail-gallery__genres"
-                            aria-label="Genres"
-                        >
-                            @for (genre of movie.genres; track genre.id) {
-                                <app-category-pill [label]="genre.name" />
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <div class="detail-gallery__body">
-            <article
-                class="detail-gallery__overview"
-                aria-labelledby="synopsis-heading"
-            >
-                <h2 id="synopsis-heading">The Synopsis</h2>
-                <p>{{ movie.overview }}</p>
-            </article>
-
+        } @else {
             <app-cast-grid [cast]="topCast" />
-        </div>
-
-        <div class="detail-gallery__actions">
-            @let isWatchlisted = movieStore.watchlistIds().includes(movie.id);
-            @let isFavorited = movieStore.favoriteIds().includes(movie.id);
-
-            <app-nn-button
-                [label]="isWatchlisted ? 'In Watchlist' : 'Watchlist'"
-                [icon]="isWatchlisted ? 'bookmark' : 'bookmark_border'"
-                [isActive]="isWatchlisted"
-                (clicked)="movieStore.toggleWatchlist({ id: movie.id, status: !isWatchlisted })"
-            />
-
-            <app-nn-button
-                [label]="isFavorited ? 'Favorite' : 'Mark Favorite'"
-                [icon]="isFavorited ? 'favorite' : 'favorite_border'"
-                [isActive]="isFavorited"
-                variant="danger"
-                (clicked)="movieStore.toggleFavorite({ id: movie.id, status: !isFavorited })"
-            />
-
-            @if (trailerKey()) {
-                <app-nn-button
-                    label="Watch Trailer"
-                    icon="play_arrow"
-                    variant="primary"
-                    (clicked)="isTrailerOpen.set(true)"
-                />
-            }
-            @if (isTrailerOpen()) {
-                <app-movie-trailer
-                    [trailerKey]="trailerKey()!"
-                    (close)="isTrailerOpen.set(false)"
-                />
-            }
-        </div>
-
-        @let similar = movieStore.selectedMovie()?.similar?.results;
-        @if (similar) {
-            <app-similar-movies [movies]="similar" />
         }
-    } @else if (movieStore.detailError()) {
-        <div
-            class="detail-gallery__error"
-            role="alert"
-        >
-            <p>{{ movieStore.detailError() }}</p>
-        </div>
+
+        @if (!isLoading) {
+            <div class="detail-gallery__body__feedback">
+                <app-movie-feedback
+                    [reviews]="movieStore.processedReviews()"
+                    [hasMore]="movieStore.hasMoreReviews()"
+                    [isRated]="!!movie?.account_states?.rated"
+                    (loadMore)="movieStore.loadMoreReviews()"
+                    (submitReview)="handleReviewSubmit($event, movie!.id)"
+                />
+            </div>
+        }
+    </div>
+
+    @if (isTrailerOpen()) {
+        <app-movie-trailer
+            [trailerKey]="trailerKey()!"
+            (close)="isTrailerOpen.set(false)"
+        />
     }
 </main>

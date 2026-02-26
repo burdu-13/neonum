@@ -1,0 +1,17 @@
+<section class="nn-empty">
+    <div class="nn-empty__visual">
+        <mat-icon class="nn-empty__icon">{{ icon() }}</mat-icon>
+        <div class="nn-empty__glow"></div>
+    </div>
+
+    <div class="nn-empty__content">
+        <h3 class="nn-empty__title">{{ title() }}</h3>
+        @if (description()) {
+            <p class="nn-empty__description">{{ description() }}</p>
+        }
+    </div>
+
+    <div class="nn-empty__actions">
+        <ng-content select="[actions]"></ng-content>
+    </div>
+</section>

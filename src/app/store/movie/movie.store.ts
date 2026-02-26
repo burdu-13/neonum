@@ -1,5 +1,5 @@
-import { inject } from '@angular/core';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
     pipe,
@@ -13,8 +13,9 @@ import {
 } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
-import { Movie, MovieDetails } from '../../shared/models/movie.model';
+import { Movie, MovieDetails, Review } from '../../shared/models/movie.model';
 import { AlertService } from '../../shared/services/alert/alert';
+import { UserStore } from '../user-info/user.store';
 
 interface MovieState {
     trending: Movie[];
@@ -28,6 +29,9 @@ interface MovieState {
     detailError: string | null;
     watchlistMovies: Movie[];
     favoriteMovies: Movie[];
+    detailsCache: Record<number, MovieDetails>;
+    reviewLimit: number;
+    activeDetailId: number | null;
 }
 
 const initialState: MovieState = {
@@ -42,11 +46,60 @@ const initialState: MovieState = {
     detailError: null,
     watchlistMovies: [],
     favoriteMovies: [],
+    reviewLimit: 6,
+    detailsCache: {},
+    activeDetailId: null,
 };
 
 export const MovieStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
+    withComputed((store, userStore = inject(UserStore)) => ({
+        selectedMovie: computed(() => {
+            const id = store.activeDetailId();
+            return id ? store.detailsCache()[id] || null : null;
+        }),
+
+        processedReviews: computed(() => {
+            const movie = store.detailsCache()[store.activeDetailId() ?? 0];
+            if (!movie) return [];
+
+            const account = userStore.account();
+            const allReviews = [...movie.reviews.results];
+
+            if (movie.account_states?.rated) {
+                const ratingValue =
+                    typeof movie.account_states.rated === 'object'
+                        ? movie.account_states.rated.value
+                        : movie.account_states.rated;
+
+                const alreadyExists = allReviews.some((r) => r.author === account?.username);
+
+                if (!alreadyExists && account) {
+                    allReviews.unshift({
+                        id: 'local-user-rating',
+                        author: account.username,
+                        author_details: {
+                            name: account.username,
+                            username: account.username,
+                            rating: Number(ratingValue),
+                            avatar_path: account.avatar?.tmdb?.avatar_path || null,
+                        },
+                        content: 'You have assessed this cinematic asset with a personal rating.',
+                        created_at: new Date().toISOString(),
+                        url: '',
+                    } as Review);
+                }
+            }
+
+            return allReviews.slice(0, store.reviewLimit());
+        }),
+
+        hasMoreReviews: computed(() => {
+            const movie = store.detailsCache()[store.activeDetailId() ?? 0];
+            return movie ? store.reviewLimit() < movie.reviews.results.length : false;
+        }),
+    })),
     withMethods(
         (
             store,
@@ -86,35 +139,46 @@ export const MovieStore = signalStore(
                 ),
             ),
 
+            loadMoreReviews() {
+                patchState(store, { reviewLimit: store.reviewLimit() + 6 });
+            },
+
             loadMovieDetail: rxMethod<string>(
                 pipe(
                     filter((id) => !!id),
-
                     distinctUntilChanged(),
                     tap((id) => {
-                        if (store.selectedMovie()?.id !== Number(id)) {
-                            patchState(store, {
-                                isDetailLoading: true,
-                                detailError: null,
-                                selectedMovie: null,
-                            });
+                        const mId = Number(id);
+
+                        patchState(store, { activeDetailId: mId, reviewLimit: 6 });
+
+                        if (!store.detailsCache()[mId]) {
+                            patchState(store, { isLoading: true, detailError: null });
                         }
                     }),
                     switchMap((id) => {
-                        if (store.selectedMovie()?.id === Number(id)) {
-                            patchState(store, { isDetailLoading: false });
+                        const mId = Number(id);
+
+                        if (store.detailsCache()[mId]) {
+                            patchState(store, { isLoading: false });
                             return EMPTY;
                         }
 
                         return detailService.getMovieDetails(id).pipe(
                             tap((movie) => {
                                 patchState(store, {
-                                    selectedMovie: movie as MovieDetails,
-                                    isDetailLoading: false,
+                                    detailsCache: {
+                                        ...store.detailsCache(),
+                                        [movie.id]: movie as MovieDetails,
+                                    },
+                                    isLoading: false,
                                 });
                             }),
                             catchError(() => {
-                                patchState(store, { isDetailLoading: false, detailError: 'Error' });
+                                patchState(store, {
+                                    isLoading: false,
+                                    detailError: 'Error loading asset.',
+                                });
                                 return EMPTY;
                             }),
                         );
@@ -229,6 +293,41 @@ export const MovieStore = signalStore(
                                     watchlistIds: watchlist.results.map((m) => m.id),
                                     favoriteIds: favorites.results.map((m) => m.id),
                                 });
+                            }),
+                        );
+                    }),
+                ),
+            ),
+
+            submitRating: rxMethod<{ id: number; rating: number }>(
+                pipe(
+                    switchMap(({ id, rating }) => {
+                        return movieService.addRating(id, rating).pipe(
+                            tap(() => {
+                                alertService.showAlert(
+                                    `Successfully rated: ${rating}/10`,
+                                    'success',
+                                );
+                                const movie = store.detailsCache()[id];
+                                if (movie) {
+                                    const updated = {
+                                        ...movie,
+                                        account_states: {
+                                            ...movie.account_states!,
+                                            rated: { value: rating },
+                                        },
+                                    };
+                                    patchState(store, {
+                                        detailsCache: {
+                                            ...store.detailsCache(),
+                                            [id]: updated as MovieDetails,
+                                        },
+                                    });
+                                }
+                            }),
+                            catchError(() => {
+                                alertService.showAlert('Rating failed.', 'error');
+                                return EMPTY;
                             }),
                         );
                     }),

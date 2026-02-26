@@ -1,0 +1,20 @@
+<div class="nn-rating">
+    <span class="nn-rating__label">Your Assessment:</span>
+    <div class="nn-rating__stars">
+        @for (star of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track star) {
+            <button
+                type="button"
+                class="nn-rating__star-btn"
+                [class.nn-rating__star-btn--active]="(hoveredStar() || value()) >= star"
+                (mouseenter)="hoveredStar.set(star)"
+                (mouseleave)="hoveredStar.set(0)"
+                (click)="valueChange.emit(star)"
+            >
+                <mat-icon>
+                    {{ (hoveredStar() || value()) >= star ? 'star' : 'star_outline' }}
+                </mat-icon>
+            </button>
+        }
+    </div>
+    <span class="nn-rating__value">{{ hoveredStar() || value() || 0 }}/10</span>
+</div>
