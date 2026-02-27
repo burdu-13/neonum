@@ -52,6 +52,16 @@ $touch: 4.4rem;
         }
     }
 
+    .profile-link {
+        text-decoration: none;
+        color: inherit;
+        transition: opacity 0.2s ease;
+
+        &:hover {
+            opacity: 0.7;
+        }
+    }
+
     &__nav {
         flex: 1;
         @include flex(center, center);

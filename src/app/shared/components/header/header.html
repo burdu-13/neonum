@@ -94,7 +94,12 @@
                     />
                 } @else if (store.isAuthenticated() && store.account()) {
                     <div class="header__profile-pill">
-                        <span class="profile-name">{{ store.account()?.username }}</span>
+                        <a
+                            routerLink="/profile/me"
+                            class="profile-link"
+                        >
+                            <span class="profile-name">{{ store.account()?.username }}</span>
+                        </a>
                         <app-nn-button
                             icon="power_settings_new"
                             variant="surface"
@@ -186,7 +191,13 @@
                         <div class="mobile-profile">
                             <span class="label">Logged in as</span>
                             <div class="user-row">
-                                <span class="name">{{ store.account()?.username }}</span>
+                                <a
+                                    routerLink="/profile/me"
+                                    (click)="closeMenu()"
+                                    class="profile-link"
+                                >
+                                    <span class="name">{{ store.account()?.username }}</span>
+                                </a>
                                 <app-nn-button
                                     icon="power_settings_new"
                                     variant="surface"
