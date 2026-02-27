@@ -1,9 +1,20 @@
 @use '../../styles/variables' as *;
+
 .category-pill {
-    padding: 0.4rem 1.2rem;
+    padding: 0.6rem 1.6rem;
     border: 0.1rem solid var(--nn-border);
     border-radius: 2rem;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     color: var(--nn-icon-muted);
     white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    display: inline-block;
+
+    &--active {
+        background: var(--nn-primary);
+        border-color: var(--nn-primary);
+        color: var(--nn-bg);
+        font-weight: 700;
+        box-shadow: 0 0.4rem 1.2rem rgba(var(--nn-primary-rgb), 0.3);
+    }
 }

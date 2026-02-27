@@ -1,0 +1,58 @@
+<main class="explore">
+    <header class="explore__header">
+        <div class="nn-container">
+            <h1 class="explore__title">Explore</h1>
+
+            <div class="explore__filters">
+                @for (genre of exploreStore.genres(); track genre.id) {
+                    <app-category-pill
+                        [label]="genre.name"
+                        [isActive]="
+                            !!exploreStore
+                                .filters()
+                                .with_genres?.split(',')
+                                ?.includes(genre.id.toString())
+                        "
+                        (click)="handleGenreChange(genre.id)"
+                    />
+                }
+            </div>
+        </div>
+    </header>
+
+    <div class="nn-container">
+        <div class="explore__grid">
+            @if (!exploreStore.isLoading()) {
+                @for (movie of exploreStore.movies(); track movie.id; let i = $index) {
+                    <app-movie-card
+                        [movie]="movie"
+                        [priority]="i < 4"
+                        class="explore__card-reveal"
+                        [style.animation-delay]="i * 0.05 + 's'"
+                    />
+                } @empty {
+                    <app-nn-empty-state
+                        title="No Assets Found"
+                        description="
+                            No cinematic assets match your current filters. Try adjusting your selection.
+                        "
+                        icon="search_off"
+                    />
+                }
+            } @else {
+                @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
+                    <div class="skeleton-card">
+                        <div class="skeleton-poster">
+                            <app-skeleton
+                                width="100%"
+                                height="100%"
+                                radius="1.2rem"
+                                style="position: absolute; inset: 0"
+                            />
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</main>

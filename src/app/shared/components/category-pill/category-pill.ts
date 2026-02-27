@@ -9,4 +9,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class CategoryPill {
     public readonly label = input.required<string>();
+    public readonly isActive = input<boolean>(false);
 }

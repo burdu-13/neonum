@@ -1,3 +1,5 @@
+import { Movie } from "../../../shared/models/movie.model";
+
 export interface ExploreFilters {
     page: number;
     with_genres?: string;
@@ -14,4 +16,9 @@ export interface Genre {
 
 export interface GenreResponse {
     genres: Genre[];
+}
+
+export interface ExploreCacheEntry {
+    results: Movie[];
+    total: number;
 }
