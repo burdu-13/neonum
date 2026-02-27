@@ -2,70 +2,71 @@
     <header class="explore__header">
         <div class="nn-container">
             <div class="explore__header-top">
-                <h1 class="explore__title">Explore</h1>
+                <div class="explore__title-group">
+                    <span class="explore__subtitle">Cinematic Archive</span>
+                    <h1 class="explore__title">Explore</h1>
+                </div>
+
                 <app-nn-dropdown
                     [options]="[
                         { label: 'Most Popular', value: 'popularity.desc' },
                         { label: 'Newest Releases', value: 'primary_release_date.desc' },
                         { label: 'Top Rated', value: 'vote_average.desc' },
-                        { label: 'Box Office', value: 'revenue.desc' },
                     ]"
                     [(value)]="sortValue"
                 />
             </div>
 
-            <div class="explore__filters">
-                @for (genre of exploreStore.genres(); track genre.id) {
-                    <app-category-pill
-                        [label]="genre.name"
-                        [isActive]="
-                            !!exploreStore
-                                .filters()
-                                .with_genres?.split(',')
-                                ?.includes(genre.id.toString())
-                        "
-                        (click)="handleGenreChange(genre.id)"
-                    />
-                }
-            </div>
+            <nav class="explore__filters">
+                <div class="explore__filters-scroll">
+                    @for (genre of exploreStore.genres(); track genre.id) {
+                        <app-category-pill
+                            [label]="genre.name"
+                            [isActive]="
+                                !!exploreStore
+                                    .filters()
+                                    .with_genres?.split(',')
+                                    ?.includes(genre.id.toString())
+                            "
+                            (click)="handleGenreChange(genre.id)"
+                        />
+                    }
+                </div>
+            </nav>
         </div>
     </header>
 
     <div class="nn-container">
         <div class="explore__grid">
             @for (movie of exploreStore.movies(); track movie.id) {
-                <app-movie-card [movie]="movie" />
+                @defer (on viewport) {
+                    <app-movie-card
+                        [movie]="movie"
+                        class="explore__item"
+                        [style.--index]="$index % 20"
+                    />
+                } @placeholder {
+                    <app-skeleton
+                        type="card"
+                        class="explore__ghost"
+                    />
+                }
             }
 
-            @if (
-                exploreStore.isLoading() &&
-                (exploreStore.filters().page === 1 || exploreStore.movies().length === 0)
-            ) {
-                @for (
-                    item of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-                    track $index
-                ) {
-                    <div class="skeleton-card"></div>
+            @if (exploreStore.isLoading()) {
+                @for (i of [1, 2, 3, 4]; track $index) {
+                    <app-skeleton
+                        type="card"
+                        class="explore__item explore__item--loading"
+                    />
                 }
             }
         </div>
 
-        @if (!exploreStore.isLoading() && exploreStore.movies().length === 0) {
-            <app-nn-empty-state
-                title="No Assets Found"
-                description="No cinematic assets match your current filters. Try adjusting your selection."
-                icon="search_off"
-            />
-        }
-
         <div
             class="explore__load-trigger"
-            appIntersectionObserver
+            appInteractionObserver
             (isIntersecting)="exploreStore.loadNextPage()"
-        >
-            @if (exploreStore.isLoading() && exploreStore.filters().page > 1) {
-                <div class="skeleton-pill"></div>
-            }
-        </div>
+        ></div>
     </div>
 </main>
