@@ -7,6 +7,15 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
 
+@font-face {
+    font-family: 'Inter-Fallback';
+    src: local('Arial');
+    ascent-override: 90%;
+    descent-override: 22.5%;
+    line-gap-override: 0%;
+    size-adjust: 107.5%;
+}
+
 html {
     height: 100%;
     font-size: 62.5%;
@@ -15,7 +24,7 @@ html {
 body,
 html,
 * {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Inter-Fallback', sans-serif;
 }
 
 body {
