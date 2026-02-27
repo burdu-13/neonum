@@ -8,6 +8,7 @@
                 </div>
 
                 <app-nn-dropdown
+                    class="explore__sort-dropdown"
                     [options]="[
                         { label: 'Most Popular', value: 'popularity.desc' },
                         { label: 'Newest Releases', value: 'primary_release_date.desc' },
@@ -17,55 +18,74 @@
                 />
             </div>
 
-            <nav class="explore__filters">
-                <div class="explore__filters-scroll">
-                    @for (genre of exploreStore.genres(); track genre.id) {
-                        <app-category-pill
-                            [label]="genre.name"
-                            [isActive]="
-                                !!exploreStore
-                                    .filters()
-                                    .with_genres?.split(',')
-                                    ?.includes(genre.id.toString())
-                            "
-                            (click)="handleGenreChange(genre.id)"
-                        />
-                    }
+            <nav
+                class="explore__filters"
+                aria-label="Genre filters"
+            >
+                @if (breakpointService.isMobile()) {
+                    <button
+                        type="button"
+                        class="explore__filter-toggle"
+                        (click)="toggleFilters()"
+                        [attr.aria-expanded]="isFiltersExpanded()"
+                        [class.explore__filter-toggle--active]="isFiltersExpanded()"
+                    >
+                        <span class="explore__filter-toggle-label">
+                            {{ isFiltersExpanded() ? 'Hide Filters' : 'Browse Genres' }}
+                        </span>
+                        <mat-icon class="explore__filter-toggle-icon">
+                            {{ isFiltersExpanded() ? 'expand_less' : 'expand_more' }}
+                        </mat-icon>
+                    </button>
+                }
+
+                <div
+                    class="explore__filters-wrapper"
+                    [class.explore__filters-wrapper--expanded]="isFiltersExpanded()"
+                >
+                    <div class="explore__filters-inner">
+                        <div class="explore__filters-grid">
+                            @for (genre of exploreStore.genres(); track genre.id) {
+                                <app-category-pill
+                                    [label]="genre.name"
+                                    [isActive]="
+                                        !!exploreStore
+                                            .filters()
+                                            .with_genres?.split(',')
+                                            ?.includes(genre.id.toString())
+                                    "
+                                    (click)="handleGenreChange(genre.id)"
+                                />
+                            }
+                        </div>
+                    </div>
                 </div>
             </nav>
         </div>
     </header>
 
     <div class="nn-container">
-        <div class="explore__grid">
+        <div
+            class="explore__grid"
+            role="feed"
+        >
             @for (movie of exploreStore.movies(); track movie.id) {
-                @defer (on viewport) {
-                    <app-movie-card
-                        [movie]="movie"
-                        class="explore__item"
-                        [style.--index]="$index % 20"
-                    />
-                } @placeholder {
-                    <app-skeleton
-                        type="card"
-                        class="explore__ghost"
-                    />
-                }
+                <app-movie-card
+                    [movie]="movie"
+                    class="explore__item"
+                />
             }
 
             @if (exploreStore.isLoading()) {
                 @for (i of [1, 2, 3, 4]; track $index) {
-                    <app-skeleton
-                        type="card"
-                        class="explore__item explore__item--loading"
-                    />
+                    <div class="skeleton-card"></div>
                 }
             }
         </div>
 
         <div
             class="explore__load-trigger"
-            appInteractionObserver
+            appIntersectionObserver
             (isIntersecting)="exploreStore.loadNextPage()"
         ></div>
     </div>

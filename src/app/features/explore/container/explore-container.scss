@@ -2,109 +2,135 @@
 @use '../../../shared/styles/variables' as *;
 
 .explore {
-    --nn-nav-height: 7rem;
     min-height: 100vh;
-    padding-top: 4rem;
-    padding-bottom: 8rem;
+    padding: 12rem 0 12rem;
 
     &__header {
-        position: sticky;
-        top: var(--nn-nav-height);
-        z-index: 90;
-        padding: 3.2rem 0;
-        margin-bottom: 4.8rem;
-
-        @include glass($opacity: 0.8, $blur: 2rem);
-        border: none;
+        margin-bottom: 6.4rem;
         border-bottom: 1px solid var(--nn-border);
-
-        animation: headerSlideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        padding-bottom: 3.2rem;
     }
 
     &__header-top {
-        @include flex(space-between, flex-end);
+        @include flex($direction: column, $gap: 2.4rem);
         margin-bottom: 3.2rem;
+
+        @include mq('md') {
+            @include flex(space-between, center, row);
+        }
+    }
+
+    &__title-group {
+        @include flex($direction: column, $gap: 0.8rem);
     }
 
     &__subtitle {
-        font-size: 1rem;
+        font-size: 1.1rem;
         text-transform: uppercase;
         letter-spacing: 0.5em;
         color: var(--nn-primary);
         font-weight: 700;
         display: block;
-        margin-bottom: 0.4rem;
     }
 
     &__title {
-        font-size: clamp(3rem, 6vw, 5.6rem);
+        font-size: clamp(3.2rem, 8vw, 6.4rem);
         font-weight: 800;
         letter-spacing: -0.04em;
         line-height: 1;
+        color: var(--nn-text);
     }
 
-    &__filters-scroll {
-        @include flex($gap: 1rem);
-        overflow-x: auto;
-        padding-bottom: 0.5rem;
-        scrollbar-width: none;
-        &::-webkit-scrollbar {
-            display: none;
+    &__sort-dropdown {
+        width: 100%;
+        @include mq('sm') {
+            width: 26rem;
         }
+    }
+
+    &__filter-toggle {
+        @include flex($align: center, $justify: space-between);
+        width: 100%;
+        padding: 1.6rem 0;
+        background: transparent;
+        border: none;
+        border-top: 1px solid var(--nn-border);
+        color: var(--nn-text);
+        cursor: pointer;
+
+        &-label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        &-icon {
+            color: var(--nn-primary);
+        }
+    }
+
+    &__filters-wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+        &--expanded {
+            grid-template-rows: 1fr;
+        }
+
+        @include mq('md') {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    &__filters-inner {
+        overflow: hidden;
+    }
+
+    &__filters-grid {
+        @include flex($wrap: wrap, $gap: 1.2rem);
+        padding: 2.4rem 0;
     }
 
     &__grid {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 3.2rem 1.6rem;
-
-        content-visibility: auto;
-        contain-intrinsic-size: 1px 40rem;
+        grid-template-columns: 1fr;
+        gap: 4.8rem;
 
         @include mq('sm') {
-            grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-            gap: 5rem 3rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4.8rem 2.4rem;
         }
-    }
 
-    &__item {
-        opacity: 0;
-        transform: translateY(2rem);
-        animation: itemReveal 0.6s cubic-bezier(0.2, 1, 0.3, 1) forwards;
-        animation-delay: calc(var(--index) * 0.04s);
-
-        &--loading {
-            opacity: 0.3;
-            filter: saturate(0);
+        @include mq('md') {
+            grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+            gap: 6.4rem 3.2rem;
         }
-    }
 
-    &__ghost {
-        aspect-ratio: 2/3;
-        background: var(--nn-surface);
-        border-radius: 1.2rem;
+        @include mq('xl') {
+            grid-template-columns: repeat(auto-fill, minmax(28rem, 1fr));
+            gap: 8rem 4rem;
+        }
     }
 
     &__load-trigger {
-        height: 20rem;
-        margin-top: -10rem;
+        height: 12rem;
+        width: 100%;
     }
 }
 
-@keyframes headerSlideDown {
-    from {
-        transform: translateY(-20%);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+.nn-container {
+    width: 100%;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding: 0 2.4rem;
 }
 
-@keyframes itemReveal {
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+.skeleton-card {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: var(--nn-surface);
+    border-radius: 1.2rem;
 }
