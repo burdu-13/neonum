@@ -1,0 +1,37 @@
+<header class="hero">
+    <div class="hero__profile">
+        <div class="hero__avatar-wrapper">
+            <img
+                [src]="avatarUrl"
+                (error)="handleImageError($event)"
+                class="hero__avatar"
+                alt="Profile Picture"
+            />
+        </div>
+
+        <div class="hero__info">
+            @if (isEditMode()) {
+                <input
+                    class="hero__input"
+                    [ngModel]="user()?.username"
+                    (ngModelChange)="editValue.set($event)"
+                    (keyup.enter)="onSave()"
+                    autofocus
+                />
+            } @else {
+                <h1 class="hero__username">{{ user()?.username || 'Guest' }}</h1>
+            }
+            <p class="hero__role">Member since 2026</p>
+        </div>
+    </div>
+
+    @if (isOwnProfile()) {
+        <div class="hero__actions">
+            <app-nn-button
+                [label]="isEditMode() ? 'Save Changes' : 'Edit Profile'"
+                [variant]="isEditMode() ? 'primary' : 'surface'"
+                (clicked)="isEditMode() ? onSave() : toggleEdit.emit()"
+            />
+        </div>
+    }
+</header>

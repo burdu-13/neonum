@@ -29,6 +29,20 @@ export const routes: Routes = [
                 (c) => c.ActorDetailContainer,
             ),
     },
+    {
+        path: 'profile/me',
+        loadComponent: () =>
+            import('./features/user-profile/container/user-profile-container').then(
+                (c) => c.UserProfileContainer,
+            ),
+    },
+    {
+        path: 'profile/:id',
+        loadComponent: () =>
+            import('./features/user-profile/container/user-profile-container').then(
+                (c) => c.UserProfileContainer,
+            ),
+    },
     { path: '', redirectTo: 'auth', pathMatch: 'full' },
     { path: '**', redirectTo: 'auth' },
 ];

@@ -1,0 +1,96 @@
+@use '../../../../shared/styles/mixins' as *;
+
+.hero {
+    @include flex(space-between, center);
+    @include glass(0.4, 2.4rem);
+    padding: 4.8rem;
+    border-radius: 3.2rem;
+    border: 1px solid rgba(var(--nn-primary-rgb), 0.1);
+    margin-bottom: 4.8rem;
+
+    @include mq('md') {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 3.2rem;
+        padding: 3.2rem;
+    }
+
+    &__profile {
+        @include flex(center, center, $gap: 3.2rem);
+
+        @include mq('sm') {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 2.4rem;
+        }
+    }
+
+    &__avatar-wrapper {
+        position: relative;
+        width: 14rem;
+        height: 14rem;
+        flex-shrink: 0;
+
+        &::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--nn-primary), transparent);
+            z-index: 1;
+        }
+    }
+
+    &__avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--nn-bg);
+        position: relative;
+        z-index: 2;
+        background: var(--nn-surface);
+    }
+
+    &__info {
+        @include flex(flex-start, flex-start, column, $gap: 0.8rem);
+    }
+
+    &__username {
+        font-size: clamp(3.2rem, 5vw, 4.8rem);
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        margin: 0;
+        color: var(--nn-text);
+    }
+
+    &__role {
+        font-size: 1.4rem;
+        color: var(--nn-icon-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        font-weight: 600;
+    }
+
+    &__input {
+        background: rgba(var(--nn-surface-rgb), 0.5);
+        border: 2px solid var(--nn-primary);
+        border-radius: 1.2rem;
+        padding: 0.8rem 1.6rem;
+        color: var(--nn-text);
+        font-size: 3.2rem;
+        font-weight: 800;
+        width: 100%;
+        max-width: 40rem;
+        outline: none;
+        transition: box-shadow 0.3s ease;
+
+        &:focus {
+            box-shadow: 0 0 2rem rgba(var(--nn-primary-rgb), 0.2);
+        }
+    }
+
+    &__actions {
+        @include flex(center, center, $gap: 1.6rem);
+    }
+}
