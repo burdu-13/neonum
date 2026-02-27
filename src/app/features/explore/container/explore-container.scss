@@ -10,12 +10,34 @@
         margin-bottom: 4.8rem;
     }
 
+    &__header-top {
+        @include flex(space-between, center);
+        margin-bottom: 3.2rem;
+    }
+
     &__title {
         font-size: clamp(3.2rem, 5vw, 4.8rem);
         font-weight: 800;
         letter-spacing: -0.04em;
-        margin-bottom: 3.2rem;
         color: var(--nn-text);
+    }
+
+    &__sorting {
+        select {
+            background: var(--nn-surface);
+            color: var(--nn-text);
+            border: 0.1rem solid var(--nn-border);
+            padding: 0.8rem 1.6rem;
+            border-radius: 0.8rem;
+            font-size: 1.4rem;
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.2s ease;
+
+            &:focus {
+                border-color: var(--nn-primary);
+            }
+        }
     }
 
     &__filters {
@@ -24,6 +46,7 @@
 
         app-category-pill {
             cursor: pointer;
+            transition: all 0.2s ease;
 
             &:hover {
                 transform: translateY(-0.2rem);
@@ -50,6 +73,13 @@
         opacity: 0;
         transform: translateY(2rem);
         animation: smoothReveal 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    }
+
+    &__load-trigger {
+        width: 100%;
+        height: 12rem;
+        @include flex(center, center);
+        margin-top: 4rem;
     }
 
     app-empty-state {

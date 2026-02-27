@@ -12,18 +12,17 @@ interface ExploreState {
     filters: ExploreFilters;
     isLoading: boolean;
     totalResults: number;
+    totalPages: number;
     cache: Record<string, ExploreCacheEntry>;
 }
 
 const initialState: ExploreState = {
     movies: [],
     genres: [],
-    filters: {
-        page: 1,
-        sort_by: 'popularity.desc',
-    },
+    filters: { page: 1, sort_by: 'popularity.desc' },
     isLoading: false,
     totalResults: 0,
+    totalPages: 0,
     cache: {},
 };
 
@@ -42,15 +41,14 @@ export const ExploreStore = signalStore(
             ),
         ),
 
-        loadMovies: rxMethod<ExploreFilters>(
+        loadMovies: rxMethod<{ filters: ExploreFilters; append: boolean }>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
-                switchMap((filters) => {
+                switchMap(({ filters, append }) => {
                     const cacheKey = JSON.stringify(filters);
-
                     const cachedData = store.cache()[cacheKey];
 
-                    if (cachedData) {
+                    if (cachedData && !append) {
                         patchState(store, {
                             movies: cachedData.results,
                             totalResults: cachedData.total,
@@ -62,13 +60,19 @@ export const ExploreStore = signalStore(
                     return exploreService.discoverMovies(filters).pipe(
                         tap((res) => {
                             patchState(store, {
-                                movies: res.results,
+                                movies: append ? [...store.movies(), ...res.results] : res.results,
                                 totalResults: res.total_results,
+                                totalPages: res.total_pages,
                                 isLoading: false,
-                                cache: {
-                                    ...store.cache(),
-                                    [cacheKey]: { results: res.results, total: res.total_results },
-                                },
+                                cache: append
+                                    ? store.cache()
+                                    : {
+                                          ...store.cache(),
+                                          [cacheKey]: {
+                                              results: res.results,
+                                              total: res.total_results,
+                                          },
+                                      },
                             });
                         }),
                         catchError(() => {
@@ -80,10 +84,19 @@ export const ExploreStore = signalStore(
             ),
         ),
 
+        loadNextPage() {
+            if (!store.isLoading() && store.filters().page < store.totalPages()) {
+                const nextPage = store.filters().page + 1;
+                patchState(store, (state) => ({ filters: { ...state.filters, page: nextPage } }));
+                this.loadMovies({ filters: store.filters(), append: true });
+            }
+        },
+
         updateFilters(newFilters: Partial<ExploreFilters>) {
             patchState(store, (state) => ({
-                filters: { ...state.filters, ...newFilters, page: newFilters.page ?? 1 },
+                filters: { ...state.filters, ...newFilters, page: 1 },
             }));
+            this.loadMovies({ filters: store.filters(), append: false });
         },
     })),
 );

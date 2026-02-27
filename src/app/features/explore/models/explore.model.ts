@@ -1,12 +1,13 @@
-import { Movie } from "../../../shared/models/movie.model";
+import { Movie } from '../../../shared/models/movie.model';
 
 export interface ExploreFilters {
     page: number;
-    with_genres?: string;
     sort_by: string;
+    with_genres?: string;
+    'vote_average.gte'?: number;
+    'vote_count.gte'?: number;
     'primary_release_date.gte'?: string;
     'primary_release_date.lte'?: string;
-    'vote_average.gte'?: number;
 }
 
 export interface Genre {

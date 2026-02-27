@@ -1,7 +1,21 @@
 <main class="explore">
     <header class="explore__header">
         <div class="nn-container">
-            <h1 class="explore__title">Explore</h1>
+            <div class="explore__header-top">
+                <h1 class="explore__title">Explore</h1>
+
+                <div class="explore__sorting">
+                    <select
+                        (change)="handleSortChange($event)"
+                        [value]="exploreStore.filters().sort_by"
+                    >
+                        <option value="popularity.desc">Most Popular</option>
+                        <option value="primary_release_date.desc">Newest Releases</option>
+                        <option value="vote_average.desc">Top Rated</option>
+                        <option value="revenue.desc">Box Office</option>
+                    </select>
+                </div>
+            </div>
 
             <div class="explore__filters">
                 @for (genre of exploreStore.genres(); track genre.id) {
@@ -22,24 +36,16 @@
 
     <div class="nn-container">
         <div class="explore__grid">
-            @if (!exploreStore.isLoading()) {
-                @for (movie of exploreStore.movies(); track movie.id; let i = $index) {
-                    <app-movie-card
-                        [movie]="movie"
-                        [priority]="i < 4"
-                        class="explore__card-reveal"
-                        [style.animation-delay]="i * 0.05 + 's'"
-                    />
-                } @empty {
-                    <app-nn-empty-state
-                        title="No Assets Found"
-                        description="
-                            No cinematic assets match your current filters. Try adjusting your selection.
-                        "
-                        icon="search_off"
-                    />
-                }
-            } @else {
+            @for (movie of exploreStore.movies(); track movie.id; let i = $index) {
+                <app-movie-card
+                    [movie]="movie"
+                    [priority]="i < 4"
+                    class="explore__card-reveal"
+                    [style.animation-delay]="i * 0.05 + 's'"
+                />
+            }
+
+            @if (exploreStore.isLoading() && exploreStore.filters().page === 1) {
                 @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track item) {
                     <div class="skeleton-card">
                         <div class="skeleton-poster">
@@ -52,6 +58,28 @@
                         </div>
                     </div>
                 }
+            }
+        </div>
+
+        @if (!exploreStore.isLoading() && exploreStore.movies().length === 0) {
+            <app-nn-empty-state
+                title="No Assets Found"
+                description="No cinematic assets match your current filters. Try adjusting your selection."
+                icon="search_off"
+            />
+        }
+
+        <div
+            class="explore__load-trigger"
+            appInteractionObserver
+            (isIntersecting)="exploreStore.loadNextPage()"
+        >
+            @if (exploreStore.isLoading() && exploreStore.filters().page > 1) {
+                <app-skeleton
+                    width="20rem"
+                    height="4rem"
+                    radius="2rem"
+                />
             }
         </div>
     </div>

@@ -15,8 +15,11 @@ export class ExploreService {
 
         if (filters.with_genres) path += `&with_genres=${filters.with_genres}`;
         if (filters['vote_average.gte']) path += `&vote_average.gte=${filters['vote_average.gte']}`;
+        if (filters['vote_count.gte']) path += `&vote_count.gte=${filters['vote_count.gte']}`;
         if (filters['primary_release_date.gte'])
             path += `&primary_release_date.gte=${filters['primary_release_date.gte']}`;
+        if (filters['primary_release_date.lte'])
+            path += `&primary_release_date.lte=${filters['primary_release_date.lte']}`;
 
         return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
