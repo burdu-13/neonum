@@ -5,6 +5,7 @@
     [class]="'nn-btn--' + variant()"
     [class.nn-btn--active]="isActive()"
     [class.nn-btn--icon-only]="!label()"
+    [attr.aria-label]="ariaLabel() || label() || icon()"
     (click)="clicked.emit($event)"
 >
     @if (icon() && !isLoading()) {

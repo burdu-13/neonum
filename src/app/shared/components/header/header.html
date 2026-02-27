@@ -18,12 +18,14 @@
                 variant="surface"
                 (clicked)="movieStore.getRandomContent()"
                 title="I'm Feeling Lucky"
+                ariaLabel="Lucky Shuffle"
             />
 
             <app-nn-button
                 icon="search"
                 variant="surface"
                 (clicked)="router.navigate(['/search'])"
+                ariaLabel="Search Movies"
             />
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {
@@ -41,6 +43,7 @@
                         <app-nn-button
                             icon="power_settings_new"
                             variant="surface"
+                            ariaLabel="Logout"
                             (clicked)="store.logout()"
                         />
                     </div>

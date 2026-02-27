@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component, input, output, signal } from '@angu
 import { AccountDetails } from '../../../../core/auth/models/auth.model';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TmdbImagePipe } from '../../../../shared/pipes/tmdb-image-pipe';
-import { Skeleton } from "../../../../shared/components/skeleton/skeleton";
+import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 
 @Component({
     selector: 'app-profile-hero',
-    imports: [CommonModule, FormsModule, TmdbImagePipe, Skeleton, NgOptimizedImage],
+    imports: [CommonModule, FormsModule, Skeleton, NgOptimizedImage],
     templateUrl: './profile-hero.html',
     styleUrl: './profile-hero.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,7 +8,7 @@
     </header>
 
     <div class="dashboard__content">
-        @if (movieStore.watchlistMovies().length > 0 || movieStore.isLoading()) {
+        @if (userStore.isAuthenticated()) {
             <app-movie-shelf
                 title="Your Watchlist"
                 [movies]="movieStore.watchlistMovies()"
@@ -16,14 +16,13 @@
                 [isPersonal]="true"
                 emptyMessage="Your cinematic queue is currently empty."
             />
-        }
 
-        @if (movieStore.favoriteMovies().length > 0 || movieStore.isLoading()) {
             <app-movie-shelf
                 title="Personal Favorites"
                 [movies]="movieStore.favoriteMovies()"
                 [isLoading]="movieStore.isLoading()"
                 [isPersonal]="true"
+                emptyMessage="You haven't added any favorites yet."
             />
         }
 
@@ -45,6 +44,7 @@
                         @for (movie of section.data; track movie.id; let i = $index) {
                             <app-movie-card
                                 [movie]="movie"
+                                [priority]="i < 4"
                                 class="dashboard__card-reveal"
                                 [style.animation-delay]="i * 0.04 + 's'"
                             />
@@ -56,12 +56,14 @@
                     } @placeholder {
                         @for (item of [1, 2, 3, 4, 5, 6]; track item) {
                             <div class="skeleton-card">
-                                <app-skeleton
-                                    height="35rem"
-                                    width="100%"
-                                    radius="1.2rem"
-                                    class="skeleton-poster"
-                                />
+                                <div class="skeleton-poster">
+                                    <app-skeleton
+                                        width="100%"
+                                        height="100%"
+                                        radius="1.2rem"
+                                        style="position: absolute; inset: 0"
+                                    />
+                                </div>
                                 <div class="skeleton-meta">
                                     <app-skeleton
                                         width="70%"

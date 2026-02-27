@@ -18,6 +18,7 @@ export class NnButton {
     public readonly isLoading = input<boolean>(false);
     public readonly disabled = input<boolean>(false);
     public readonly type = input<'button' | 'submit'>('button');
+    public readonly ariaLabel = input<string>();
 
     public readonly clicked = output<MouseEvent>();
 }
