@@ -9,24 +9,18 @@ import {
 } from '@angular/core';
 import { ExploreStore } from '../store/explore.store';
 import { MovieCard } from '../../dashboard/components/movie-card/movie-card';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
-import { CategoryPill } from '../../../shared/components/category-pill/category-pill';
-import { NnEmptyState } from '../../../shared/components/nn-empty-state/nn-empty-state';
 import { InteractionObserver } from '../../../shared/directives/interaction-observer';
-import { NnDropdown } from '../../../shared/components/nn-dropdown/nn-dropdown';
 import { BreakpointService } from '../../../shared/services/breakpoint-service/breakpoint-service';
-import { MatIcon } from '@angular/material/icon';
+import { ExploreFilters } from '../components/explore-filters/explore-filters';
+import { ExploreHeader } from '../components/explore-header/explore-header';
 
 @Component({
     selector: 'app-explore-container',
     imports: [
         MovieCard,
-        Skeleton,
-        CategoryPill,
-        NnEmptyState,
         InteractionObserver,
-        NnDropdown,
-        MatIcon,
+        ExploreFilters,
+        ExploreHeader,
     ],
     templateUrl: './explore-container.html',
     styleUrl: './explore-container.scss',
@@ -39,12 +33,14 @@ export class FeatureContainer implements OnInit {
     private readonly mobileFiltersToggled = signal(false);
 
     protected readonly isFiltersExpanded = computed(() => {
-        if (!this.breakpointService.isMobile()) {
-            return true;
-        }
-
+        if (!this.breakpointService.isMobile()) return true;
         return this.mobileFiltersToggled();
     });
+
+    protected readonly activeGenreIds = computed(
+        () => this.exploreStore.filters().with_genres?.split(',') ?? [],
+    );
+
     protected readonly sortValue = signal(this.exploreStore.filters().sort_by);
 
     constructor() {
@@ -69,7 +65,7 @@ export class FeatureContainer implements OnInit {
     }
 
     protected handleGenreChange(genreId: number): void {
-        const currentGenres = this.exploreStore.filters().with_genres?.split(',') || [];
+        const currentGenres = this.activeGenreIds();
         const idStr = genreId.toString();
         const newGenres = currentGenres.includes(idStr)
             ? currentGenres.filter((id) => id !== idStr)

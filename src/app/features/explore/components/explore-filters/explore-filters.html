@@ -1,0 +1,38 @@
+<nav
+    class="explore-filters"
+    aria-label="Genre filters"
+>
+    @if (showToggle()) {
+        <button
+            type="button"
+            class="explore-filters__toggle"
+            (click)="toggle.emit()"
+            [attr.aria-expanded]="isExpanded()"
+            [class.explore-filters__toggle--active]="isExpanded()"
+        >
+            <span class="explore-filters__toggle-label">
+                {{ isExpanded() ? 'Hide Filters' : 'Browse Genres' }}
+            </span>
+            <mat-icon class="explore-filters__toggle-icon">
+                {{ isExpanded() ? 'expand_less' : 'expand_more' }}
+            </mat-icon>
+        </button>
+    }
+
+    <div
+        class="explore-filters__wrapper"
+        [class.explore-filters__wrapper--expanded]="isExpanded()"
+    >
+        <div class="explore-filters__inner">
+            <div class="explore-filters__grid">
+                @for (genre of genres(); track genre.id) {
+                    <app-category-pill
+                        [label]="genre.name"
+                        [isActive]="activeGenreIds().includes(genre.id.toString())"
+                        (click)="genreChange.emit(genre.id)"
+                    />
+                }
+            </div>
+        </div>
+    </div>
+</nav>

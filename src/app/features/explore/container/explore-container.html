@@ -1,66 +1,16 @@
 <main class="explore">
     <header class="explore__header">
         <div class="nn-container">
-            <div class="explore__header-top">
-                <div class="explore__title-group">
-                    <span class="explore__subtitle">Cinematic Archive</span>
-                    <h1 class="explore__title">Explore</h1>
-                </div>
+            <app-explore-header [(sortValue)]="sortValue" />
 
-                <app-nn-dropdown
-                    class="explore__sort-dropdown"
-                    [options]="[
-                        { label: 'Most Popular', value: 'popularity.desc' },
-                        { label: 'Newest Releases', value: 'primary_release_date.desc' },
-                        { label: 'Top Rated', value: 'vote_average.desc' },
-                    ]"
-                    [(value)]="sortValue"
-                />
-            </div>
-
-            <nav
-                class="explore__filters"
-                aria-label="Genre filters"
-            >
-                @if (breakpointService.isMobile()) {
-                    <button
-                        type="button"
-                        class="explore__filter-toggle"
-                        (click)="toggleFilters()"
-                        [attr.aria-expanded]="isFiltersExpanded()"
-                        [class.explore__filter-toggle--active]="isFiltersExpanded()"
-                    >
-                        <span class="explore__filter-toggle-label">
-                            {{ isFiltersExpanded() ? 'Hide Filters' : 'Browse Genres' }}
-                        </span>
-                        <mat-icon class="explore__filter-toggle-icon">
-                            {{ isFiltersExpanded() ? 'expand_less' : 'expand_more' }}
-                        </mat-icon>
-                    </button>
-                }
-
-                <div
-                    class="explore__filters-wrapper"
-                    [class.explore__filters-wrapper--expanded]="isFiltersExpanded()"
-                >
-                    <div class="explore__filters-inner">
-                        <div class="explore__filters-grid">
-                            @for (genre of exploreStore.genres(); track genre.id) {
-                                <app-category-pill
-                                    [label]="genre.name"
-                                    [isActive]="
-                                        !!exploreStore
-                                            .filters()
-                                            .with_genres?.split(',')
-                                            ?.includes(genre.id.toString())
-                                    "
-                                    (click)="handleGenreChange(genre.id)"
-                                />
-                            }
-                        </div>
-                    </div>
-                </div>
-            </nav>
+            <app-explore-filters
+                [genres]="exploreStore.genres()"
+                [isExpanded]="isFiltersExpanded()"
+                [showToggle]="breakpointService.isMobile()"
+                [activeGenreIds]="activeGenreIds()"
+                (toggle)="toggleFilters()"
+                (genreChange)="handleGenreChange($event)"
+            />
         </div>
     </header>
 
@@ -85,7 +35,7 @@
 
         <div
             class="explore__load-trigger"
-            appIntersectionObserver
+            appInteractionObserver
             (isIntersecting)="exploreStore.loadNextPage()"
         ></div>
     </div>

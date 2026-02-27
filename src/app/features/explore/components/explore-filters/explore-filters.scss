@@ -1,0 +1,50 @@
+@use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
+
+.explore-filters {
+    &__toggle {
+        @include flex($align: center, $justify: space-between);
+        width: 100%;
+        padding: 1.6rem 0;
+        background: transparent;
+        border: none;
+        border-top: 1px solid var(--nn-border);
+        color: var(--nn-text);
+        cursor: pointer;
+
+        &-label {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-weight: 700;
+            opacity: 0.8;
+        }
+
+        &-icon {
+            color: var(--nn-primary);
+        }
+    }
+
+    &__wrapper {
+        display: grid;
+        grid-template-rows: 0fr;
+        transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+
+        &--expanded {
+            grid-template-rows: 1fr;
+        }
+
+        @include mq('md') {
+            grid-template-rows: 1fr;
+        }
+    }
+
+    &__inner {
+        overflow: hidden;
+    }
+
+    &__grid {
+        @include flex($wrap: wrap, $gap: 1.2rem);
+        padding: 2.4rem 0;
+    }
+}
