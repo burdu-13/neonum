@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Movie, TVShow } from '../../../../shared/models/movie.model';
 import { MatIcon } from '@angular/material/icon';
@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-movie-card',
-    imports: [CommonModule, MatIcon, RouterLink],
+    imports: [CommonModule, MatIcon, RouterLink, NgOptimizedImage],
     templateUrl: './movie-card.html',
     styleUrl: './movie-card.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

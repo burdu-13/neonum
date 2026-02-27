@@ -5,8 +5,6 @@
 @use './app/shared/styles/reset' as *;
 @include mat.core();
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
 @font-face {
     font-family: 'Inter-Fallback';
     src: local('Arial');

@@ -6,24 +6,15 @@
 >
     <div class="movie-card__poster-wrapper">
         <img
-            [src]="'https://image.tmdb.org/t/p/w342' + displayData().poster"
-            [srcset]="
-                'https://image.tmdb.org/t/p/w185' +
-                displayData().poster +
-                ' 185w, ' +
-                'https://image.tmdb.org/t/p/w342' +
-                displayData().poster +
-                ' 342w, ' +
-                'https://image.tmdb.org/t/p/w500' +
-                displayData().poster +
-                ' 500w'
-            "
-            sizes="(max-width: 600px) 150px, 300px"
+            [ngSrc]="displayData().poster"
+            width="342"
+            height="513"
+            [priority]="priority()"
             [alt]="displayData().title"
             class="movie-card__poster"
-            [loading]="priority() ? 'eager' : 'lazy'"
-            [attr.fetchpriority]="priority() ? 'high' : 'auto'"
+            sizes="(max-width: 768px) 50vw, 20vw"
         />
+
         <div class="movie-card__badge">
             <mat-icon class="star-icon">star</mat-icon>
             <span>{{ displayData().rating.toFixed(1) }}</span>

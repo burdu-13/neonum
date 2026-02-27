@@ -1,13 +1,18 @@
 <header class="hero">
     @if (user()) {
         <div class="hero__avatar-container">
-            <img
-                [src]="
-                    user()?.avatar?.tmdb?.avatar_path | tmdbImage: 'w300_and_h300_face' : 'profile'
-                "
-                class="hero__avatar"
-                [alt]="user()?.username"
-            />
+            @if (user()?.avatar?.tmdb?.avatar_path) {
+                <img
+                    [ngSrc]="user()!.avatar!.tmdb!.avatar_path!"
+                    class="hero__avatar"
+                    [alt]="user()?.username"
+                    fill
+                    sizes="(max-width: 768px) 50vw, 15vw"
+                    priority
+                />
+            } @else {
+                <div class="hero__avatar hero__avatar--fallback"></div>
+            }
             <div class="hero__avatar-glow"></div>
         </div>
 

@@ -17,14 +17,17 @@
     }
 
     &__avatar {
-        width: 100%;
-        height: 100%;
         border-radius: 50%;
         object-fit: cover;
         border: 4px solid var(--nn-bg);
-        position: relative;
         z-index: 2;
         background: var(--nn-surface);
+    }
+
+    &__avatar--fallback {
+        width: 100%;
+        height: 100%;
+        position: relative;
     }
 
     &__avatar-glow {
@@ -41,6 +44,7 @@
         font-weight: 800;
         letter-spacing: -0.02em;
         margin: 0;
+        color: var(--nn-text);
     }
 
     &__status {
