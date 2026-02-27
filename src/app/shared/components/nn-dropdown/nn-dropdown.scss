@@ -1,0 +1,114 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.nn-dropdown {
+    position: relative;
+    width: 22rem;
+
+    &__trigger {
+        width: 100%;
+        @include flex($align: center, $justify: space-between);
+        padding: 1rem 1.4rem;
+        background: var(--nn-surface);
+        border: 1px solid var(--nn-border);
+        border-radius: 0.8rem;
+        color: var(--nn-text);
+        font-size: 1.4rem;
+        cursor: pointer;
+        transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover:not(:disabled) {
+            border-color: rgba(var(--nn-primary-rgb), 0.5);
+            background: rgba(255, 255, 255, 0.02);
+        }
+    }
+
+    &__label {
+        @include text-truncate;
+        font-weight: 500;
+    }
+
+    &__chevron {
+        font-size: 2rem;
+        width: 2rem;
+        height: 2rem;
+        color: var(--nn-icon-muted);
+        transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    &__panel {
+        position: absolute;
+        top: calc(100% + 0.6rem);
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        @include glass($opacity: 0.8, $blur: 1.2rem);
+        border: 1px solid var(--nn-border);
+        border-radius: 1rem;
+        box-shadow: 0 1.2rem 3rem rgba(0, 0, 0, 0.3);
+
+        transform-origin: top center;
+        animation: dropdownReveal 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    &__list {
+        padding: 0.6rem;
+    }
+
+    &__option {
+        @include flex($align: center, $justify: space-between);
+        padding: 0.8rem 1.2rem;
+        border-radius: 0.6rem;
+        font-size: 1.4rem;
+        color: var(--nn-text);
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05);
+            padding-left: 1.6rem;
+        }
+
+        &--active {
+            background: rgba(var(--nn-primary-rgb), 0.08);
+            color: var(--nn-primary);
+            font-weight: 600;
+        }
+    }
+
+    &__indicator {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--nn-primary);
+        box-shadow: 0 0 0.8rem var(--nn-primary);
+    }
+
+    &--open {
+        .nn-dropdown__trigger {
+            border-color: var(--nn-primary);
+        }
+
+        .nn-dropdown__chevron {
+            transform: rotate(180deg);
+            color: var(--nn-primary);
+        }
+    }
+
+    &--disabled {
+        opacity: 0.4;
+        pointer-events: none;
+        cursor: not-allowed;
+    }
+}
+
+@keyframes dropdownReveal {
+    from {
+        opacity: 0;
+        transform: scale(0.96) translateY(-0.8rem);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
