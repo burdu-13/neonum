@@ -1,0 +1,38 @@
+<header class="hero">
+    @if (user()) {
+        <div class="hero__avatar-container">
+            <img
+                [src]="
+                    user()?.avatar?.tmdb?.avatar_path | tmdbImage: 'w300_and_h300_face' : 'profile'
+                "
+                class="hero__avatar"
+                [alt]="user()?.username"
+            />
+            <div class="hero__avatar-glow"></div>
+        </div>
+
+        <div class="hero__info">
+            <h1 class="hero__name">{{ user()?.username }}</h1>
+            <p class="hero__status">Verified Cinema Member</p>
+        </div>
+    } @else {
+        <div class="hero__avatar-container">
+            <app-skeleton
+                height="18rem"
+                width="18rem"
+                radius="50%"
+            />
+        </div>
+        <div class="hero__info">
+            <app-skeleton
+                height="4.8rem"
+                width="24rem"
+            />
+            <app-skeleton
+                height="1.4rem"
+                width="18rem"
+                style="margin-top: 1rem"
+            />
+        </div>
+    }
+</header>

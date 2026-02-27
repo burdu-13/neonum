@@ -82,4 +82,8 @@ export class MovieService {
             value: rating,
         });
     }
+
+    public discover(type: 'movie' | 'tv', page: number): Observable<MovieResponse> {
+        return this.http.get<MovieResponse>(`${this.proxyUrl}?path=discover/${type}&page=${page}`);
+    }
 }

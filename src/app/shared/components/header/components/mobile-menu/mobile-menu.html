@@ -1,0 +1,54 @@
+<div
+    class="mobile-menu"
+    [class.mobile-menu--open]="isOpen()"
+>
+    <div class="mobile-menu__close">
+        <app-nn-button
+            icon="close"
+            variant="surface"
+            (clicked)="closed.emit()"
+        />
+    </div>
+
+    <div class="mobile-menu__content">
+        <nav class="mobile-menu__nav">
+            <app-nav-link
+                path="/dashboard"
+                (clicked)="closed.emit()"
+            >
+                DASHBOARD
+            </app-nav-link>
+            <app-nav-link
+                path="/movies"
+                (clicked)="closed.emit()"
+            >
+                EXPLORE
+            </app-nav-link>
+            <button
+                class="mobile-menu__lucky-btn"
+                (click)="luckyClicked.emit()"
+            >
+                LUCKY SHUFFLE
+            </button>
+        </nav>
+
+        @if (account()) {
+            <div class="mobile-menu__footer">
+                <span class="mobile-menu__label">Logged in as</span>
+                <div class="mobile-menu__user">
+                    <app-nav-link
+                        path="/profile/me"
+                        (clicked)="closed.emit()"
+                    >
+                        {{ account()?.username }}
+                    </app-nav-link>
+                    <app-nn-button
+                        icon="power_settings_new"
+                        variant="surface"
+                        (clicked)="logoutClicked.emit()"
+                    />
+                </div>
+            </div>
+        }
+    </div>
+</div>

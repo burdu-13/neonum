@@ -3,87 +3,28 @@
     [class.header--menu-open]="isMenuOpen()"
 >
     <div class="header__frame">
-        <a
-            class="header__brand"
-            routerLink="/dashboard"
-            (click)="closeMenu()"
-        >
-            <span class="header__brand-text">NEONUM</span>
-        </a>
+        <app-brand-logo (clicked)="closeMenu()" />
 
         @if (bp.isLargeTablet() || bp.isDesktop()) {
             <nav class="header__nav">
-                <ul class="header__nav-list">
-                    @if (store.isLoading()) {
-                        <li class="header__nav-item">
-                            <app-skeleton
-                                width="9rem"
-                                height="1.6rem"
-                            />
-                        </li>
-                    } @else if (store.isAuthenticated() && store.account()) {
-                        <li class="header__nav-item">
-                            <a
-                                routerLink="/dashboard"
-                                routerLinkActive="active"
-                                class="header__nav-link"
-                            >
-                                DASHBOARD
-                            </a>
-                        </li>
-                    }
-
-                    <li class="header__nav-item">
-                        <a
-                            routerLink="/movies"
-                            routerLinkActive="active"
-                            class="header__nav-link"
-                        >
-                            MOVIES
-                        </a>
-                    </li>
-                    <li class="header__nav-item">
-                        <a
-                            routerLink="/tv-shows"
-                            routerLinkActive="active"
-                            class="header__nav-link"
-                        >
-                            SERIES
-                        </a>
-                    </li>
-
-                    @if (store.isLoading()) {
-                        <li class="header__nav-item">
-                            <app-skeleton
-                                width="9rem"
-                                height="1.6rem"
-                            />
-                        </li>
-                    } @else if (store.isAuthenticated() && store.account()) {
-                        <li class="header__nav-item">
-                            <a
-                                routerLink="/watchlist"
-                                routerLinkActive="active"
-                                class="header__nav-link"
-                            >
-                                WATCHLIST
-                            </a>
-                        </li>
-                    }
-                </ul>
+                <app-nav-link path="/dashboard">DASHBOARD</app-nav-link>
+                <app-nav-link path="/movies">EXPLORE</app-nav-link>
             </nav>
         }
 
         <div class="header__meta">
-            <a
-                routerLink="/search"
-                class="header__search-trigger"
-            >
-                <app-nn-button
-                    icon="search"
-                    variant="surface"
-                />
-            </a>
+            <app-nn-button
+                icon="casino"
+                variant="surface"
+                (clicked)="movieStore.getRandomContent()"
+                title="I'm Feeling Lucky"
+            />
+
+            <app-nn-button
+                icon="search"
+                variant="surface"
+                (clicked)="router.navigate(['/search'])"
+            />
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {
                 @if (store.isLoading()) {
@@ -94,19 +35,15 @@
                     />
                 } @else if (store.isAuthenticated() && store.account()) {
                     <div class="header__profile-pill">
-                        <span class="profile-name">{{ store.account()?.username }}</span>
+                        <app-nav-link path="/profile/me">
+                            {{ store.account()?.username }}
+                        </app-nav-link>
                         <app-nn-button
                             icon="power_settings_new"
                             variant="surface"
                             (clicked)="store.logout()"
                         />
                     </div>
-                } @else {
-                    <app-nn-button
-                        label="LOGIN"
-                        variant="primary"
-                        (clicked)="goToLogin()"
-                    />
                 }
             }
 
@@ -125,84 +62,13 @@
         </div>
     </div>
 
-    @if (!bp.isDesktop() && !bp.isLargeTablet()) {
-        <div class="header__overlay">
-            <div class="header__overlay-close">
-                <app-nn-button
-                    icon="close"
-                    variant="surface"
-                    (clicked)="closeMenu()"
-                />
-            </div>
-            <div class="header__overlay-content">
-                <nav class="header__nav--mobile">
-                    <ul class="header__nav-list">
-                        <li class="header__nav-item">
-                            <a
-                                routerLink="/dashboard"
-                                routerLinkActive="active"
-                                class="header__nav-link"
-                                (click)="closeMenu()"
-                            >
-                                DASHBOARD
-                            </a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a
-                                routerLink="/movies"
-                                routerLinkActive="active"
-                                class="header__nav-link"
-                                (click)="closeMenu()"
-                            >
-                                MOVIES
-                            </a>
-                        </li>
-                        <li class="header__nav-item">
-                            <a
-                                routerLink="/tv-shows"
-                                routerLinkActive="active"
-                                class="header__nav-link"
-                                (click)="closeMenu()"
-                            >
-                                SERIES
-                            </a>
-                        </li>
-                        @if (store.isAuthenticated() && store.account()) {
-                            <li class="header__nav-item">
-                                <a
-                                    routerLink="/watchlist"
-                                    routerLinkActive="active"
-                                    class="header__nav-link"
-                                    (click)="closeMenu()"
-                                >
-                                    WATCHLIST
-                                </a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
-                <div class="header__overlay-footer">
-                    @if (store.isAuthenticated() && store.account()) {
-                        <div class="mobile-profile">
-                            <span class="label">Logged in as</span>
-                            <div class="user-row">
-                                <span class="name">{{ store.account()?.username }}</span>
-                                <app-nn-button
-                                    icon="power_settings_new"
-                                    variant="surface"
-                                    (clicked)="store.logout(); closeMenu()"
-                                />
-                            </div>
-                        </div>
-                    } @else {
-                        <app-nn-button
-                            label="LOGIN"
-                            variant="primary"
-                            (clicked)="goToLogin()"
-                        />
-                    }
-                </div>
-            </div>
-        </div>
+    @defer (when isMenuOpen()) {
+        <app-mobile-menu
+            [isOpen]="isMenuOpen()"
+            [account]="store.account()"
+            (closed)="closeMenu()"
+            (luckyClicked)="handleLuckyClick()"
+            (logoutClicked)="handleLogout()"
+        />
     }
 </header>

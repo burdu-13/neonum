@@ -1,0 +1,105 @@
+@use '../../../../styles/variables' as *;
+@use '../../../../styles/mixins' as *;
+
+.mobile-menu {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    @include glass(0.98, 2.4rem);
+    background: var(--nn-bg);
+    z-index: 2000;
+    padding: 10rem 2.4rem 4.8rem;
+
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+
+    @include flex(space-between, flex-start, column);
+    pointer-events: none;
+    visibility: hidden;
+
+    &--open {
+        transform: translateX(0);
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    &__close {
+        position: absolute;
+        top: 2rem;
+        right: 2.4rem;
+    }
+
+    &__content {
+        width: 100%;
+        @include flex(flex-start, stretch, column, $gap: 6.4rem);
+    }
+
+    &__nav {
+        @include flex(flex-start, flex-start, column, $gap: 2.4rem);
+
+        app-nav-link {
+            width: 100%;
+            display: block;
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-transform: uppercase;
+        }
+    }
+
+    &__lucky-btn {
+        background: none;
+        border: none;
+        padding: 0;
+        font-size: 2.4rem;
+        font-weight: 700;
+        letter-spacing: 0.1rem;
+        color: var(--nn-primary);
+        text-align: left;
+        cursor: pointer;
+        width: 100%;
+        text-transform: uppercase;
+        transition: all 0.2s ease;
+
+        &:active {
+            opacity: 0.6;
+            transform: translateX(0.4rem);
+        }
+    }
+
+    &__footer {
+        width: 100%;
+        padding-top: 3.2rem;
+        border-top: 0.1rem solid var(--nn-border);
+        opacity: 0;
+        transform: translateY(1.5rem);
+        transition:
+            opacity 0.4s ease 0.4s,
+            transform 0.4s ease 0.4s;
+
+        .mobile-menu--open & {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    &__label {
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        color: var(--nn-icon-muted);
+        display: block;
+        margin-bottom: 1.6rem;
+    }
+
+    &__user {
+        @include flex(space-between, center);
+
+        app-nav-link {
+            font-size: 2rem;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+    }
+}

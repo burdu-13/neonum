@@ -1,0 +1,53 @@
+@use '../../../../shared/styles/mixins' as *;
+
+.hero {
+    @include flex(center, center, column, $gap: 3.2rem);
+    padding: 6.4rem 2.4rem;
+    text-align: center;
+    background: radial-gradient(
+        circle at center,
+        rgba(var(--nn-primary-rgb), 0.05),
+        transparent 70%
+    );
+
+    &__avatar-container {
+        position: relative;
+        width: 18rem;
+        height: 18rem;
+    }
+
+    &__avatar {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--nn-bg);
+        position: relative;
+        z-index: 2;
+        background: var(--nn-surface);
+    }
+
+    &__avatar-glow {
+        position: absolute;
+        inset: -4px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--nn-primary), transparent);
+        filter: blur(8px);
+        opacity: 0.5;
+    }
+
+    &__name {
+        font-size: 4.8rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin: 0;
+    }
+
+    &__status {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.2rem;
+        color: var(--nn-icon-muted);
+        margin-top: 0.8rem;
+    }
+}
