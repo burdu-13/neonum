@@ -1,0 +1,44 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.nn-toggle {
+    position: relative;
+    @include flex($align: center);
+    background: var(--nn-surface);
+    border: 1px solid var(--nn-border);
+    border-radius: 1.2rem;
+    padding: 0.4rem;
+    width: fit-content;
+
+    &__item {
+        position: relative;
+        z-index: 2;
+        padding: 0.8rem 2rem;
+        border: none;
+        background: transparent;
+        color: var(--nn-text-muted);
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        min-width: 10rem;
+
+        &--active {
+            color: var(--nn-text);
+        }
+    }
+
+    &__slider {
+        position: absolute;
+        top: 0.4rem;
+        left: 0.4rem;
+        height: calc(100% - 0.8rem);
+        background: var(--nn-surface-bright);
+        border: 1px solid var(--nn-border);
+        border-radius: 0.8rem;
+        z-index: 1;
+        transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+}

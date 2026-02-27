@@ -4,7 +4,6 @@ import {
     computed,
     effect,
     inject,
-    OnInit,
     signal,
 } from '@angular/core';
 import { ExploreStore } from '../store/explore.store';
@@ -13,50 +12,47 @@ import { InteractionObserver } from '../../../shared/directives/interaction-obse
 import { BreakpointService } from '../../../shared/services/breakpoint-service/breakpoint-service';
 import { ExploreFilters } from '../components/explore-filters/explore-filters';
 import { ExploreHeader } from '../components/explore-header/explore-header';
+import { EXPLORE_TYPE_OPTIONS } from '../components/explore-header/config/toggle.config';
 
 @Component({
     selector: 'app-explore-container',
-    imports: [
-        MovieCard,
-        InteractionObserver,
-        ExploreFilters,
-        ExploreHeader,
-    ],
+    imports: [MovieCard, InteractionObserver, ExploreFilters, ExploreHeader],
     templateUrl: './explore-container.html',
     styleUrl: './explore-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureContainer implements OnInit {
+export class FeatureContainer {
     protected readonly exploreStore = inject(ExploreStore);
     protected readonly breakpointService = inject(BreakpointService);
 
     private readonly mobileFiltersToggled = signal(false);
+
+    protected readonly contentType = signal('movie');
+    protected readonly typeOptions = EXPLORE_TYPE_OPTIONS;
 
     protected readonly isFiltersExpanded = computed(() => {
         if (!this.breakpointService.isMobile()) return true;
         return this.mobileFiltersToggled();
     });
 
-    protected readonly activeGenreIds = computed(
-        () => this.exploreStore.filters().with_genres?.split(',') ?? [],
-    );
+    protected readonly activeGenreIds = computed(() => {
+        const genres = this.exploreStore.filters().with_genres;
+        return genres ? genres.split(',').filter((id) => !!id) : [];
+    });
 
     protected readonly sortValue = signal(this.exploreStore.filters().sort_by);
 
     constructor() {
         effect(() => {
-            const val = this.sortValue();
-            if (val !== this.exploreStore.filters().sort_by) {
-                this.exploreStore.updateFilters({ sort_by: val });
-            }
-        });
-    }
+            const sort = this.sortValue();
+            const type = this.contentType() as 'movie' | 'tv';
 
-    public ngOnInit(): void {
-        this.exploreStore.loadGenres();
-        this.exploreStore.loadMovies({
-            filters: this.exploreStore.filters(),
-            append: false,
+            this.exploreStore.loadGenres(type);
+
+            this.exploreStore.updateFilters({
+                sort_by: sort,
+                type: type,
+            });
         });
     }
 

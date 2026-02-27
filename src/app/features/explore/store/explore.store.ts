@@ -19,7 +19,11 @@ interface ExploreState {
 const initialState: ExploreState = {
     movies: [],
     genres: [],
-    filters: { page: 1, sort_by: 'popularity.desc' },
+    filters: {
+        page: 1,
+        sort_by: 'popularity.desc',
+        type: 'movie',
+    },
     isLoading: false,
     totalResults: 0,
     totalPages: 0,
@@ -30,10 +34,10 @@ export const ExploreStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
     withMethods((store, exploreService = inject(ExploreService)) => ({
-        loadGenres: rxMethod<void>(
+        loadGenres: rxMethod<'movie' | 'tv'>(
             pipe(
-                switchMap(() =>
-                    exploreService.getGenres().pipe(
+                switchMap((type) =>
+                    exploreService.getGenres(type).pipe(
                         tap((res) => patchState(store, { genres: res.genres })),
                         catchError(() => EMPTY),
                     ),
@@ -87,15 +91,26 @@ export const ExploreStore = signalStore(
         loadNextPage() {
             if (!store.isLoading() && store.filters().page < store.totalPages()) {
                 const nextPage = store.filters().page + 1;
-                patchState(store, (state) => ({ filters: { ...state.filters, page: nextPage } }));
+                patchState(store, (state) => ({
+                    filters: { ...state.filters, page: nextPage },
+                }));
                 this.loadMovies({ filters: store.filters(), append: true });
             }
         },
 
         updateFilters(newFilters: Partial<ExploreFilters>) {
-            patchState(store, (state) => ({
-                filters: { ...state.filters, ...newFilters, page: 1 },
-            }));
+            patchState(store, (state) => {
+                const updatedFilters = { ...state.filters, ...newFilters, page: 1 };
+
+                const genreUpdate =
+                    newFilters.type && newFilters.type !== state.filters.type
+                        ? { genres: [], with_genres: '' }
+                        : {};
+
+                return {
+                    filters: { ...updatedFilters, ...genreUpdate },
+                };
+            });
             this.loadMovies({ filters: store.filters(), append: false });
         },
     })),

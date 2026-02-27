@@ -4,6 +4,8 @@
             <app-explore-header [(sortValue)]="sortValue" />
 
             <app-explore-filters
+                [(contentType)]="contentType"
+                [typeOptions]="typeOptions"
                 [genres]="exploreStore.genres()"
                 [isExpanded]="isFiltersExpanded()"
                 [showToggle]="breakpointService.isMobile()"

@@ -8,6 +8,7 @@ export interface ExploreFilters {
     'vote_count.gte'?: number;
     'primary_release_date.gte'?: string;
     'primary_release_date.lte'?: string;
+    type: 'movie' | 'tv';
 }
 
 export interface Genre {

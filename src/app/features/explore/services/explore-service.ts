@@ -11,9 +11,11 @@ export class ExploreService {
     private readonly proxyUrl = environment.proxyUrl;
 
     public discoverMovies(filters: ExploreFilters): Observable<MovieResponse> {
-        let path = `discover/movie?page=${filters.page}&sort_by=${filters.sort_by}`;
+        const contentType = filters.type || 'movie';
+        let path = `discover/${contentType}?page=${filters.page}&sort_by=${filters.sort_by}`;
 
         if (filters.with_genres) path += `&with_genres=${filters.with_genres}`;
+
         if (filters['vote_average.gte']) path += `&vote_average.gte=${filters['vote_average.gte']}`;
         if (filters['vote_count.gte']) path += `&vote_count.gte=${filters['vote_count.gte']}`;
         if (filters['primary_release_date.gte'])
@@ -24,7 +26,7 @@ export class ExploreService {
         return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
 
-    public getGenres(): Observable<GenreResponse> {
-        return this.http.get<GenreResponse>(`${this.proxyUrl}?path=genre/movie/list`);
+    public getGenres(type: 'movie' | 'tv' = 'movie'): Observable<GenreResponse> {
+        return this.http.get<GenreResponse>(`${this.proxyUrl}?path=genre/${type}/list`);
     }
 }

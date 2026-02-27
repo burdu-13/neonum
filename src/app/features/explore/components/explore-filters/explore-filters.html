@@ -2,6 +2,10 @@
     class="explore-filters"
     aria-label="Genre filters"
 >
+    <app-nn-toggle
+        [(value)]="contentType"
+        [options]="typeOptions()"
+    />
     @if (showToggle()) {
         <button
             type="button"
