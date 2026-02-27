@@ -1,0 +1,30 @@
+@use '../../../../shared/styles/mixins' as *;
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 3.2rem;
+    max-width: 60rem;
+    margin: 0 auto 8rem;
+
+    &__item {
+        @include flex(center, center, column, $gap: 0.8rem);
+        @include glass(0.2, 1.6rem);
+        padding: 3.2rem;
+        border-radius: 2.4rem;
+        border: 1px solid rgba(var(--nn-primary-rgb), 0.1);
+    }
+
+    &__value {
+        font-size: 3.6rem;
+        font-weight: 800;
+        color: var(--nn-primary);
+    }
+
+    &__label {
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15rem;
+        color: var(--nn-icon-muted);
+    }
+}

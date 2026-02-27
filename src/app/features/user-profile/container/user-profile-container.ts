@@ -4,10 +4,13 @@ import { NnButton } from '../../../shared/components/nn-button/nn-button';
 import { UserStore } from '../../../store/user-info/user.store';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { UserProfileStore } from '../../../store/user-profile/user-profile.store';
+import { ProfileStats } from '../components/profile-stats/profile-stats';
+import { ProfileHero } from '../components/profile-hero/profile-hero';
+import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 
 @Component({
     selector: 'app-user-profile-container',
-    imports: [MovieShelf],
+    imports: [MovieShelf, ProfileStats, ProfileHero, Skeleton],
     providers: [UserProfileStore],
     templateUrl: './user-profile-container.html',
     styleUrl: './user-profile-container.scss',
@@ -17,15 +20,11 @@ export class UserProfileContainer implements OnInit {
     protected readonly userStore = inject(UserStore);
     protected readonly movieStore = inject(MovieStore);
     protected readonly profileStore = inject(UserProfileStore);
-    public readonly id = input<string>();
 
-    ngOnInit(): void {
-        const profileId = this.id();
-        if (profileId && profileId !== 'me') {
-            this.profileStore.setProfileId(Number(profileId));
-        } else {
-            const currentUserId = this.userStore.account()?.id;
-            if (currentUserId) this.profileStore.setProfileId(currentUserId);
+    public ngOnInit(): void {
+        const currentUserId = this.userStore.account()?.id;
+        if (currentUserId) {
+            this.profileStore.setProfileId(currentUserId);
         }
 
         if (!this.movieStore.collectionsLoaded()) {

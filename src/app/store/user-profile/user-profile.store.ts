@@ -4,13 +4,11 @@ import { UserStore } from '../user-info/user.store';
 
 interface UserProfileState {
     viewedUserId: number | null;
-    isEditMode: boolean;
 }
 
 export const UserProfileStore = signalStore(
     withState<UserProfileState>({
         viewedUserId: null,
-        isEditMode: false,
     }),
     withComputed((store, userStore = inject(UserStore)) => ({
         isOwnProfile: computed(() => {
@@ -26,11 +24,8 @@ export const UserProfileStore = signalStore(
         }),
     })),
     withMethods((store) => ({
-        setProfileId(id: number) {
+        setProfileId(id: number): void {
             patchState(store, { viewedUserId: id });
-        },
-        toggleEditMode() {
-            patchState(store, { isEditMode: !store.isEditMode() });
         },
     })),
 );

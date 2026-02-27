@@ -1,36 +1,37 @@
 <header class="hero">
-    <div class="hero__profile">
-        <div class="hero__avatar-wrapper">
+    @if (user()) {
+        <div class="hero__avatar-container">
             <img
-                [src]="avatarUrl"
-                (error)="handleImageError($event)"
+                [src]="
+                    user()?.avatar?.tmdb?.avatar_path | tmdbImage: 'w300_and_h300_face' : 'profile'
+                "
                 class="hero__avatar"
-                alt="Profile Picture"
+                [alt]="user()?.username"
             />
+            <div class="hero__avatar-glow"></div>
         </div>
 
         <div class="hero__info">
-            @if (isEditMode()) {
-                <input
-                    class="hero__input"
-                    [ngModel]="user()?.username"
-                    (ngModelChange)="editValue.set($event)"
-                    (keyup.enter)="onSave()"
-                    autofocus
-                />
-            } @else {
-                <h1 class="hero__username">{{ user()?.username || 'Guest' }}</h1>
-            }
-            <p class="hero__role">Member since 2026</p>
+            <h1 class="hero__name">{{ user()?.username }}</h1>
+            <p class="hero__status">Verified Cinema Member</p>
         </div>
-    </div>
-
-    @if (isOwnProfile()) {
-        <div class="hero__actions">
-            <app-nn-button
-                [label]="isEditMode() ? 'Save Changes' : 'Edit Profile'"
-                [variant]="isEditMode() ? 'primary' : 'surface'"
-                (clicked)="isEditMode() ? onSave() : toggleEdit.emit()"
+    } @else {
+        <div class="hero__avatar-container">
+            <app-skeleton
+                height="18rem"
+                width="18rem"
+                radius="50%"
+            />
+        </div>
+        <div class="hero__info">
+            <app-skeleton
+                height="4.8rem"
+                width="24rem"
+            />
+            <app-skeleton
+                height="1.4rem"
+                width="18rem"
+                style="margin-top: 1rem"
             />
         </div>
     }

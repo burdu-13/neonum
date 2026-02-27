@@ -1,32 +1,30 @@
-<main class="profile-layout">
-    <app-profile-hero
-        [user]="profileStore.userProfileData()"
-        [isOwnProfile]="profileStore.isOwnProfile()"
-        [isEditMode]="profileStore.isEditMode()"
-        (toggleEdit)="profileStore.toggleEditMode()"
-        (updateUsername)="profileStore.updateUsername($event)"
-    />
+<main class="profile">
+    @if (!userStore.isLoading()) {
+        <header class="profile__hero">
+            <app-profile-hero [user]="profileStore.userProfileData()" />
+        </header>
 
-    <div class="profile-content">
-        <app-profile-stats
-            [watchlistCount]="movieStore.watchlistMovies().length"
-            [favoritesCount]="movieStore.favoriteMovies().length"
-            [followers]="profileStore.followers()"
-            [following]="profileStore.following()"
-        />
+        <div class="profile__content">
+            <app-profile-stats
+                [watchlistCount]="movieStore.watchlistMovies().length"
+                [favoritesCount]="movieStore.favoriteMovies().length"
+            />
 
-        <app-movie-shelf
-            title="Watchlist"
-            [movies]="movieStore.watchlistMovies()"
-            [isLoading]="movieStore.isDetailLoading()"
-            [isPersonal]="true"
-        />
+            <app-movie-shelf
+                title="Watchlist"
+                [movies]="movieStore.watchlistMovies()"
+                [isLoading]="movieStore.isDetailLoading()"
+                [isPersonal]="true"
+            />
 
-        <app-movie-shelf
-            title="Favorites"
-            [movies]="movieStore.favoriteMovies()"
-            [isLoading]="movieStore.isDetailLoading()"
-            [isPersonal]="true"
-        />
-    </div>
+            <app-movie-shelf
+                title="Favorites"
+                [movies]="movieStore.favoriteMovies()"
+                [isLoading]="movieStore.isDetailLoading()"
+                [isPersonal]="true"
+            />
+        </div>
+    } @else {
+        <div class="profile-loader">...</div>
+    }
 </main>

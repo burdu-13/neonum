@@ -24,7 +24,6 @@ interface MovieState {
     topRated: Movie[];
     watchlistIds: number[];
     favoriteIds: number[];
-    selectedMovie: MovieDetails | null;
     isLoading: boolean;
     isDetailLoading: boolean;
     detailError: string | null;
@@ -42,7 +41,6 @@ const initialState: MovieState = {
     topRated: [],
     watchlistIds: [],
     favoriteIds: [],
-    selectedMovie: null,
     isLoading: false,
     isDetailLoading: false,
     detailError: null,
@@ -118,7 +116,10 @@ export const MovieStore = signalStore(
                         }
                     }),
                     switchMap(() => {
-                        if (store.trending().length > 0) return EMPTY;
+                        if (store.trending().length > 0) {
+                            patchState(store, { isLoading: false });
+                            return EMPTY;
+                        }
 
                         return forkJoin({
                             trending: movieService.getTrendingMovies(),
