@@ -1,0 +1,9 @@
+<a
+    [routerLink]="path()"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: exact() }"
+    (click)="clicked.emit()"
+    class="nav-link"
+>
+    <span class="nav-link__text"><ng-content></ng-content></span>
+</a>

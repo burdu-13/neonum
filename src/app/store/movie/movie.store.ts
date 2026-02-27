@@ -14,9 +14,10 @@ import {
 } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
-import { Movie, MovieDetails, Review } from '../../shared/models/movie.model';
+import { Movie, MovieDetails, MovieResponse, Review } from '../../shared/models/movie.model';
 import { AlertService } from '../../shared/services/alert/alert';
 import { UserStore } from '../user-info/user.store';
+import { Router } from '@angular/router';
 
 interface MovieState {
     trending: Movie[];
@@ -107,6 +108,7 @@ export const MovieStore = signalStore(
             movieService = inject(MovieService),
             detailService = inject(MovieDetailService),
             alertService = inject(AlertService),
+            router = inject(Router),
         ) => ({
             loadAllMovies: rxMethod<void>(
                 pipe(
@@ -228,6 +230,35 @@ export const MovieStore = signalStore(
                                     watchlistMovies: currentMovies,
                                 });
                                 alertService.showAlert('Failed to update watchlist.', 'error');
+                                return EMPTY;
+                            }),
+                        );
+                    }),
+                ),
+            ),
+
+            getRandomContent: rxMethod<void>(
+                pipe(
+                    switchMap(() => {
+                        const randomPage = Math.floor(Math.random() * 500) + 1;
+                        const isMovie = Math.random() > 0.5;
+                        const type = isMovie ? 'movie' : 'tv';
+
+                        return movieService.discover(type, randomPage).pipe(
+                            tap((response: MovieResponse) => {
+                                const results = response.results;
+
+                                if (results && results.length > 0) {
+                                    const randomItem =
+                                        results[Math.floor(Math.random() * results.length)];
+
+                                    const route = isMovie ? '/movie' : '/tv-show';
+
+                                    router.navigate([route, randomItem.id]);
+                                }
+                            }),
+                            catchError((err) => {
+                                console.error('Failed to find lucky content:', err);
                                 return EMPTY;
                             }),
                         );
