@@ -1,65 +1,41 @@
 @use '../../../shared/styles/mixins' as *;
 
-.profile-layout {
+.profile {
     max-width: 144rem;
     margin: 0 auto;
     padding: 12rem 2.4rem 8rem;
+    min-height: 100vh;
 
-    &__content {
+    &__header {
+        margin-bottom: 6.4rem;
+        @include glass(0.02, 2.4rem);
+        border: 1px solid rgba(var(--nn-primary-rgb), 0.1);
+        border-radius: 3.2rem;
+    }
+
+    &__body {
         @include flex(flex-start, stretch, column, $gap: 8rem);
-        margin-top: 6rem;
-    }
-}
 
-.hero {
-    @include flex(space-between, center);
-    background: radial-gradient(circle at left, rgba(var(--nn-primary-rgb), 0.05), transparent);
-    padding: 4rem;
-    border-radius: 2.4rem;
-    border: 1px solid rgba(var(--nn-primary-rgb), 0.1);
-
-    @include mq('md') {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 3.2rem;
-        padding: 2.4rem;
+        @include mq('md') {
+            gap: 4.8rem;
+        }
     }
 
-    &__profile {
-        @include flex(center, center, $gap: 3.2rem);
-    }
-
-    &__avatar {
-        width: 12rem;
-        height: 12rem;
-        border-radius: 50%;
-        object-fit: cover;
-        background: var(--nn-surface);
-        border: 2px solid var(--nn-primary);
-    }
-
-    &__username {
-        font-size: 4rem;
-        font-weight: 800;
-        letter-spacing: -0.02em;
-        margin: 0;
-    }
-
-    &__role {
-        font-size: 1.4rem;
-        color: var(--nn-icon-muted);
-        margin-top: 0.4rem;
-    }
-
-    &__input {
-        background: var(--nn-bg);
-        border: 2px solid var(--nn-primary);
-        color: white;
-        font-size: 3.2rem;
-        font-weight: 800;
-        padding: 0.4rem 1.2rem;
-        border-radius: 0.8rem;
+    &__section {
         width: 100%;
-        outline: none;
+    }
+
+    &__loading {
+        @include flex(flex-start, stretch, column, $gap: 4rem);
+
+        &-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.4rem;
+
+            @include mq('sm') {
+                grid-template-columns: 1fr;
+            }
+        }
     }
 }

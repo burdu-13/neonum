@@ -1,30 +1,66 @@
 <main class="profile">
     @if (!userStore.isLoading()) {
-        <header class="profile__hero">
-            <app-profile-hero [user]="profileStore.userProfileData()" />
+        <header class="profile__header">
+            <app-profile-hero [user]="userStore.account()" />
         </header>
 
-        <div class="profile__content">
+        <div class="profile__body">
             <app-profile-stats
                 [watchlistCount]="movieStore.watchlistMovies().length"
                 [favoritesCount]="movieStore.favoriteMovies().length"
             />
 
-            <app-movie-shelf
-                title="Watchlist"
-                [movies]="movieStore.watchlistMovies()"
-                [isLoading]="movieStore.isDetailLoading()"
-                [isPersonal]="true"
-            />
+            <section class="profile__section">
+                @if (movieStore.watchlistMovies().length > 0 || movieStore.isDetailLoading()) {
+                    <app-movie-shelf
+                        title="Watchlist"
+                        [movies]="movieStore.watchlistMovies()"
+                        [isLoading]="movieStore.isDetailLoading()"
+                        [isPersonal]="true"
+                    />
+                } @else {
+                    <app-nn-empty-state
+                        title="Empty Queue"
+                        message="Your watchlist is currently empty. Explore the library to add movies."
+                        icon="bookmark_border"
+                    />
+                }
+            </section>
 
-            <app-movie-shelf
-                title="Favorites"
-                [movies]="movieStore.favoriteMovies()"
-                [isLoading]="movieStore.isDetailLoading()"
-                [isPersonal]="true"
-            />
+            <section class="profile__section">
+                @if (movieStore.favoriteMovies().length > 0 || movieStore.isDetailLoading()) {
+                    <app-movie-shelf
+                        title="Favorites"
+                        [movies]="movieStore.favoriteMovies()"
+                        [isLoading]="movieStore.isDetailLoading()"
+                        [isPersonal]="true"
+                    />
+                } @else {
+                    <app-nn-empty-state
+                        title="No Favorites"
+                        message="Mark movies as favorites to see them showcased here."
+                        icon="favorite_border"
+                    />
+                }
+            </section>
         </div>
     } @else {
-        <div class="profile-loader">...</div>
+        <div class="profile__loading">
+            <app-skeleton
+                height="32rem"
+                width="100%"
+                radius="2.4rem"
+            />
+            <div class="profile__loading-grid">
+                <app-skeleton
+                    height="12rem"
+                    radius="1.6rem"
+                />
+                <app-skeleton
+                    height="12rem"
+                    radius="1.6rem"
+                />
+            </div>
+        </div>
     }
 </main>
