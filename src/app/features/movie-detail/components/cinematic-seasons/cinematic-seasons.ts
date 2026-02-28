@@ -12,4 +12,5 @@ import { CommonModule } from '@angular/common';
 export class CinematicSeasons {
     public readonly seasons = input.required<Season[]>();
     public readonly seasonClicked = output<number>();
+    public readonly activeSeason = input<number | null>(null);
 }

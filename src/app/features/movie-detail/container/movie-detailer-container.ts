@@ -8,37 +8,33 @@ import {
     signal,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
-import { CastGrid } from '../components/cast-grid/cast-grid';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieTrailer } from '../../../shared/components/movie-trailer/movie-trailer';
 import { MovieDetails, ReviewPayload } from '../../../shared/models/movie.model';
 import { MovieFeedback } from '../components/movie-feedback/movie-feedback';
 import { MovieActions } from '../components/movie-actions/movie-actions';
 import { MovieHero } from '../components/movie-hero/movie-hero';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { ActivatedRoute } from '@angular/router';
 import { HeroDisplayModel } from '../models/cinematic.config';
 import { isTVShow } from '../utils/cinematics.utils';
-import { CinematicCast } from "../components/cinematic-cast/cinematic-cast";
-import { CinematicSeasons } from "../components/cinematic-seasons/cinematic-seasons";
-import { CinematicSynopsis } from "../components/cinematic-synopsis/cinematic-synopsis";
-import { CinematicEpisodes } from "../components/cinematic-episodes/cinematic-episodes";
+import { CinematicCast } from '../components/cinematic-cast/cinematic-cast';
+import { CinematicSeasons } from '../components/cinematic-seasons/cinematic-seasons';
+import { CinematicSynopsis } from '../components/cinematic-synopsis/cinematic-synopsis';
+import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-episodes';
 
 @Component({
     selector: 'app-movie-detailer-container',
     imports: [
-    MatIconModule,
-    CastGrid,
-    MovieTrailer,
-    MovieFeedback,
-    MovieActions,
-    MovieHero,
-    Skeleton,
-    CinematicCast,
-    CinematicSeasons,
-    CinematicSynopsis,
-    CinematicEpisodes
-],
+        MatIconModule,
+        MovieTrailer,
+        MovieFeedback,
+        MovieActions,
+        MovieHero,
+        CinematicCast,
+        CinematicSeasons,
+        CinematicSynopsis,
+        CinematicEpisodes,
+    ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +45,8 @@ export class MovieDetailerContainer {
 
     public readonly id = input.required<string>();
     public isTrailerOpen = signal(false);
+
+    protected readonly activeSeasonNumber = signal<number | null>(null);
 
     public readonly trailerKey = computed(() => {
         const videos = this.movieStore.selectedMovie()?.videos?.results;
@@ -92,7 +90,13 @@ export class MovieDetailerContainer {
 
     public onSeasonSelect(seasonNumber: number): void {
         const movie = this.movieStore.selectedMovie();
-        if (movie) {
+        if (!movie) return;
+
+        if (this.activeSeasonNumber() === seasonNumber) {
+            this.activeSeasonNumber.set(null);
+            this.movieStore.clearSeasonEpisodes();
+        } else {
+            this.activeSeasonNumber.set(seasonNumber);
             this.movieStore.loadSeasonDetails({
                 tvId: movie.id,
                 seasonNumber,

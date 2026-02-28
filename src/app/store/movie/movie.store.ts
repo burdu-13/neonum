@@ -282,23 +282,16 @@ export const MovieStore = signalStore(
 
             loadSeasonDetails: rxMethod<{ tvId: number; seasonNumber: number }>(
                 pipe(
-                    // Prevent re-fetching if the same season is clicked multiple times
-                    distinctUntilChanged(
-                        (prev, curr) =>
-                            prev.tvId === curr.tvId && prev.seasonNumber === curr.seasonNumber,
-                    ),
                     tap(({ tvId, seasonNumber }) => {
                         const cacheKey = `${tvId}_s${seasonNumber}`;
                         const cachedData = store.seasonCache()[cacheKey];
 
                         if (cachedData) {
-                            // Immediate UI update from cache
                             patchState(store, {
                                 activeSeasonEpisodes: cachedData,
                                 isSeasonLoading: false,
                             });
                         } else {
-                            // Trigger loading state for new data
                             patchState(store, {
                                 isSeasonLoading: true,
                                 activeSeasonEpisodes: [],
@@ -331,6 +324,13 @@ export const MovieStore = signalStore(
                     }),
                 ),
             ),
+
+            clearSeasonEpisodes() {
+                patchState(store, {
+                    activeSeasonEpisodes: [],
+                    isSeasonLoading: false,
+                });
+            },
 
             toggleFavorite: rxMethod<{ id: number; status: boolean }>(
                 pipe(

@@ -6,47 +6,55 @@
         [displayData]="heroDisplay()"
         [isLoading]="isLoading"
     >
-        <app-movie-actions
-            actions
-            [movie]="movie"
-            [watchlistIds]="movieStore.watchlistIds()"
-            [favoriteIds]="movieStore.favoriteIds()"
-            [hasTrailer]="!!trailerKey()"
-            (toggleWatchlist)="movieStore.toggleWatchlist($event)"
-            (toggleFavorite)="movieStore.toggleFavorite($event)"
-            (openTrailer)="isTrailerOpen.set(true)"
-        />
+        <div actions>
+            <app-movie-actions
+                [movie]="movie"
+                [watchlistIds]="movieStore.watchlistIds()"
+                [favoriteIds]="movieStore.favoriteIds()"
+                [hasTrailer]="!!trailerKey()"
+                (toggleWatchlist)="movieStore.toggleWatchlist($event)"
+                (toggleFavorite)="movieStore.toggleFavorite($event)"
+                (openTrailer)="isTrailerOpen.set(true)"
+            />
+        </div>
     </app-movie-hero>
 
     <div class="detail-gallery__body">
-        <div class="flex flex-col gap-12">
+        <div class="detail-gallery__main-content">
             <app-cinematic-synopsis
                 [overview]="movie?.overview"
                 [isLoading]="isLoading"
             />
 
             @if (!isLoading && seasons().length > 0) {
-                <app-cinematic-seasons
-                    [seasons]="seasons()"
-                    (seasonClicked)="onSeasonSelect($event)"
-                />
-
-                @if (movieStore.activeSeasonEpisodes().length > 0 || movieStore.isSeasonLoading()) {
-                    <app-cinematic-episodes
-                        [episodes]="movieStore.activeSeasonEpisodes()"
-                        [isLoading]="movieStore.isSeasonLoading()"
+                <div class="detail-gallery__seasons-wrapper">
+                    <app-cinematic-seasons
+                        [seasons]="seasons()"
+                        [activeSeason]="activeSeasonNumber()"
+                        (seasonClicked)="onSeasonSelect($event)"
                     />
-                }
+
+                    @if (
+                        movieStore.activeSeasonEpisodes().length > 0 || movieStore.isSeasonLoading()
+                    ) {
+                        <app-cinematic-episodes
+                            [episodes]="movieStore.activeSeasonEpisodes()"
+                            [isLoading]="movieStore.isSeasonLoading()"
+                        />
+                    }
+                </div>
             }
         </div>
 
-        <app-cinematic-cast
-            [cast]="topCast"
-            [isLoading]="isLoading"
-        />
+        <aside class="detail-gallery__sidebar">
+            <app-cinematic-cast
+                [cast]="topCast"
+                [isLoading]="isLoading"
+            />
+        </aside>
 
         @if (!isLoading) {
-            <div class="detail-gallery__body__feedback">
+            <footer class="detail-gallery__footer">
                 <app-movie-feedback
                     [reviews]="movieStore.processedReviews()"
                     [hasMore]="movieStore.hasMoreReviews()"
@@ -54,7 +62,7 @@
                     (loadMore)="movieStore.loadMoreReviews()"
                     (submitReview)="handleReviewSubmit($event, movie!.id)"
                 />
-            </div>
+            </footer>
         }
     </div>
 

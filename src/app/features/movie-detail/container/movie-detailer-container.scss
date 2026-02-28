@@ -10,13 +10,13 @@
     &__body {
         max-width: 144rem;
         margin: 0 auto;
-        padding: clamp(4rem, 8vh, 8rem) 2.4rem 0;
+        padding: clamp(6rem, 10vh, 10rem) 2.4rem 0;
         display: grid;
         grid-template-columns: 1fr;
         gap: 8rem;
 
         @include mq('lg') {
-            padding: 10rem 6.4rem 0;
+            padding: 12rem 6.4rem 0;
             grid-template-columns: 1.6fr 1fr;
             align-items: start;
             gap: 12rem;
@@ -24,13 +24,17 @@
     }
 
     &__main-content {
-        @include flex($direction: column, $gap: 8rem);
+        @include flex($direction: column, $gap: clamp(8rem, 12vh, 12rem));
+    }
+
+    &__seasons-wrapper {
+        @include flex($direction: column, $gap: 6rem);
     }
 
     &__footer {
         grid-column: 1 / -1;
-        margin-top: 4rem;
+        margin-top: clamp(6rem, 12vh, 12rem);
         border-top: 1px solid var(--nn-border);
-        padding-top: clamp(6rem, 10vh, 10rem);
+        padding-top: clamp(8rem, 14vh, 14rem);
     }
 }

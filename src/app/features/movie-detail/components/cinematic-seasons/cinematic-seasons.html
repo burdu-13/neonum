@@ -8,6 +8,7 @@
         @for (season of seasons(); track season.id) {
             <div
                 class="season-card"
+                [class.season-card--active]="activeSeason() === season.season_number"
                 (click)="seasonClicked.emit(season.season_number)"
             >
                 <div class="season-card__content">
