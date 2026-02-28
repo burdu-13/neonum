@@ -10,16 +10,18 @@ import { catchError, EMPTY, tap } from 'rxjs';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { AlertService } from '../../../../shared/services/alert/alert';
 import { UserStore } from '../../../../store/user-info/user.store';
+import { NnButton } from "../../../../shared/components/nn-button/nn-button";
 @Component({
     selector: 'app-login',
     imports: [
-        ReactiveFormsModule,
-        MatIconModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatButtonModule,
-        MatSnackBarModule,
-    ],
+    ReactiveFormsModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSnackBarModule,
+    NnButton
+],
     templateUrl: './login.html',
     styleUrl: './login.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

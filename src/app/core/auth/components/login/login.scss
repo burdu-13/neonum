@@ -2,100 +2,83 @@
 @use '../../../../shared/styles/mixins' as *;
 
 .login {
+    width: 100%;
     @include flex(center, center);
-    min-height: calc(100vh - 11.2rem);
-    background-color: var(--nn-bg);
 
     &__card {
-        background-color: var(--nn-surface);
-        @include glass(0.4, 2.5rem);
-        @include flex(center, stretch, column, $gap: 3.2rem);
         width: 100%;
-        max-width: 46rem;
-        padding: 4.8rem;
-        border-radius: 1.2rem;
+        max-width: 48rem;
+        padding: clamp(3.2rem, 10vw, 6.4rem);
+        @include glass($opacity: 0.05, $blur: 2rem);
         border: 1px solid var(--nn-border);
-        box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.5);
-    }
-
-    &__icon-box {
-        @include flex(center, center);
-        width: 6.4rem;
-        height: 6.4rem;
-        margin: 0 auto;
-        background: rgba(var(--nn-primary-rgb), 0.1);
-        border-radius: 50%;
-        color: var(--nn-primary);
-
-        .login__icon {
-            font-size: 3.2rem;
-            width: 3.2rem;
-            height: 3.2rem;
-        }
+        border-radius: 4rem;
+        @include flex(stretch, stretch, column, $gap: 4.8rem);
     }
 
     &__header {
         text-align: center;
     }
 
-    &__title {
-        font-size: 2.8rem;
+    &__label {
+        display: block;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5em;
+        color: var(--nn-primary);
         font-weight: 700;
-        color: var(--nn-text);
-        margin-bottom: 0.8rem;
-        letter-spacing: -0.02em;
+        margin-bottom: 1.6rem;
     }
 
-    &__subtitle {
-        font-size: 1.4rem;
-        color: rgba(var(--nn-text-rgb), 0.4);
-        text-transform: uppercase;
-        letter-spacing: 0.1rem;
+    &__title {
+        font-size: clamp(3.6rem, 5vw, 4.8rem);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        line-height: 1;
+        margin-bottom: 2rem;
+        color: var(--nn-text);
+
+        span {
+            color: var(--nn-primary);
+        }
+    }
+
+    &__description {
+        font-size: 1.5rem;
+        color: var(--nn-icon-muted);
+        line-height: 1.6;
+        font-weight: 300;
     }
 
     &__form {
-        @include flex(stretch, stretch, column, $gap: 0.8rem);
+        @include flex(stretch, stretch, column, $gap: 2rem);
     }
 
-    &__main-btn {
-        height: 5.2rem;
-        border-radius: 0.8rem;
-        font-size: 1.6rem;
-        margin-top: 1.2rem;
-        font-weight: 700;
-        letter-spacing: 0.05rem;
-        box-shadow: 0 0.8rem 2.4rem rgba(var(--nn-primary-rgb), 0.2);
+    &__footer {
+        @include flex(center, center, $gap: 2.4rem);
+        padding-top: 3.2rem;
+        border-top: 1px solid var(--nn-border);
     }
 
-    &__actions {
-        @include flex(space-between, center, $gap: 1.6rem);
-        width: 100%;
-    }
-
-    &__action-btn {
-        flex: 1;
-        height: 4.4rem;
-        border-radius: 0.8rem;
+    &__action {
+        background: transparent;
+        border: none;
+        color: var(--nn-text);
         font-size: 1.2rem;
-        font-weight: 600;
-        color: rgba(var(--nn-text-rgb), 0.6);
-        background-color: transparent;
-        border: 1px solid transparent;
-        transition: all 0.2s ease;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
 
         &:hover {
-            background-color: rgba(var(--nn-text-rgb), 0.05);
-            color: var(--nn-text);
+            opacity: 1;
         }
+    }
 
-        &--outline {
-            border-color: var(--nn-border);
-            color: var(--nn-primary);
-
-            &:hover {
-                border-color: var(--nn-primary);
-                background-color: rgba(var(--nn-primary-rgb), 0.05);
-            }
-        }
+    &__divider {
+        width: 1px;
+        height: 1.2rem;
+        background: var(--nn-border);
     }
 }

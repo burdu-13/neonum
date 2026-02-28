@@ -1,4 +1,14 @@
+@use '../../../shared/styles/mixins' as *;
+@use '../../../shared/styles/variables' as *;
+
 .auth-container {
-    display: grid;
-    place-items: center;
+    background-color: var(--nn-bg);
+    min-height: 100vh;
+    @include flex(center, center);
+    padding: 2.4rem;
+}
+
+.auth-content {
+    width: 100%;
+    @include flex(center, center);
 }

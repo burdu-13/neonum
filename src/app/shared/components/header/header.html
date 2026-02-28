@@ -47,6 +47,13 @@
                             (clicked)="store.logout()"
                         />
                     </div>
+                } @else {
+                    <app-nn-button
+                        label="LOG IN"
+                        variant="primary"
+                        (clicked)="router.navigate(['/auth'])"
+                        ariaLabel="Navigate to Login"
+                    />
                 }
             }
 
