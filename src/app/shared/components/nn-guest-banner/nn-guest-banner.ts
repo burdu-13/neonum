@@ -11,7 +11,7 @@ import { UserStore } from '../../../store/user-info/user.store';
 })
 export class NnGuestBanner {
     protected readonly userStore = inject(UserStore);
-    protected readonly hoursRemaining = input.required<number>();
+    public readonly hoursRemaining = input.required<number>();
     protected readonly upgradeRequested = output<void>();
 
     protected onEndSession(): void {
