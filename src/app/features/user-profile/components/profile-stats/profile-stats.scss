@@ -1,9 +1,7 @@
 @use '../../../../shared/styles/mixins' as *;
 
 .stats {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3.2rem;
+    @include grid(repeat(2, 1fr), 3.2rem);
     max-width: 60rem;
     margin: 0 auto 8rem;
 

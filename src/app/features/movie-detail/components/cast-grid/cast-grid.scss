@@ -12,9 +12,7 @@
 }
 
 .cast-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-    gap: 2.4rem;
+    @include auto-grid(10rem, 2.4rem);
 
     .cast-card {
         @include flex(flex-start, center, column);

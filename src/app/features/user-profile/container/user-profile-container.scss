@@ -29,9 +29,7 @@
         @include flex(flex-start, stretch, column, $gap: 4rem);
 
         &-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.4rem;
+            @include grid(repeat(2, 1fr), 2.4rem);
 
             @include mq('sm') {
                 grid-template-columns: 1fr;

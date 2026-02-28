@@ -9,14 +9,11 @@
         max-width: 144rem;
         margin: 0 auto;
         padding: 2.4rem;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 4rem;
+        @include grid(1fr, 4rem);
 
         @include mq('lg') {
-            grid-template-columns: 28rem 1fr;
+            @include grid(28rem 1fr, 8.8rem);
             padding: 6rem 6.4rem;
-            gap: 8.8rem;
         }
     }
 
@@ -59,19 +56,14 @@
     }
 
     &__credits-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-        gap: 2rem;
-        justify-content: center;
+        @include auto-grid(16rem, 2rem, 1fr, center);
 
         @include mq('sm') {
-            grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-            gap: 2.4rem;
+            @include auto-grid(20rem, 2.4rem, 1fr, center);
         }
 
         @include mq('lg') {
-            grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-            gap: 3.2rem;
+            @include auto-grid(22rem, 3.2rem, 1fr, center);
         }
 
         app-nn-empty-state {

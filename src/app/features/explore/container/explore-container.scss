@@ -14,29 +14,18 @@
     }
 
     &__grid {
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 4rem;
+        @include grid(1fr, 4rem);
 
         @include mq('sm') {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 4rem 2.4rem;
+            @include grid(repeat(2, 1fr), 4rem 2.4rem);
         }
 
         @include mq('md') {
-            grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
-            gap: 6rem 3.2rem;
+            @include auto-grid(24rem, 6rem 3.2rem);
         }
     }
 }
 
 .nn-container {
-    width: 100%;
-    max-width: 144rem;
-    margin: 0 auto;
-    padding: 0 2rem;
-
-    @include mq('sm') {
-        padding: 0 4rem;
-    }
+    @include nn-container;
 }

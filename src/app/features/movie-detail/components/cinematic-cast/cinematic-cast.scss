@@ -12,12 +12,8 @@
     }
 
     &__label {
+        @include text-upper(1rem, 0.4em, var(--nn-primary), 700);
         display: block;
-        font-size: 1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.4em;
-        color: var(--nn-primary);
-        font-weight: 700;
         margin-bottom: 0.8rem;
     }
 

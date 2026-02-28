@@ -45,9 +45,7 @@
     }
 
     &__close {
-        background: transparent;
-        border: none;
-        cursor: pointer;
+        @include button-reset;
         color: rgba(var(--nn-text-rgb), 0.3);
         @include flex(center, center);
         transition: color 0.2s;

@@ -48,8 +48,7 @@
     }
 
     .search-layout {
-        display: grid;
-        gap: 6.4rem;
+        @include grid(1fr, 6.4rem);
         flex: 1;
     }
 
