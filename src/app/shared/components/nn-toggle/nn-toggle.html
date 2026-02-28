@@ -1,17 +1,26 @@
-<div class="nn-toggle">
+<div
+    class="nn-toggle"
+    role="tablist"
+>
     @for (option of options(); track option.value) {
         <button
             type="button"
             class="nn-toggle__item"
             [class.nn-toggle__item--active]="option.value === value()"
             (click)="select(option.value)"
+            role="tab"
+            [attr.aria-selected]="option.value === value()"
         >
-            {{ option.label }}
+            <span class="nn-toggle__label">{{ option.label }}</span>
         </button>
     }
+
     <div
         class="nn-toggle__slider"
         [style.width]="sliderStyle().width"
         [style.transform]="sliderStyle().transform"
-    ></div>
+        aria-hidden="true"
+    >
+        <div class="nn-toggle__slider-glow"></div>
+    </div>
 </div>

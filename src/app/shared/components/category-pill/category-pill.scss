@@ -3,17 +3,16 @@
 
 .nn-pill {
     position: relative;
-    @include flex($align: center, $justify: center); //
+    @include flex($align: center, $justify: center);
     padding: 0.8rem 1.8rem;
     background: transparent;
-    border: 1px solid var(--nn-border); //
-    border-radius: 0.4rem; // Editorial sharp-roundness vs generic circles
-    color: var(--nn-icon-muted); //
+    border: 1px solid var(--nn-border);
+    border-radius: 0.4rem;
+    color: var(--nn-icon-muted);
     cursor: pointer;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
 
-    // Typographic refinement
     font-size: 1.1rem;
     font-weight: 700;
     text-transform: uppercase;
@@ -29,26 +28,24 @@
     &__bg {
         position: absolute;
         inset: 0;
-        background: var(--nn-primary); //
+        background: var(--nn-primary);
         transform: translateY(100%);
         transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
         z-index: 1;
     }
 
-    // Hover Effect: Subtle border glow and label shift
     &:hover:not(.nn-pill--active) {
-        border-color: rgba(var(--nn-primary-rgb), 0.5); //
-        color: var(--nn-text); //
+        border-color: rgba(var(--nn-primary-rgb), 0.5);
+        color: var(--nn-text);
 
         .nn-pill__label {
             transform: translateY(-1px);
         }
     }
 
-    // Active State: High-contrast editorial highlight
     &--active {
-        border-color: var(--nn-primary); //
-        color: var(--nn-bg); // High contrast against primary
+        border-color: var(--nn-primary);
+        color: var(--nn-bg);
         font-weight: 800;
 
         .nn-pill__bg {
@@ -56,10 +53,9 @@
         }
 
         .nn-pill__label {
-            color: var(--nn-bg); // Ensure text is legible on primary
+            color: var(--nn-bg);
         }
 
-        // Soft elevation glow for active pills
         box-shadow: 0 0.8rem 2rem -0.4rem rgba(var(--nn-primary-rgb), 0.4);
     }
 

@@ -5,6 +5,7 @@ import {
     effect,
     inject,
     signal,
+    untracked,
 } from '@angular/core';
 import { ExploreStore } from '../store/explore.store';
 import { MovieCard } from '../../dashboard/components/movie-card/movie-card';
@@ -30,6 +31,8 @@ export class FeatureContainer {
     protected readonly contentType = signal('movie');
     protected readonly typeOptions = EXPLORE_TYPE_OPTIONS;
 
+    private lastType?: string;
+
     protected readonly isFiltersExpanded = computed(() => {
         if (!this.breakpointService.isMobile()) return true;
         return this.mobileFiltersToggled();
@@ -47,11 +50,16 @@ export class FeatureContainer {
             const sort = this.sortValue();
             const type = this.contentType() as 'movie' | 'tv';
 
-            this.exploreStore.loadGenres(type);
+            untracked(() => {
+                if (this.lastType !== type) {
+                    this.exploreStore.loadGenres(type);
+                    this.lastType = type;
+                }
 
-            this.exploreStore.updateFilters({
-                sort_by: sort,
-                type: type,
+                this.exploreStore.updateFilters({
+                    sort_by: sort,
+                    type: type,
+                });
             });
         });
     }

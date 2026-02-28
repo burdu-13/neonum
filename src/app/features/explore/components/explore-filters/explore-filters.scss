@@ -2,6 +2,15 @@
 @use '../../../../shared/styles/variables' as *;
 
 .explore-filters {
+    &__controls {
+        @include flex($direction: column, $gap: 2rem);
+        margin-bottom: 2rem;
+
+        @include mq('sm') {
+            @include flex($direction: row, $align: center, $justify: space-between);
+        }
+    }
+
     &__toggle {
         @include flex($align: center, $justify: space-between);
         width: 100%;
@@ -11,6 +20,11 @@
         border-top: 1px solid var(--nn-border);
         color: var(--nn-text);
         cursor: pointer;
+
+        @include mq('sm') {
+            width: auto;
+            border-top: none;
+        }
 
         &-label {
             font-size: 1.1rem;
@@ -29,6 +43,7 @@
         display: grid;
         grid-template-rows: 0fr;
         transition: grid-template-rows 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        z-index: 10;
 
         &--expanded {
             grid-template-rows: 1fr;

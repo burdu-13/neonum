@@ -2,26 +2,29 @@
     class="explore-filters"
     aria-label="Genre filters"
 >
-    <app-nn-toggle
-        [(value)]="contentType"
-        [options]="typeOptions()"
-    />
-    @if (showToggle()) {
-        <button
-            type="button"
-            class="explore-filters__toggle"
-            (click)="toggle.emit()"
-            [attr.aria-expanded]="isExpanded()"
-            [class.explore-filters__toggle--active]="isExpanded()"
-        >
-            <span class="explore-filters__toggle-label">
-                {{ isExpanded() ? 'Hide Filters' : 'Browse Genres' }}
-            </span>
-            <mat-icon class="explore-filters__toggle-icon">
-                {{ isExpanded() ? 'expand_less' : 'expand_more' }}
-            </mat-icon>
-        </button>
-    }
+    <div class="explore-filters__controls">
+        <app-nn-toggle
+            [(value)]="contentType"
+            [options]="typeOptions()"
+        />
+
+        @if (showToggle()) {
+            <button
+                type="button"
+                class="explore-filters__toggle"
+                (click)="toggle.emit()"
+                [attr.aria-expanded]="isExpanded()"
+                [class.explore-filters__toggle--active]="isExpanded()"
+            >
+                <span class="explore-filters__toggle-label">
+                    {{ isExpanded() ? 'Hide Filters' : 'Browse Genres' }}
+                </span>
+                <mat-icon class="explore-filters__toggle-icon">
+                    {{ isExpanded() ? 'expand_less' : 'expand_more' }}
+                </mat-icon>
+            </button>
+        }
+    </div>
 
     <div
         class="explore-filters__wrapper"

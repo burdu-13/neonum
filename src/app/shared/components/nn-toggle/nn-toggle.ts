@@ -13,11 +13,14 @@ export class NnToggle {
     public readonly options = input.required<ToggleOption[]>();
 
     protected readonly sliderStyle = computed(() => {
-        const index = this.options().findIndex((o) => o.value === this.value());
-        const width = 100 / this.options().length;
+        const options = this.options();
+        const index = options.findIndex((o) => o.value === this.value());
+
+        const segmentWidth = 100 / options.length;
+
         return {
-            width: `${width}%`,
-            transform: `translateX(${index * 100}%)`,
+            width: `calc(${segmentWidth}% - 0.4rem)`,
+            transform: `translateX(calc(${index * 100}%))`,
         };
     });
 

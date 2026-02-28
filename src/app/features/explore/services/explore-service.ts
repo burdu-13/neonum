@@ -12,10 +12,10 @@ export class ExploreService {
 
     public discoverMovies(filters: ExploreFilters): Observable<MovieResponse> {
         const contentType = filters.type || 'movie';
+
         let path = `discover/${contentType}?page=${filters.page}&sort_by=${filters.sort_by}`;
 
         if (filters.with_genres) path += `&with_genres=${filters.with_genres}`;
-
         if (filters['vote_average.gte']) path += `&vote_average.gte=${filters['vote_average.gte']}`;
         if (filters['vote_count.gte']) path += `&vote_count.gte=${filters['vote_count.gte']}`;
         if (filters['primary_release_date.gte'])

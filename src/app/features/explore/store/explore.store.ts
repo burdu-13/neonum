@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap, catchError, EMPTY, of } from 'rxjs';
+import { pipe, switchMap, tap, catchError, EMPTY, of, concatMap } from 'rxjs';
 import { Movie } from '../../../shared/models/movie.model';
 import { ExploreCacheEntry, ExploreFilters, Genre } from '../models/explore.model';
 import { ExploreService } from '../services/explore-service';
@@ -48,7 +48,7 @@ export const ExploreStore = signalStore(
         loadMovies: rxMethod<{ filters: ExploreFilters; append: boolean }>(
             pipe(
                 tap(() => patchState(store, { isLoading: true })),
-                switchMap(({ filters, append }) => {
+                concatMap(({ filters, append }) => {
                     const cacheKey = JSON.stringify(filters);
                     const cachedData = store.cache()[cacheKey];
 
@@ -56,6 +56,7 @@ export const ExploreStore = signalStore(
                         patchState(store, {
                             movies: cachedData.results,
                             totalResults: cachedData.total,
+                            totalPages: cachedData.totalPages,
                             isLoading: false,
                         });
                         return of(null);
@@ -75,6 +76,7 @@ export const ExploreStore = signalStore(
                                           [cacheKey]: {
                                               results: res.results,
                                               total: res.total_results,
+                                              totalPages: res.total_pages,
                                           },
                                       },
                             });
@@ -100,15 +102,21 @@ export const ExploreStore = signalStore(
 
         updateFilters(newFilters: Partial<ExploreFilters>) {
             patchState(store, (state) => {
-                const updatedFilters = { ...state.filters, ...newFilters, page: 1 };
+                const typeChanged = newFilters.type && newFilters.type !== state.filters.type;
+                const updatedFilters = {
+                    ...state.filters,
+                    ...newFilters,
+                    page: 1,
 
-                const genreUpdate =
-                    newFilters.type && newFilters.type !== state.filters.type
-                        ? { genres: [], with_genres: '' }
-                        : {};
+                    with_genres: typeChanged
+                        ? ''
+                        : (newFilters.with_genres ?? state.filters.with_genres),
+                };
 
                 return {
-                    filters: { ...updatedFilters, ...genreUpdate },
+                    filters: updatedFilters,
+
+                    genres: typeChanged ? [] : state.genres,
                 };
             });
             this.loadMovies({ filters: store.filters(), append: false });

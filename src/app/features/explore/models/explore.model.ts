@@ -23,4 +23,5 @@ export interface GenreResponse {
 export interface ExploreCacheEntry {
     results: Movie[];
     total: number;
+    totalPages: number;
 }
