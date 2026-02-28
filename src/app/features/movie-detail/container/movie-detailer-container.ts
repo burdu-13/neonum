@@ -19,18 +19,24 @@ import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { ActivatedRoute } from '@angular/router';
 import { HeroDisplayModel } from '../models/cinematic.config';
 import { isTVShow } from '../utils/cinematics.utils';
+import { CinematicCast } from "../components/cinematic-cast/cinematic-cast";
+import { CinematicSeasons } from "../components/cinematic-seasons/cinematic-seasons";
+import { CinematicSynopsis } from "../components/cinematic-synopsis/cinematic-synopsis";
 
 @Component({
     selector: 'app-movie-detailer-container',
     imports: [
-        MatIconModule,
-        CastGrid,
-        MovieTrailer,
-        MovieFeedback,
-        MovieActions,
-        MovieHero,
-        Skeleton,
-    ],
+    MatIconModule,
+    CastGrid,
+    MovieTrailer,
+    MovieFeedback,
+    MovieActions,
+    MovieHero,
+    Skeleton,
+    CinematicCast,
+    CinematicSeasons,
+    CinematicSynopsis
+],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
