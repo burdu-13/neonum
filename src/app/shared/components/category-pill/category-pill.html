@@ -1,1 +1,12 @@
-<span class="category-pill">{{ label() }}</span>
+<button
+    type="button"
+    class="nn-pill"
+    [class.nn-pill--active]="isActive()"
+    [attr.aria-pressed]="isActive()"
+>
+    <span class="nn-pill__label">{{ label() }}</span>
+    <span
+        class="nn-pill__bg"
+        aria-hidden="true"
+    ></span>
+</button>

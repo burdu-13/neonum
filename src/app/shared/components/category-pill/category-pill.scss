@@ -1,9 +1,65 @@
 @use '../../styles/variables' as *;
-.category-pill {
-    padding: 0.4rem 1.2rem;
-    border: 0.1rem solid var(--nn-border);
-    border-radius: 2rem;
-    font-size: 1.2rem;
+@use '../../styles/mixins' as *;
+
+.nn-pill {
+    position: relative;
+    @include flex($align: center, $justify: center);
+    padding: 0.8rem 1.8rem;
+    background: transparent;
+    border: 1px solid var(--nn-border);
+    border-radius: 0.4rem;
     color: var(--nn-icon-muted);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
     white-space: nowrap;
+
+    &__label {
+        position: relative;
+        z-index: 2;
+        transition: color 0.3s ease;
+    }
+
+    &__bg {
+        position: absolute;
+        inset: 0;
+        background: var(--nn-primary);
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        z-index: 1;
+    }
+
+    &:hover:not(.nn-pill--active) {
+        border-color: rgba(var(--nn-primary-rgb), 0.5);
+        color: var(--nn-text);
+
+        .nn-pill__label {
+            transform: translateY(-1px);
+        }
+    }
+
+    &--active {
+        border-color: var(--nn-primary);
+        color: var(--nn-bg);
+        font-weight: 800;
+
+        .nn-pill__bg {
+            transform: translateY(0);
+        }
+
+        .nn-pill__label {
+            color: var(--nn-bg);
+        }
+
+        box-shadow: 0 0.8rem 2rem -0.4rem rgba(var(--nn-primary-rgb), 0.4);
+    }
+
+    &:active {
+        transform: scale(0.96);
+    }
 }

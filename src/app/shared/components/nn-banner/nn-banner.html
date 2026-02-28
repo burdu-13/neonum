@@ -1,0 +1,26 @@
+<div class="nn-banner">
+    <div class="nn-banner__image-wrapper">
+        <img
+            [src]="imageSrc()"
+            fill
+            class="nn-banner__image"
+            alt="Hero Cinematic Banner"
+            priority
+        />
+        <div class="nn-banner__overlay"></div>
+    </div>
+
+    <div class="nn-banner__content">
+        @if (label()) {
+            <span class="nn-banner__label">{{ label() }}</span>
+        }
+        <h1 class="nn-banner__title">{{ title() }}</h1>
+        @if (description()) {
+            <p class="nn-banner__description">{{ description() }}</p>
+        }
+
+        <div class="nn-banner__actions">
+            <ng-content select="[actions]"></ng-content>
+        </div>
+    </div>
+</div>

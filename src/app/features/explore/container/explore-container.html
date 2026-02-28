@@ -1,0 +1,44 @@
+<main class="explore">
+    <header class="explore__header">
+        <div class="nn-container">
+            <app-explore-header [(sortValue)]="sortValue" />
+
+            <app-explore-filters
+                [(contentType)]="contentType"
+                [typeOptions]="typeOptions"
+                [genres]="exploreStore.genres()"
+                [isExpanded]="isFiltersExpanded()"
+                [showToggle]="breakpointService.isMobile()"
+                [activeGenreIds]="activeGenreIds()"
+                (toggle)="toggleFilters()"
+                (genreChange)="handleGenreChange($event)"
+            />
+        </div>
+    </header>
+
+    <div class="nn-container">
+        <div
+            class="explore__grid"
+            role="feed"
+        >
+            @for (movie of exploreStore.movies(); track movie.id) {
+                <app-movie-card
+                    [movie]="movie"
+                    class="explore__item"
+                />
+            }
+
+            @if (exploreStore.isLoading()) {
+                @for (i of [1, 2, 3, 4]; track $index) {
+                    <div class="skeleton-card"></div>
+                }
+            }
+        </div>
+
+        <div
+            class="explore__load-trigger"
+            appInteractionObserver
+            (isIntersecting)="exploreStore.loadNextPage()"
+        ></div>
+    </div>
+</main>

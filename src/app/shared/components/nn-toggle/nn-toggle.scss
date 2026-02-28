@@ -1,0 +1,73 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.nn-toggle {
+    position: relative;
+    @include flex($align: center);
+    @include glass($opacity: 0.1, $blur: 1.2rem);
+    background: rgba(var(--nn-surface-rgb), 0.4);
+    border: 1px solid var(--nn-border);
+    border-radius: 0.6rem;
+    padding: 0.4rem;
+    width: fit-content;
+    min-width: 28rem;
+
+    &__item {
+        position: relative;
+        z-index: 2;
+        flex: 1;
+        padding: 1rem 2.4rem;
+        border: none;
+        background: transparent;
+        color: var(--nn-icon-muted);
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+        font-size: 1.1rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+
+        &--active {
+            color: var(--nn-text);
+
+            .nn-toggle__label {
+                transform: translateY(0);
+            }
+        }
+
+        &:hover:not(.nn-toggle__item--active) {
+            color: var(--nn-text);
+            opacity: 0.8;
+        }
+    }
+
+    &__label {
+        display: block;
+        transition: transform 0.4s ease;
+    }
+
+    &__slider {
+        position: absolute;
+        top: 0.4rem;
+        left: 0.4rem;
+        height: calc(100% - 0.8rem);
+        background: var(--nn-surface);
+        border: 1px solid var(--nn-border);
+        border-radius: 0.4rem;
+        z-index: 1;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow:
+            0 4px 12px rgba(0, 0, 0, 0.2),
+            inset 0 1px 1px rgba(255, 255, 255, 0.05);
+
+        &-glow {
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 1px;
+            background: var(--nn-primary);
+            box-shadow: 0 0 8px var(--nn-primary);
+        }
+    }
+}

@@ -1,0 +1,80 @@
+@use '../../styles/mixins' as *;
+@use '../../styles/variables' as *;
+
+.nn-banner {
+    position: relative;
+    width: 100%;
+    min-height: 50rem;
+    border-radius: 3.2rem;
+    overflow: hidden;
+    @include flex($direction: column, $justify: flex-end);
+    padding: 6rem;
+    background: var(--nn-bg-dark);
+
+    &__image-wrapper {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+    }
+
+    &__image {
+        object-fit: cover;
+        object-position: center;
+        width: 100%;
+        height: 100%;
+        transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+    }
+
+    &__overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            to top,
+            rgba(0, 0, 0, 0.85) 0%,
+            rgba(0, 0, 0, 0.3) 60%,
+            rgba(0, 0, 0, 0) 100%
+        );
+    }
+
+    &__content {
+        position: relative;
+        z-index: 2;
+        max-width: 72rem;
+        @include glass($opacity: 0.1, $blur: 1.5rem);
+        padding: 4rem;
+        border-radius: 2.4rem;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    &__label {
+        display: block;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5em;
+        color: var(--nn-primary);
+        margin-bottom: 2rem;
+        font-weight: 700;
+    }
+
+    &__title {
+        font-size: clamp(3.2rem, 6vw, 6.4rem);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        line-height: 1.1;
+        margin-bottom: 2.4rem;
+        color: var(--nn-text);
+    }
+
+    &__description {
+        font-size: 1.8rem;
+        font-weight: 300;
+        line-height: 1.6;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 3.2rem;
+    }
+
+    &__actions {
+        @include flex($align: center, $gap: 1.6rem);
+    }
+}

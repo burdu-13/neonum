@@ -1,0 +1,42 @@
+@use '../../../shared/styles/mixins' as *;
+@use '../../../shared/styles/variables' as *;
+
+.explore {
+    --nn-nav-height: 8rem;
+    min-height: 100vh;
+    padding: calc(var(--nn-nav-height) + 4rem) 0 12rem;
+    overflow-x: hidden;
+
+    &__header {
+        margin-bottom: 6rem;
+        border-bottom: 1px solid var(--nn-border);
+        padding-bottom: 4rem;
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 4rem;
+
+        @include mq('sm') {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 4rem 2.4rem;
+        }
+
+        @include mq('md') {
+            grid-template-columns: repeat(auto-fill, minmax(24rem, 1fr));
+            gap: 6rem 3.2rem;
+        }
+    }
+}
+
+.nn-container {
+    width: 100%;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    @include mq('sm') {
+        padding: 0 4rem;
+    }
+}

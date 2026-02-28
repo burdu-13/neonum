@@ -30,14 +30,14 @@ export const routes: Routes = [
             ),
     },
     {
-        path: 'profile/me',
+        path: 'explore',
         loadComponent: () =>
-            import('./features/user-profile/container/user-profile-container').then(
-                (c) => c.UserProfileContainer,
+            import('./features/explore/container/explore-container').then(
+                (c) => c.FeatureContainer,
             ),
     },
     {
-        path: 'profile/:id',
+        path: 'profile/me',
         loadComponent: () =>
             import('./features/user-profile/container/user-profile-container').then(
                 (c) => c.UserProfileContainer,
