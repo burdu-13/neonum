@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { NnButton } from "../nn-button/nn-button";
+import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { NnButton } from '../nn-button/nn-button';
+import { UserStore } from '../../../store/user-info/user.store';
 
 @Component({
     selector: 'app-nn-guest-banner',
@@ -9,6 +10,11 @@ import { NnButton } from "../nn-button/nn-button";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NnGuestBanner {
-    hoursRemaining = input.required<number>();
-    upgradeRequested = output<void>();
+    protected readonly userStore = inject(UserStore);
+    protected readonly hoursRemaining = input.required<number>();
+    protected readonly upgradeRequested = output<void>();
+
+    protected onEndSession(): void {
+        this.userStore.logout();
+    }
 }

@@ -154,7 +154,6 @@ export const UserStore = signalStore(
                                 localStorage.setItem('is_guest', 'true');
                                 localStorage.setItem('guest_created_at', now.toString());
                                 localStorage.setItem('neonum_session_id', res.guest_session_id);
-
                                 patchState(store, {
                                     sessionId: res.guest_session_id,
                                     isAuthenticated: true,
@@ -162,10 +161,12 @@ export const UserStore = signalStore(
                                     guestCreatedAt: now,
                                     isLoading: false,
                                 });
+
                                 alertService.showAlert('Guest Session Active.', 'info');
-                                router.navigate(['/']);
+
+                                router.navigate(['/dashboard']);
                             }),
-                            catchError(() => {
+                            catchError((err) => {
                                 patchState(store, { isLoading: false });
                                 alertService.showAlert('Failed to start guest session.', 'error');
                                 return EMPTY;

@@ -13,12 +13,19 @@
                 </p>
             </div>
 
-            <app-nn-button
-                label="Join Neonum"
-                variant="primary"
-                class="guest-banner__action"
-                (clicked)="upgradeRequested.emit()"
-            />
+            <div class="guest-banner__actions">
+                <app-nn-button
+                    label="Join Neonum"
+                    variant="primary"
+                    (clicked)="upgradeRequested.emit()"
+                />
+
+                <app-nn-button
+                    label="End Session"
+                    variant="surface"
+                    (clicked)="onEndSession()"
+                />
+            </div>
         </div>
     </div>
 </aside>

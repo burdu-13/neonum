@@ -5,23 +5,20 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { Auth } from '../../services/auth';
-import { catchError, EMPTY, tap } from 'rxjs';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { AlertService } from '../../../../shared/services/alert/alert';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserStore } from '../../../../store/user-info/user.store';
-import { NnButton } from "../../../../shared/components/nn-button/nn-button";
+import { NnButton } from '../../../../shared/components/nn-button/nn-button';
 @Component({
     selector: 'app-login',
     imports: [
-    ReactiveFormsModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    NnButton
-],
+        ReactiveFormsModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatSnackBarModule,
+        NnButton,
+    ],
     templateUrl: './login.html',
     styleUrl: './login.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +46,7 @@ export class Login {
     public onGuestLogin(): void {
         this.store.loginAsGuest();
     }
+    
 
     public onRegisterNavigate(): void {
         this.router.navigate(['auth/sign-up']);
