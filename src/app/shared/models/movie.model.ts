@@ -1,3 +1,36 @@
+export type CinematicType = 'movie' | 'tv';
+
+export interface Genre {
+    id: number;
+    name: string;
+}
+
+export interface Season {
+    id: number;
+    air_date: string;
+    episode_count: number;
+    name: string;
+    overview: string;
+    poster_path: string;
+    season_number: number;
+    vote_average: number;
+}
+
+export interface TVDetails extends TVShow {
+    tagline: string | null;
+    genres: Genre[];
+    number_of_episodes: number;
+    number_of_seasons: number;
+    seasons: Season[];
+    credits: Credits;
+    similar: { results: TVShow[] };
+    account_states?: AccountStates;
+    reviews: ReviewResponse;
+    videos: MovieVideoResponse;
+}
+
+export type CinematicDetail = MovieDetails | TVDetails;
+
 export interface Movie {
     id: number;
     title: string;

@@ -11,12 +11,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { CastGrid } from '../components/cast-grid/cast-grid';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieTrailer } from '../../../shared/components/movie-trailer/movie-trailer';
-import { ReviewPayload } from '../../../shared/models/movie.model';
+import { MovieDetails, ReviewPayload } from '../../../shared/models/movie.model';
 import { MovieFeedback } from '../components/movie-feedback/movie-feedback';
 import { MovieActions } from '../components/movie-actions/movie-actions';
 import { MovieHero } from '../components/movie-hero/movie-hero';
 import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 import { ActivatedRoute } from '@angular/router';
+import { HeroDisplayModel } from '../models/cinematic.config';
+import { isTVShow } from '../utils/cinematics.utils';
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -44,6 +46,40 @@ export class MovieDetailerContainer {
         const videos = this.movieStore.selectedMovie()?.videos?.results;
         const trailer = videos?.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
         return trailer?.key || videos?.[0]?.key || null;
+    });
+
+    protected readonly heroDisplay = computed((): HeroDisplayModel | null => {
+        const movie = this.movieStore.selectedMovie();
+        if (!movie) return null;
+
+        const tv = isTVShow(movie);
+
+        return {
+            title: tv ? movie.name : (movie as MovieDetails).title,
+            tagline: movie.tagline || '',
+            posterPath: movie.poster_path,
+            backdropPath: movie.backdrop_path,
+            rating: movie.vote_average,
+            metadata: [
+                {
+                    text: new Date(tv ? movie.first_air_date : (movie as MovieDetails).release_date)
+                        .getFullYear()
+                        .toString(),
+                },
+                ...(tv
+                    ? [
+                          { text: `${movie.number_of_seasons} SEASONS` },
+                          { text: `${movie.number_of_episodes} EPISODES` },
+                      ]
+                    : [{ text: `${(movie as MovieDetails).runtime} MIN` }]),
+            ],
+            genres: movie.genres,
+        };
+    });
+
+    protected readonly seasons = computed(() => {
+        const movie = this.movieStore.selectedMovie();
+        return movie && isTVShow(movie) ? movie.seasons : [];
     });
 
     constructor() {

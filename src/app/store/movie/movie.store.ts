@@ -157,7 +157,7 @@ export const MovieStore = signalStore(
                     ),
                     tap(({ id, type }) => {
                         const mId = Number(id);
-                        // Fix: Added 'store' reference to patchState
+
                         patchState(store, {
                             activeDetailId: mId,
                             reviewLimit: 6,
@@ -175,7 +175,6 @@ export const MovieStore = signalStore(
                             return EMPTY;
                         }
 
-                        // This now matches the updated service signature
                         return detailService.getMovieDetails(id, type).pipe(
                             tap((movie) => {
                                 patchState(store, {
