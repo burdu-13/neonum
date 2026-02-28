@@ -1,0 +1,24 @@
+<aside
+    class="guest-banner"
+    role="alert"
+>
+    <div class="nn-container">
+        <div class="guest-banner__content">
+            <div class="guest-banner__message">
+                <span class="guest-banner__tag">Guest Session</span>
+                <p class="guest-banner__text">
+                    Your temporary access will be deactivated in
+                    <strong>{{ hoursRemaining() }} hours</strong>
+                    . Create an account to preserve your archive.
+                </p>
+            </div>
+
+            <app-nn-button
+                label="Join Neonum"
+                variant="primary"
+                class="guest-banner__action"
+                (clicked)="upgradeRequested.emit()"
+            />
+        </div>
+    </div>
+</aside>
