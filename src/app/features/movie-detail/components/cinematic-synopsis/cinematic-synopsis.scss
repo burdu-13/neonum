@@ -24,10 +24,12 @@
     }
 
     &__text {
-        font-size: clamp(1.6rem, 2vw, 1.8rem);
+        font-size: 1.6rem;
         line-height: 1.8;
         color: var(--nn-icon-muted);
-        font-weight: 300;
-        max-width: 85rem;
+        max-width: 80rem;
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
 }
