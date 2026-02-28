@@ -14,7 +14,13 @@ import {
 } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
-import { Movie, MovieDetails, MovieResponse, Review } from '../../shared/models/movie.model';
+import {
+    Episode,
+    Movie,
+    MovieDetails,
+    MovieResponse,
+    Review,
+} from '../../shared/models/movie.model';
 import { AlertService } from '../../shared/services/alert/alert';
 import { UserStore } from '../user-info/user.store';
 import { Router } from '@angular/router';
@@ -34,6 +40,9 @@ interface MovieState {
     reviewLimit: number;
     activeDetailId: number | null;
     collectionsLoaded: boolean;
+    activeSeasonEpisodes: Episode[];
+    isSeasonLoading: boolean;
+    seasonCache: Record<string, Episode[]>;
 }
 
 const initialState: MovieState = {
@@ -51,6 +60,9 @@ const initialState: MovieState = {
     detailsCache: {},
     activeDetailId: null,
     collectionsLoaded: false,
+    activeSeasonEpisodes: [],
+    isSeasonLoading: false,
+    seasonCache: {},
 };
 
 export const MovieStore = signalStore(
@@ -149,20 +161,25 @@ export const MovieStore = signalStore(
                 patchState(store, { reviewLimit: store.reviewLimit() + 6 });
             },
 
-            loadMovieDetail: rxMethod<string>(
+            loadMovieDetail: rxMethod<{ id: string; type: 'movie' | 'tv' }>(
                 pipe(
-                    filter((id) => !!id),
-                    distinctUntilChanged(),
-                    tap((id) => {
+                    filter((data) => !!data.id),
+                    distinctUntilChanged(
+                        (prev, curr) => prev.id === curr.id && prev.type === curr.type,
+                    ),
+                    tap(({ id, type }) => {
                         const mId = Number(id);
 
-                        patchState(store, { activeDetailId: mId, reviewLimit: 6 });
+                        patchState(store, {
+                            activeDetailId: mId,
+                            reviewLimit: 6,
+                        });
 
                         if (!store.detailsCache()[mId]) {
                             patchState(store, { isLoading: true, detailError: null });
                         }
                     }),
-                    switchMap((id) => {
+                    switchMap(({ id, type }) => {
                         const mId = Number(id);
 
                         if (store.detailsCache()[mId]) {
@@ -170,7 +187,7 @@ export const MovieStore = signalStore(
                             return EMPTY;
                         }
 
-                        return detailService.getMovieDetails(id).pipe(
+                        return detailService.getMovieDetails(id, type).pipe(
                             tap((movie) => {
                                 patchState(store, {
                                     detailsCache: {
@@ -247,13 +264,10 @@ export const MovieStore = signalStore(
                         return movieService.discover(type, randomPage).pipe(
                             tap((response: MovieResponse) => {
                                 const results = response.results;
-
-                                if (results && results.length > 0) {
+                                if (results?.length > 0) {
                                     const randomItem =
                                         results[Math.floor(Math.random() * results.length)];
-
-                                    const route = isMovie ? '/movie' : '/tv-show';
-
+                                    const route = isMovie ? '/movie' : '/tv';
                                     router.navigate([route, randomItem.id]);
                                 }
                             }),
@@ -265,6 +279,58 @@ export const MovieStore = signalStore(
                     }),
                 ),
             ),
+
+            loadSeasonDetails: rxMethod<{ tvId: number; seasonNumber: number }>(
+                pipe(
+                    tap(({ tvId, seasonNumber }) => {
+                        const cacheKey = `${tvId}_s${seasonNumber}`;
+                        const cachedData = store.seasonCache()[cacheKey];
+
+                        if (cachedData) {
+                            patchState(store, {
+                                activeSeasonEpisodes: cachedData,
+                                isSeasonLoading: false,
+                            });
+                        } else {
+                            patchState(store, {
+                                isSeasonLoading: true,
+                                activeSeasonEpisodes: [],
+                            });
+                        }
+                    }),
+                    switchMap(({ tvId, seasonNumber }) => {
+                        const cacheKey = `${tvId}_s${seasonNumber}`;
+
+                        if (store.seasonCache()[cacheKey]) {
+                            return EMPTY;
+                        }
+
+                        return detailService.getSeasonDetails(tvId.toString(), seasonNumber).pipe(
+                            tap((detail) => {
+                                patchState(store, {
+                                    activeSeasonEpisodes: detail.episodes,
+                                    seasonCache: {
+                                        ...store.seasonCache(),
+                                        [cacheKey]: detail.episodes,
+                                    },
+                                    isSeasonLoading: false,
+                                });
+                            }),
+                            catchError(() => {
+                                patchState(store, { isSeasonLoading: false });
+                                return EMPTY;
+                            }),
+                        );
+                    }),
+                ),
+            ),
+
+            clearSeasonEpisodes() {
+                patchState(store, {
+                    activeSeasonEpisodes: [],
+                    isSeasonLoading: false,
+                });
+            },
 
             toggleFavorite: rxMethod<{ id: number; status: boolean }>(
                 pipe(

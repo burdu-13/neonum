@@ -1,7 +1,9 @@
 <header
     class="movie-hero"
     [style.backgroundImage]="
-        movie() ? 'url(https://image.tmdb.org/t/p/original' + movie()?.backdrop_path + ')' : 'none'
+        displayData()
+            ? 'url(https://image.tmdb.org/t/p/original' + displayData()?.backdropPath + ')'
+            : 'none'
     "
 >
     <div class="movie-hero__fade"></div>
@@ -14,10 +16,10 @@
                         height="100%"
                         radius="1.6rem"
                     />
-                } @else if (movie()?.poster_path) {
+                } @else if (displayData()?.posterPath) {
                     <img
-                        [src]="'https://image.tmdb.org/t/p/w500' + movie()?.poster_path"
-                        [alt]="movie()?.title"
+                        [src]="'https://image.tmdb.org/t/p/w500' + displayData()?.posterPath"
+                        [alt]="displayData()?.title"
                     />
                 }
             </figure>
@@ -36,11 +38,11 @@
                     />
                 } @else {
                     <h1 class="movie-hero__content__grid__typography__title">
-                        {{ movie()?.title }}
+                        {{ displayData()?.title }}
                     </h1>
-                    @if (movie()?.tagline) {
+                    @if (displayData()?.tagline) {
                         <p class="movie-hero__content__grid__typography__tagline">
-                            {{ movie()?.tagline }}
+                            {{ displayData()?.tagline }}
                         </p>
                     }
                 }
@@ -60,11 +62,13 @@
                     } @else {
                         <app-meta-badge
                             icon="star"
-                            [text]="movie()?.vote_average | number: '1.1-1'"
+                            [text]="displayData()?.rating | number: '1.1-1'"
                             [highlight]="true"
                         />
-                        <app-meta-badge [text]="movie()?.release_date | date: 'yyyy'" />
-                        <app-meta-badge [text]="movie()?.runtime + ' MIN'" />
+
+                        @for (meta of displayData()?.metadata; track meta.text) {
+                            <app-meta-badge [text]="meta.text" />
+                        }
                     }
                 </div>
 
@@ -81,7 +85,7 @@
                             radius="2rem"
                         />
                     } @else {
-                        @for (genre of movie()?.genres; track genre.id) {
+                        @for (genre of displayData()?.genres; track genre.id) {
                             <app-category-pill [label]="genre.name" />
                         }
                     }

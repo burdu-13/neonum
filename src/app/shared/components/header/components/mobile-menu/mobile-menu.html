@@ -49,6 +49,13 @@
                     />
                 </div>
             </div>
+        } @else {
+            <app-nn-button
+                label="SIGN IN"
+                variant="primary"
+                style="width: 100%"
+                (clicked)="closed.emit(); router.navigate(['/auth'])"
+            />
         }
     </div>
 </div>

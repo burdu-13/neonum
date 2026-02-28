@@ -5,8 +5,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieCard } from '../components/movie-card/movie-card';
-import { Skeleton } from '../../../shared/components/skeleton/skeleton';
-import { MovieShelf } from '../components/movie-shelf/movie-shelf';
 import { NnEmptyState } from '../../../shared/components/nn-empty-state/nn-empty-state';
 import { NnBanner } from '../../../shared/components/nn-banner/nn-banner';
 import { NnButton } from '../../../shared/components/nn-button/nn-button';
@@ -19,8 +17,6 @@ import { Router } from '@angular/router';
         MatButtonModule,
         MatIconModule,
         MovieCard,
-        Skeleton,
-        MovieShelf,
         NnEmptyState,
         NnBanner,
         NnButton,
@@ -36,9 +32,10 @@ export class DashboardContainer implements OnInit {
     constructor() {
         effect(() => {
             const auth = this.userStore.isAuthenticated();
+            const isGuest = this.userStore.isGuest();
             const loading = this.userStore.isLoading();
 
-            if (auth && !loading) {
+            if (auth && !isGuest && !loading) {
                 this.movieStore.loadCollections();
             }
         });

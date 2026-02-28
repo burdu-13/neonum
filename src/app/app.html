@@ -10,6 +10,13 @@
         <app-header></app-header>
         <app-alert></app-alert>
 
+        @if (userStore.isGuest()) {
+            <app-nn-guest-banner
+                [hoursRemaining]="userStore.guestSessionRemainingHours()"
+                (upgradeRequested)="navigateToSignUp()"
+            />
+        }
+
         <main class="app-main">
             <router-outlet></router-outlet>
         </main>

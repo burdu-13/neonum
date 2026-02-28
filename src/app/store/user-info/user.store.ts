@@ -1,5 +1,12 @@
-import { inject } from '@angular/core';
-import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
+import {
+    patchState,
+    signalStore,
+    withComputed,
+    withHooks,
+    withMethods,
+    withState,
+} from '@ngrx/signals';
 import { Router } from '@angular/router';
 import { catchError, EMPTY, pipe, switchMap, tap } from 'rxjs';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -12,21 +19,38 @@ export interface UserState {
     account: AccountDetails | null;
     isLoading: boolean;
     isAuthenticated: boolean;
+    isGuest: boolean;
+    guestCreatedAt: number | null;
 }
 
 const sessionId = localStorage.getItem('neonum_session_id');
 const isGuest = localStorage.getItem('is_guest') === 'true';
+const guestCreatedAt = localStorage.getItem('guest_created_at');
 
 const initialState: UserState = {
     sessionId: sessionId,
     isLoading: !!sessionId && !isGuest,
     account: null,
     isAuthenticated: !!sessionId,
+    isGuest: isGuest,
+    guestCreatedAt: guestCreatedAt ? Number(guestCreatedAt) : null,
 };
 
 export const UserStore = signalStore(
     { providedIn: 'root' },
     withState(initialState),
+    withComputed(({ isGuest, guestCreatedAt }) => ({
+        guestSessionRemainingHours: computed(() => {
+            if (!isGuest() || !guestCreatedAt()) return 0;
+
+            const now = Date.now();
+            const twentyFourHours = 24 * 60 * 60 * 1000;
+            const elapsed = now - guestCreatedAt()!;
+            const remaining = Math.max(0, twentyFourHours - elapsed);
+
+            return Math.floor(remaining / (1000 * 60 * 60));
+        }),
+    })),
     withMethods(
         (
             store,
@@ -73,7 +97,14 @@ export const UserStore = signalStore(
                         authService.login(credentials).pipe(
                             tap((session) => {
                                 localStorage.removeItem('is_guest');
-                                patchState(store, { sessionId: session.session_id });
+                                localStorage.removeItem('guest_created_at');
+                                localStorage.setItem('neonum_session_id', session.session_id);
+
+                                patchState(store, {
+                                    sessionId: session.session_id,
+                                    isGuest: false,
+                                    guestCreatedAt: null,
+                                });
                             }),
                             switchMap(() =>
                                 authService.getAccountDetails().pipe(
@@ -104,7 +135,7 @@ export const UserStore = signalStore(
                                 const message =
                                     err.status === 401
                                         ? 'Invalid username or password.'
-                                        : 'The cinematic mainframe is currently unreachable.';
+                                        : 'The cinematic mainframe is unreachable.';
                                 alertService.showAlert(message, 'error');
                                 return EMPTY;
                             }),
@@ -119,15 +150,23 @@ export const UserStore = signalStore(
                     switchMap(() =>
                         authService.loginAsGuest().pipe(
                             tap((res) => {
+                                const now = Date.now();
+                                localStorage.setItem('is_guest', 'true');
+                                localStorage.setItem('guest_created_at', now.toString());
+                                localStorage.setItem('neonum_session_id', res.guest_session_id);
                                 patchState(store, {
                                     sessionId: res.guest_session_id,
                                     isAuthenticated: true,
+                                    isGuest: true,
+                                    guestCreatedAt: now,
                                     isLoading: false,
                                 });
+
                                 alertService.showAlert('Guest Session Active.', 'info');
-                                router.navigate(['/']);
+
+                                router.navigate(['/dashboard']);
                             }),
-                            catchError(() => {
+                            catchError((err) => {
                                 patchState(store, { isLoading: false });
                                 alertService.showAlert('Failed to start guest session.', 'error');
                                 return EMPTY;
@@ -140,7 +179,16 @@ export const UserStore = signalStore(
             logout(): void {
                 localStorage.removeItem('neonum_session_id');
                 localStorage.removeItem('is_guest');
-                patchState(store, { sessionId: null, account: null, isAuthenticated: false });
+                localStorage.removeItem('guest_created_at');
+
+                patchState(store, {
+                    sessionId: null,
+                    account: null,
+                    isAuthenticated: false,
+                    isGuest: false,
+                    guestCreatedAt: null,
+                });
+
                 router.navigate(['/auth/login']);
             },
         }),
@@ -149,8 +197,12 @@ export const UserStore = signalStore(
     withHooks({
         onInit(store) {
             const isGuest = localStorage.getItem('is_guest') === 'true';
+            const createdAt = Number(localStorage.getItem('guest_created_at'));
+            const isExpired = Date.now() - createdAt > 24 * 60 * 60 * 1000;
 
-            if (store.sessionId() && !isGuest) {
+            if (isGuest && isExpired) {
+                store.logout();
+            } else if (store.sessionId() && !isGuest) {
                 store.restoreSession();
             }
         },

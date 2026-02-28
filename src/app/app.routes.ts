@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth-guard';
 
 export const routes: Routes = [
     {
@@ -7,6 +8,7 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
+        canActivate: [authGuard],
         loadChildren: () =>
             import('./features/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     },
@@ -23,6 +25,13 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'tv/:id',
+        loadComponent: () =>
+            import('./features/movie-detail/container/movie-detailer-container').then(
+                (c) => c.MovieDetailerContainer,
+            ),
+    },
+    {
         path: 'actor/:id',
         loadComponent: () =>
             import('./features/actor-detail/container/actor-detail-container').then(
@@ -31,6 +40,7 @@ export const routes: Routes = [
     },
     {
         path: 'explore',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/explore/container/explore-container').then(
                 (c) => c.FeatureContainer,
@@ -38,6 +48,7 @@ export const routes: Routes = [
     },
     {
         path: 'profile/me',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/user-profile/container/user-profile-container').then(
                 (c) => c.UserProfileContainer,

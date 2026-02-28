@@ -3,13 +3,13 @@
 
 .alert {
     position: fixed;
-    top: 8rem;
-    left: 50%;
-    transform: translateX(-50%);
+    top: 10rem;
+    right: 2.4rem;
+    left: auto;
     z-index: 1100;
 
     min-width: 32rem;
-    max-width: 90vw;
+    max-width: calc(100vw - 4.8rem);
     border-radius: 0.8rem;
     overflow: hidden;
     @include glass(0.8, 1.5rem);
@@ -29,6 +29,7 @@
             color: #ff4d4d;
         }
     }
+
     &--success {
         border-left: 4px solid var(--nn-primary);
         .alert__icon {
@@ -54,6 +55,7 @@
         &:hover {
             color: var(--nn-text);
         }
+
         mat-icon {
             font-size: 1.8rem;
             width: 1.8rem;
@@ -73,11 +75,11 @@
 @keyframes alertSlideIn {
     from {
         opacity: 0;
-        transform: translate(-50%, -20px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
-        transform: translate(-50%, 0);
+        transform: translateY(0);
     }
 }
 

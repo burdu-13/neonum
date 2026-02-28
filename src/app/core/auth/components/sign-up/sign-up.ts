@@ -2,10 +2,11 @@ import { ChangeDetectionStrategy, Component, inject, output } from '@angular/cor
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
+import { NnButton } from '../../../../shared/components/nn-button/nn-button';
 
 @Component({
     selector: 'app-sign-up',
-    imports: [MatButtonModule, MatIconModule],
+    imports: [MatButtonModule, MatIconModule, NnButton],
     templateUrl: './sign-up.html',
     styleUrl: './sign-up.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,5 +18,9 @@ export class SignUp {
 
     public onBackToLogin(): void {
         this.router.navigate(['/auth/login']);
+    }
+
+    public onRegister(): void {
+        window.open(this.tmdbSignupUrl, '_blank');
     }
 }

@@ -1,0 +1,41 @@
+@use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
+
+.cast-section {
+    @include glass($opacity: 0.02, $blur: 1.2rem);
+    border: 1px solid var(--nn-border);
+    border-radius: 3.2rem;
+    padding: 4rem;
+
+    &__header {
+        margin-bottom: 4rem;
+    }
+
+    &__label {
+        display: block;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        color: var(--nn-primary);
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+    }
+
+    &__title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    &__skeleton-grid {
+        @include flex($direction: column, $gap: 2.4rem);
+    }
+}
+
+.cast-skeleton {
+    @include flex($align: center, $gap: 1.6rem);
+
+    &__meta {
+        flex: 1;
+    }
+}

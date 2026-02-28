@@ -1,12 +1,14 @@
 <section class="login">
     <div class="login__card">
-        <div class="login__icon-box">
-            <mat-icon class="login__icon">account_circle</mat-icon>
-        </div>
-
         <header class="login__header">
-            <h1 class="login__title">Sign In</h1>
-            <p class="login__subtitle">Continue your cinematic journey</p>
+            <span class="login__label">Cinematic Archive</span>
+            <h1 class="login__title">
+                Sign In
+                <span>.</span>
+            </h1>
+            <p class="login__description">
+                Continue your exploration through curated masterpieces.
+            </p>
         </header>
 
         <form
@@ -22,7 +24,6 @@
                 <input
                     matInput
                     formControlName="username"
-                    placeholder="Enter your username"
                 />
                 <mat-icon matSuffix>person</mat-icon>
             </mat-form-field>
@@ -36,43 +37,36 @@
                     matInput
                     formControlName="password"
                     type="password"
-                    placeholder="Enter your password"
                 />
                 <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
 
-            <button
-                mat-flat-button
-                color="primary"
-                class="login__main-btn"
-                [disabled]="loginForm.invalid || store.isLoading()"
-            >
-                @if (store.isLoading()) {
-                    <span>Logging In...</span>
-                } @else {
-                    <span>Log In</span>
-                }
-            </button>
+            <app-nn-button
+                type="submit"
+                label="Log In"
+                variant="primary"
+                [isLoading]="store.isLoading()"
+                [disabled]="loginForm.invalid"
+                class="login__submit"
+            />
         </form>
 
-        <div class="login__actions">
+        <footer class="login__footer">
             <button
-                mat-button
                 type="button"
-                class="login__action-btn"
+                class="login__action"
                 (click)="onGuestLogin()"
             >
                 Guest Session
             </button>
-
+            <div class="login__divider"></div>
             <button
-                mat-button
                 type="button"
+                class="login__action"
                 (click)="onRegisterNavigate()"
-                class="login__action-btn"
             >
                 Create Account
             </button>
-        </div>
+        </footer>
     </div>
 </section>

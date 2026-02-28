@@ -6,9 +6,9 @@ import { BreakpointService } from '../../services/breakpoint-service/breakpoint-
 import { Skeleton } from '../skeleton/skeleton';
 import { NnButton } from '../nn-button/nn-button';
 import { MovieStore } from '../../../store/movie/movie.store';
-import { MobileMenu } from "./components/mobile-menu/mobile-menu";
-import { NavLink } from "./components/nav-link/nav-link";
-import { BrandLogo } from "./components/brand-logo/brand-logo";
+import { MobileMenu } from './components/mobile-menu/mobile-menu';
+import { NavLink } from './components/nav-link/nav-link';
+import { BrandLogo } from './components/brand-logo/brand-logo';
 
 @Component({
     selector: 'app-header',
@@ -51,6 +51,7 @@ export class Header {
 
     protected handleLuckyClick(): void {
         this.movieStore.getRandomContent();
+
         this.closeMenu();
     }
 }

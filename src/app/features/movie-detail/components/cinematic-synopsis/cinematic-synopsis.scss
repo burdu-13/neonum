@@ -1,0 +1,33 @@
+@use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
+
+.synopsis {
+    &__header {
+        margin-bottom: 3.2rem;
+    }
+
+    &__label {
+        display: block;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5em;
+        color: var(--nn-primary);
+        font-weight: 700;
+        margin-bottom: 1.2rem;
+    }
+
+    &__title {
+        font-size: clamp(3.2rem, 5vw, 4.8rem);
+        font-weight: 300;
+        letter-spacing: -0.04em;
+        line-height: 1;
+    }
+
+    &__text {
+        font-size: clamp(1.6rem, 2vw, 1.8rem);
+        line-height: 1.8;
+        color: var(--nn-icon-muted);
+        font-weight: 300;
+        max-width: 85rem;
+    }
+}

@@ -1,45 +1,38 @@
 <section class="register">
     <div class="register__card">
-        <div class="register__icon-box">
-            <mat-icon class="register__icon">movie_filter</mat-icon>
-        </div>
-
         <header class="register__header">
-            <h1 class="register__title">Join the Cinema</h1>
-            <p class="register__subtitle">Registration required via TMDB</p>
+            <span class="register__label">Membership</span>
+            <h1 class="register__title">
+                Join
+                <span>.</span>
+            </h1>
+            <p class="register__description">
+                Neonum utilizes the global TMDB registry for secure identity management.
+            </p>
         </header>
 
         <div class="register__content">
-            <p class="register__text">
-                To protect your privacy and security, Neonum does not store local credentials.
-            </p>
-            <p class="register__text">
-                Please complete your registration on the official TMDB registry to start tracking
-                your films.
+            <p class="register__info">
+                To protect your privacy, we do not store local credentials. Your cinematic profile
+                is managed through the official registry portal.
             </p>
         </div>
 
-        <a
-            mat-flat-button
-            color="primary"
-            class="register__main-btn"
-            [href]="tmdbSignupUrl"
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-            Open Registry Portal
-            <mat-icon>open_in_new</mat-icon>
-        </a>
+        <app-nn-button
+            label="Open Registry Portal"
+            variant="primary"
+            class="register__submit"
+            (clicked)="onRegister()"
+        />
 
-        <div class="register__actions">
+        <footer class="register__footer">
             <button
-                mat-button
                 type="button"
+                class="register__action"
                 (click)="onBackToLogin()"
-                class="register__action-btn"
             >
                 Return to Login
             </button>
-        </div>
+        </footer>
     </div>
 </section>

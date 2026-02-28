@@ -3,75 +3,58 @@
 
 <main class="detail-gallery">
     <app-movie-hero
-        [movie]="movie"
+        [displayData]="heroDisplay()"
         [isLoading]="isLoading"
     >
-        <app-movie-actions
-            actions
-            [movie]="movie"
-            [watchlistIds]="movieStore.watchlistIds()"
-            [favoriteIds]="movieStore.favoriteIds()"
-            [hasTrailer]="!!trailerKey()"
-            (toggleWatchlist)="movieStore.toggleWatchlist($event)"
-            (toggleFavorite)="movieStore.toggleFavorite($event)"
-            (openTrailer)="isTrailerOpen.set(true)"
-        />
+        <div actions>
+            <app-movie-actions
+                [movie]="movie"
+                [watchlistIds]="movieStore.watchlistIds()"
+                [favoriteIds]="movieStore.favoriteIds()"
+                [hasTrailer]="!!trailerKey()"
+                (toggleWatchlist)="movieStore.toggleWatchlist($event)"
+                (toggleFavorite)="movieStore.toggleFavorite($event)"
+                (openTrailer)="isTrailerOpen.set(true)"
+            />
+        </div>
     </app-movie-hero>
 
     <div class="detail-gallery__body">
-        <article class="detail-gallery__body__section">
-            @if (isLoading) {
-                <app-skeleton
-                    width="30%"
-                    height="2.8rem"
-                    style="margin-bottom: 2.4rem; display: block"
-                />
-                <app-skeleton
-                    width="100%"
-                    height="1.6rem"
-                    style="margin-bottom: 0.8rem; display: block"
-                />
-                <app-skeleton
-                    width="95%"
-                    height="1.6rem"
-                    style="margin-bottom: 0.8rem; display: block"
-                />
-                <app-skeleton
-                    width="60%"
-                    height="1.6rem"
-                    style="display: block"
-                />
-            } @else {
-                <h2>The Synopsis</h2>
-                <p>{{ movie?.overview }}</p>
-            }
-        </article>
+        <div class="detail-gallery__main-content">
+            <app-cinematic-synopsis
+                [overview]="movie?.overview"
+                [isLoading]="isLoading"
+            />
 
-        @if (isLoading) {
-            <section class="detail-gallery__body__section">
-                <app-skeleton
-                    width="25%"
-                    height="2.8rem"
-                    style="margin-bottom: 2.4rem; display: block"
-                />
-                <div class="detail-gallery__body__section__cast-grid">
-                    @for (i of [1, 2, 3, 4, 5, 6]; track i) {
-                        <div class="detail-gallery__body__section__cast-grid__skeleton">
-                            <app-skeleton
-                                width="8rem"
-                                height="8rem"
-                                radius="50%"
-                            />
-                        </div>
+            @if (!isLoading && seasons().length > 0) {
+                <div class="detail-gallery__seasons-wrapper">
+                    <app-cinematic-seasons
+                        [seasons]="seasons()"
+                        [activeSeason]="activeSeasonNumber()"
+                        (seasonClicked)="onSeasonSelect($event)"
+                    />
+
+                    @if (
+                        movieStore.activeSeasonEpisodes().length > 0 || movieStore.isSeasonLoading()
+                    ) {
+                        <app-cinematic-episodes
+                            [episodes]="movieStore.activeSeasonEpisodes()"
+                            [isLoading]="movieStore.isSeasonLoading()"
+                        />
                     }
                 </div>
-            </section>
-        } @else {
-            <app-cast-grid [cast]="topCast" />
-        }
+            }
+        </div>
+
+        <aside class="detail-gallery__sidebar">
+            <app-cinematic-cast
+                [cast]="topCast"
+                [isLoading]="isLoading"
+            />
+        </aside>
 
         @if (!isLoading) {
-            <div class="detail-gallery__body__feedback">
+            <footer class="detail-gallery__footer">
                 <app-movie-feedback
                     [reviews]="movieStore.processedReviews()"
                     [hasMore]="movieStore.hasMoreReviews()"
@@ -79,7 +62,7 @@
                     (loadMore)="movieStore.loadMoreReviews()"
                     (submitReview)="handleReviewSubmit($event, movie!.id)"
                 />
-            </div>
+            </footer>
         }
     </div>
 

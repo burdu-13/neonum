@@ -1,0 +1,34 @@
+<section class="seasons">
+    <div class="seasons__header">
+        <span class="seasons__label">Structure</span>
+        <h2 class="seasons__title">Cinematic Segments</h2>
+    </div>
+
+    <div class="seasons__grid">
+        @for (season of seasons(); track season.id) {
+            <div
+                class="season-card"
+                [class.season-card--active]="activeSeason() === season.season_number"
+                (click)="seasonClicked.emit(season.season_number)"
+            >
+                <div class="season-card__content">
+                    <div class="season-card__meta">
+                        <span class="season-card__number">Season {{ season.season_number }}</span>
+                        @if (season.vote_average) {
+                            <span class="season-card__rating">
+                                ★ {{ season.vote_average.toFixed(1) }}
+                            </span>
+                        }
+                    </div>
+                    <h3 class="season-card__title">{{ season.name }}</h3>
+                    <p class="season-card__stats">
+                        {{ season.episode_count }} Episodes • {{ season.air_date | date: 'yyyy' }}
+                    </p>
+                    <p class="season-card__overview">
+                        {{ season.overview || 'No transmission log provided.' }}
+                    </p>
+                </div>
+            </div>
+        }
+    </div>
+</section>

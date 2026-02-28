@@ -3,58 +3,38 @@
 
 .detail-gallery {
     background: var(--nn-bg);
-    min-height: 100dvh;
+    min-height: 100vh;
     color: var(--nn-text);
     padding-bottom: 12rem;
 
     &__body {
         max-width: 144rem;
         margin: 0 auto;
-        padding: 6rem 2.4rem 0;
+        padding: clamp(6rem, 10vh, 10rem) 2.4rem 0;
         display: grid;
         grid-template-columns: 1fr;
-        gap: 6rem;
+        gap: 8rem;
 
         @include mq('lg') {
-            padding: 8rem 6.4rem 0;
-            grid-template-columns: 1fr 1.5fr;
-            gap: 8rem;
-        }
-
-        &__section {
-            h2 {
-                font-size: 2.4rem;
-                font-weight: 600;
-                margin-bottom: 2.4rem;
-                letter-spacing: 0.05rem;
-            }
-
-            p {
-                font-size: 1.6rem;
-                line-height: 1.8;
-                color: var(--nn-icon-muted);
-            }
-
-            &__cast-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-                gap: 2.4rem;
-
-                &__skeleton {
-                    @include flex(center, center);
-                }
-            }
-        }
-
-        &__feedback {
-            grid-column: 1 / -1;
-            margin-top: 4rem;
+            padding: 12rem 6.4rem 0;
+            grid-template-columns: 1.6fr 1fr;
+            align-items: start;
+            gap: 12rem;
         }
     }
 
-    &__error {
-        @include flex(center, center);
-        min-height: 50vh;
-        color: var(--nn-error);
+    &__main-content {
+        @include flex($direction: column, $gap: clamp(8rem, 12vh, 12rem));
+    }
+
+    &__seasons-wrapper {
+        @include flex($direction: column, $gap: 6rem);
+    }
+
+    &__footer {
+        grid-column: 1 / -1;
+        margin-top: clamp(6rem, 12vh, 12rem);
+        border-top: 1px solid var(--nn-border);
+        padding-top: clamp(8rem, 14vh, 14rem);
     }
 }

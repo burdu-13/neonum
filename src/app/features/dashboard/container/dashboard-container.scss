@@ -15,6 +15,16 @@
         padding-bottom: 6rem;
     }
 
+    &__banner-actions {
+        @include flex($direction: column, $gap: 1.6rem);
+        width: 100%;
+
+        @include mq('sm') {
+            @include flex($direction: row, $gap: 1.6rem);
+            width: auto;
+        }
+    }
+
     &__section {
         margin-bottom: 12rem;
 
