@@ -32,9 +32,10 @@ export class DashboardContainer implements OnInit {
     constructor() {
         effect(() => {
             const auth = this.userStore.isAuthenticated();
+            const isGuest = this.userStore.isGuest();
             const loading = this.userStore.isLoading();
 
-            if (auth && !loading) {
+            if (auth && !isGuest && !loading) {
                 this.movieStore.loadCollections();
             }
         });

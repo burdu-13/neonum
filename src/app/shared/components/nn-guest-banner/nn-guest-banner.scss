@@ -3,7 +3,8 @@
 
 .guest-banner {
     width: 100%;
-    z-index: 110;
+    position: relative;
+    z-index: 1100;
     @include glass($opacity: 0.05, $blur: 3.2rem);
     border-bottom: 1px solid var(--nn-border);
     padding: 1.6rem 0;
