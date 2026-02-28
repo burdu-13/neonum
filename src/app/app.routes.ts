@@ -8,7 +8,6 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
-        canActivate: [authGuard],
         loadChildren: () =>
             import('./features/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     },
@@ -33,6 +32,7 @@ export const routes: Routes = [
     },
     {
         path: 'actor/:id',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/actor-detail/container/actor-detail-container').then(
                 (c) => c.ActorDetailContainer,
@@ -40,7 +40,6 @@ export const routes: Routes = [
     },
     {
         path: 'explore',
-        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/explore/container/explore-container').then(
                 (c) => c.FeatureContainer,

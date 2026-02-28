@@ -8,6 +8,7 @@
             [label]="isWatchlisted ? 'In Watchlist' : 'Watchlist'"
             [icon]="isWatchlisted ? 'bookmark' : 'bookmark_border'"
             [isActive]="isWatchlisted"
+            [disabled]="!isMember()"
             (clicked)="toggleWatchlist.emit({ id: m.id, status: !isWatchlisted })"
         />
 
@@ -15,6 +16,7 @@
             [label]="isFavorited ? 'Favorite' : 'Mark Favorite'"
             [icon]="isFavorited ? 'favorite' : 'favorite_border'"
             [isActive]="isFavorited"
+            [disabled]="!isMember()"
             variant="danger"
             (clicked)="toggleFavorite.emit({ id: m.id, status: !isFavorited })"
         />
