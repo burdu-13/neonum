@@ -1,6 +1,6 @@
 <article
     class="movie-card"
-    [routerLink]="['/movie', displayData().id]"
+    [routerLink]="['/' + displayData().type, displayData().id]"
     tabindex="0"
     [attr.aria-label]="displayData().title"
 >

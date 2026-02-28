@@ -15,17 +15,28 @@ import { ReviewPayload } from '../../../shared/models/movie.model';
 import { MovieFeedback } from '../components/movie-feedback/movie-feedback';
 import { MovieActions } from '../components/movie-actions/movie-actions';
 import { MovieHero } from '../components/movie-hero/movie-hero';
-import { Skeleton } from "../../../shared/components/skeleton/skeleton";
+import { Skeleton } from '../../../shared/components/skeleton/skeleton';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-movie-detailer-container',
-    imports: [MatIconModule, CastGrid, MovieTrailer, MovieFeedback, MovieActions, MovieHero, Skeleton],
+    imports: [
+        MatIconModule,
+        CastGrid,
+        MovieTrailer,
+        MovieFeedback,
+        MovieActions,
+        MovieHero,
+        Skeleton,
+    ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MovieDetailerContainer {
     public readonly movieStore = inject(MovieStore);
+    private readonly route = inject(ActivatedRoute);
+
     public readonly id = input.required<string>();
     public isTrailerOpen = signal(false);
 
@@ -37,7 +48,12 @@ export class MovieDetailerContainer {
 
     constructor() {
         effect(() => {
-            this.movieStore.loadMovieDetail(this.id());
+            const type = this.route.snapshot.url[0].path as 'movie' | 'tv';
+
+            this.movieStore.loadMovieDetail({
+                id: this.id(),
+                type,
+            });
         });
     }
 

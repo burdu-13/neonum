@@ -18,17 +18,17 @@ export class MovieCard {
     protected readonly displayData = computed(() => {
         const item = this.movie();
 
+        const type = 'title' in item ? 'movie' : 'tv';
         const title = 'title' in item ? item.title : item.name;
         const date = 'release_date' in item ? item.release_date : item.first_air_date;
-        const poster = item.poster_path;
-        const rating = item.vote_average;
 
         return {
             id: item.id,
             title,
             date,
-            poster,
-            rating,
+            type,
+            poster: item.poster_path,
+            rating: item.vote_average,
         };
     });
 }

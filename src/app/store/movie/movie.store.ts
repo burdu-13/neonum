@@ -149,20 +149,25 @@ export const MovieStore = signalStore(
                 patchState(store, { reviewLimit: store.reviewLimit() + 6 });
             },
 
-            loadMovieDetail: rxMethod<string>(
+            loadMovieDetail: rxMethod<{ id: string; type: 'movie' | 'tv' }>(
                 pipe(
-                    filter((id) => !!id),
-                    distinctUntilChanged(),
-                    tap((id) => {
+                    filter((data) => !!data.id),
+                    distinctUntilChanged(
+                        (prev, curr) => prev.id === curr.id && prev.type === curr.type,
+                    ),
+                    tap(({ id, type }) => {
                         const mId = Number(id);
-
-                        patchState(store, { activeDetailId: mId, reviewLimit: 6 });
+                        // Fix: Added 'store' reference to patchState
+                        patchState(store, {
+                            activeDetailId: mId,
+                            reviewLimit: 6,
+                        });
 
                         if (!store.detailsCache()[mId]) {
                             patchState(store, { isLoading: true, detailError: null });
                         }
                     }),
-                    switchMap((id) => {
+                    switchMap(({ id, type }) => {
                         const mId = Number(id);
 
                         if (store.detailsCache()[mId]) {
@@ -170,7 +175,8 @@ export const MovieStore = signalStore(
                             return EMPTY;
                         }
 
-                        return detailService.getMovieDetails(id).pipe(
+                        // This now matches the updated service signature
+                        return detailService.getMovieDetails(id, type).pipe(
                             tap((movie) => {
                                 patchState(store, {
                                     detailsCache: {
@@ -247,13 +253,10 @@ export const MovieStore = signalStore(
                         return movieService.discover(type, randomPage).pipe(
                             tap((response: MovieResponse) => {
                                 const results = response.results;
-
-                                if (results && results.length > 0) {
+                                if (results?.length > 0) {
                                     const randomItem =
                                         results[Math.floor(Math.random() * results.length)];
-
-                                    const route = isMovie ? '/movie' : '/tv-show';
-
+                                    const route = isMovie ? '/movie' : '/tv';
                                     router.navigate([route, randomItem.id]);
                                 }
                             }),

@@ -10,9 +10,10 @@ import { MovieDetails } from '../../../shared/models/movie.model';
 export class MovieDetailService {
     private readonly http = inject(HttpClient);
     private readonly proxyUrl = environment.proxyUrl;
-    public getMovieDetails(id: string): Observable<MovieDetails> {
+
+    public getMovieDetails(id: string, type: 'movie' | 'tv' = 'movie'): Observable<MovieDetails> {
         return this.http.get<MovieDetails>(
-            `${this.proxyUrl}?path=movie/${id}&append_to_response=credits,videos,similar,reviews,account_states`,
+            `${this.proxyUrl}?path=${type}/${id}&append_to_response=credits,videos,similar,reviews,account_states`,
         );
     }
 }

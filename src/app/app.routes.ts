@@ -23,6 +23,13 @@ export const routes: Routes = [
             ),
     },
     {
+        path: 'tv/:id',
+        loadComponent: () =>
+            import('./features/movie-detail/container/movie-detailer-container').then(
+                (c) => c.MovieDetailerContainer,
+            ),
+    },
+    {
         path: 'actor/:id',
         loadComponent: () =>
             import('./features/actor-detail/container/actor-detail-container').then(
