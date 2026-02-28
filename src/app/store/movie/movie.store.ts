@@ -14,7 +14,13 @@ import {
 } from 'rxjs';
 import { MovieService } from '../../features/dashboard/services/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
-import { Movie, MovieDetails, MovieResponse, Review } from '../../shared/models/movie.model';
+import {
+    Episode,
+    Movie,
+    MovieDetails,
+    MovieResponse,
+    Review,
+} from '../../shared/models/movie.model';
 import { AlertService } from '../../shared/services/alert/alert';
 import { UserStore } from '../user-info/user.store';
 import { Router } from '@angular/router';
@@ -34,6 +40,8 @@ interface MovieState {
     reviewLimit: number;
     activeDetailId: number | null;
     collectionsLoaded: boolean;
+    activeSeasonEpisodes: Episode[];
+    isSeasonLoading: boolean;
 }
 
 const initialState: MovieState = {
@@ -51,6 +59,8 @@ const initialState: MovieState = {
     detailsCache: {},
     activeDetailId: null,
     collectionsLoaded: false,
+    activeSeasonEpisodes: [],
+    isSeasonLoading: false,
 };
 
 export const MovieStore = signalStore(
@@ -265,6 +275,28 @@ export const MovieStore = signalStore(
                             }),
                         );
                     }),
+                ),
+            ),
+
+            loadSeasonDetails: rxMethod<{ tvId: number; seasonNumber: number }>(
+                pipe(
+                    tap(() =>
+                        patchState(store, { isSeasonLoading: true, activeSeasonEpisodes: [] }),
+                    ),
+                    switchMap(({ tvId, seasonNumber }) =>
+                        detailService.getSeasonDetails(tvId.toString(), seasonNumber).pipe(
+                            tap((detail) =>
+                                patchState(store, {
+                                    activeSeasonEpisodes: detail.episodes,
+                                    isSeasonLoading: false,
+                                }),
+                            ),
+                            catchError(() => {
+                                patchState(store, { isSeasonLoading: false });
+                                return EMPTY;
+                            }),
+                        ),
+                    ),
                 ),
             ),
 

@@ -82,6 +82,16 @@ export class MovieDetailerContainer {
         return movie && isTVShow(movie) ? movie.seasons : [];
     });
 
+    public onSeasonSelect(seasonNumber: number): void {
+        const movie = this.movieStore.selectedMovie();
+        if (movie) {
+            this.movieStore.loadSeasonDetails({
+                tvId: movie.id,
+                seasonNumber,
+            });
+        }
+    }
+
     constructor() {
         effect(() => {
             const type = this.route.snapshot.url[0].path as 'movie' | 'tv';

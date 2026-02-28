@@ -1,0 +1,46 @@
+<section class="cast-section">
+    @if (isLoading()) {
+        <app-skeleton
+            width="25%"
+            height="2.8rem"
+            style="margin-bottom: 2.4rem; display: block"
+        />
+        <div class="cast-section__grid">
+            @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                <div class="cast-section__grid__skeleton">
+                    <app-skeleton
+                        width="8rem"
+                        height="8rem"
+                        radius="50%"
+                    />
+                </div>
+            }
+        </div>
+    } @else {
+        <h2>The Cast</h2>
+        <app-cast-grid [cast]="cast()" />
+    }
+</section>
+<section class="cast-section">
+    @if (isLoading()) {
+        <app-skeleton
+            width="25%"
+            height="2.8rem"
+            style="margin-bottom: 2.4rem; display: block"
+        />
+        <div class="cast-section__grid">
+            @for (i of [1, 2, 3, 4, 5, 6]; track i) {
+                <div class="cast-section__grid__skeleton">
+                    <app-skeleton
+                        width="8rem"
+                        height="8rem"
+                        radius="50%"
+                    />
+                </div>
+            }
+        </div>
+    } @else {
+        <h2>The Cast</h2>
+        <app-cast-grid [cast]="cast()" />
+    }
+</section>

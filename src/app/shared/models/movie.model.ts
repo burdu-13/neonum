@@ -5,6 +5,20 @@ export interface Genre {
     name: string;
 }
 
+export interface Episode {
+    id: number;
+    name: string;
+    overview: string;
+    episode_number: number;
+    air_date: string;
+    still_path: string | null;
+    vote_average: number;
+}
+
+export interface SeasonDetail extends Season {
+    episodes: Episode[];
+}
+
 export interface Season {
     id: number;
     air_date: string;
