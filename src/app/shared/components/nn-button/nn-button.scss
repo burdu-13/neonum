@@ -1,36 +1,70 @@
 @use '../../styles/mixins' as *;
+@use '../../styles/variables' as *;
 
 .nn-btn {
     @include flex(center, center, $gap: 0.8rem);
-    padding: 1.2rem 2.4rem;
+
+    width: 100%;
+    min-height: 4.8rem;
+    padding: 1rem 2rem;
     border-radius: 0.8rem;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: 0.1rem;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     border: 0.1rem solid var(--nn-border);
     white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+
+    @include mq('sm') {
+        width: auto;
+        min-height: auto;
+        padding: 1.2rem 2.4rem;
+        font-size: 1.2rem;
+    }
 
     &__icon {
         font-size: 1.8rem;
         width: 1.8rem;
         height: 1.8rem;
+        transition: transform 0.3s ease;
+    }
+
+    &__label {
+        flex-shrink: 1;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        max-width: 100%;
+    }
+
+    &__loader {
+        width: 1.6rem;
+        height: 1.6rem;
+        border: 2px solid rgba(var(--nn-text-rgb), 0.2);
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
     }
 
     &:disabled {
-        opacity: 0.5;
+        opacity: 0.4;
         cursor: not-allowed;
+        filter: saturate(0);
     }
 
     &--surface {
         background: rgba(var(--nn-surface-rgb), 0.3);
         color: var(--nn-text);
+
         &:hover:not(:disabled) {
             background: rgba(255, 255, 255, 0.08);
             border-color: var(--nn-primary);
         }
+
         &.nn-btn--active {
             background: var(--nn-primary);
             color: var(--nn-bg);
@@ -43,25 +77,43 @@
         background: var(--nn-primary);
         color: var(--nn-bg);
         border-color: var(--nn-primary);
+
         &:hover:not(:disabled) {
             transform: translateY(-0.2rem);
-            box-shadow: 0 0.8rem 2.4rem rgba(var(--nn-primary-rgb), 0.4);
+            box-shadow: 0 1.2rem 3.2rem rgba(var(--nn-primary-rgb), 0.4);
+
+            .nn-btn__icon {
+                transform: scale(1.1);
+            }
         }
     }
 
     &--danger {
         background: rgba(var(--nn-surface-rgb), 0.3);
         color: var(--nn-text);
+
         &.nn-btn--active {
-            background: #ef4444;
-            border-color: #ef4444;
+            background: var(--nn-error);
+            border-color: var(--nn-error);
             color: #fff;
-            box-shadow: 0 0.8rem 2.4rem rgba(239, 68, 68, 0.3);
+            box-shadow: 0 0.8rem 2.4rem rgba(var(--nn-error-rgb), 0.3);
         }
     }
 
     &--icon-only {
         padding: 1.2rem;
         border-radius: 50%;
+        aspect-ratio: 1 / 1;
+        width: 4.8rem;
+
+        @include mq('sm') {
+            width: auto;
+        }
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }
