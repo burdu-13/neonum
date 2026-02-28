@@ -42,6 +42,7 @@ interface MovieState {
     collectionsLoaded: boolean;
     activeSeasonEpisodes: Episode[];
     isSeasonLoading: boolean;
+    seasonCache: Record<string, Episode[]>;
 }
 
 const initialState: MovieState = {
@@ -61,6 +62,7 @@ const initialState: MovieState = {
     collectionsLoaded: false,
     activeSeasonEpisodes: [],
     isSeasonLoading: false,
+    seasonCache: {},
 };
 
 export const MovieStore = signalStore(
@@ -280,23 +282,53 @@ export const MovieStore = signalStore(
 
             loadSeasonDetails: rxMethod<{ tvId: number; seasonNumber: number }>(
                 pipe(
-                    tap(() =>
-                        patchState(store, { isSeasonLoading: true, activeSeasonEpisodes: [] }),
+                    // Prevent re-fetching if the same season is clicked multiple times
+                    distinctUntilChanged(
+                        (prev, curr) =>
+                            prev.tvId === curr.tvId && prev.seasonNumber === curr.seasonNumber,
                     ),
-                    switchMap(({ tvId, seasonNumber }) =>
-                        detailService.getSeasonDetails(tvId.toString(), seasonNumber).pipe(
-                            tap((detail) =>
+                    tap(({ tvId, seasonNumber }) => {
+                        const cacheKey = `${tvId}_s${seasonNumber}`;
+                        const cachedData = store.seasonCache()[cacheKey];
+
+                        if (cachedData) {
+                            // Immediate UI update from cache
+                            patchState(store, {
+                                activeSeasonEpisodes: cachedData,
+                                isSeasonLoading: false,
+                            });
+                        } else {
+                            // Trigger loading state for new data
+                            patchState(store, {
+                                isSeasonLoading: true,
+                                activeSeasonEpisodes: [],
+                            });
+                        }
+                    }),
+                    switchMap(({ tvId, seasonNumber }) => {
+                        const cacheKey = `${tvId}_s${seasonNumber}`;
+
+                        if (store.seasonCache()[cacheKey]) {
+                            return EMPTY;
+                        }
+
+                        return detailService.getSeasonDetails(tvId.toString(), seasonNumber).pipe(
+                            tap((detail) => {
                                 patchState(store, {
                                     activeSeasonEpisodes: detail.episodes,
+                                    seasonCache: {
+                                        ...store.seasonCache(),
+                                        [cacheKey]: detail.episodes,
+                                    },
                                     isSeasonLoading: false,
-                                }),
-                            ),
+                                });
+                            }),
                             catchError(() => {
                                 patchState(store, { isSeasonLoading: false });
                                 return EMPTY;
                             }),
-                        ),
-                    ),
+                        );
+                    }),
                 ),
             ),
 

@@ -30,6 +30,13 @@
                     [seasons]="seasons()"
                     (seasonClicked)="onSeasonSelect($event)"
                 />
+
+                @if (movieStore.activeSeasonEpisodes().length > 0 || movieStore.isSeasonLoading()) {
+                    <app-cinematic-episodes
+                        [episodes]="movieStore.activeSeasonEpisodes()"
+                        [isLoading]="movieStore.isSeasonLoading()"
+                    />
+                }
             }
         </div>
 

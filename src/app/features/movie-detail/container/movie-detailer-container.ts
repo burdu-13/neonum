@@ -22,6 +22,7 @@ import { isTVShow } from '../utils/cinematics.utils';
 import { CinematicCast } from "../components/cinematic-cast/cinematic-cast";
 import { CinematicSeasons } from "../components/cinematic-seasons/cinematic-seasons";
 import { CinematicSynopsis } from "../components/cinematic-synopsis/cinematic-synopsis";
+import { CinematicEpisodes } from "../components/cinematic-episodes/cinematic-episodes";
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -35,7 +36,8 @@ import { CinematicSynopsis } from "../components/cinematic-synopsis/cinematic-sy
     Skeleton,
     CinematicCast,
     CinematicSeasons,
-    CinematicSynopsis
+    CinematicSynopsis,
+    CinematicEpisodes
 ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
