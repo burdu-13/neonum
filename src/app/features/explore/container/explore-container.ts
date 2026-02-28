@@ -14,10 +14,11 @@ import { BreakpointService } from '../../../shared/services/breakpoint-service/b
 import { ExploreFilters } from '../components/explore-filters/explore-filters';
 import { ExploreHeader } from '../components/explore-header/explore-header';
 import { EXPLORE_TYPE_OPTIONS } from '../components/explore-header/config/toggle.config';
+import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 
 @Component({
     selector: 'app-explore-container',
-    imports: [MovieCard, InteractionObserver, ExploreFilters, ExploreHeader],
+    imports: [MovieCard, InteractionObserver, ExploreFilters, ExploreHeader, Skeleton],
     templateUrl: './explore-container.html',
     styleUrl: './explore-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

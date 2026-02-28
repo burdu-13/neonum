@@ -21,6 +21,7 @@ import { CinematicCast } from '../components/cinematic-cast/cinematic-cast';
 import { CinematicSeasons } from '../components/cinematic-seasons/cinematic-seasons';
 import { CinematicSynopsis } from '../components/cinematic-synopsis/cinematic-synopsis';
 import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-episodes';
+import { UserStore } from '../../../store/user-info/user.store';
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -42,6 +43,7 @@ import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-ep
 export class MovieDetailerContainer {
     public readonly movieStore = inject(MovieStore);
     private readonly route = inject(ActivatedRoute);
+    protected readonly userStore = inject(UserStore);
 
     public readonly id = input.required<string>();
     public isTrailerOpen = signal(false);
@@ -53,6 +55,8 @@ export class MovieDetailerContainer {
         const trailer = videos?.find((v) => v.type === 'Trailer' && v.site === 'YouTube');
         return trailer?.key || videos?.[0]?.key || null;
     });
+
+    protected readonly isMember = computed(() => !!this.userStore.account());
 
     protected readonly heroDisplay = computed((): HeroDisplayModel | null => {
         const movie = this.movieStore.selectedMovie();

@@ -19,12 +19,9 @@
 }
 
 .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-    gap: 3.2rem;
+    @include auto-grid(20rem, 3.2rem);
 
     @include mq('sm') {
-        grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
-        gap: 2.4rem;
+        @include auto-grid(16rem, 2.4rem);
     }
 }

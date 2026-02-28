@@ -15,6 +15,7 @@
                 (toggleWatchlist)="movieStore.toggleWatchlist($event)"
                 (toggleFavorite)="movieStore.toggleFavorite($event)"
                 (openTrailer)="isTrailerOpen.set(true)"
+                [isMember]="isMember()"
             />
         </div>
     </app-movie-hero>
@@ -61,6 +62,7 @@
                     [isRated]="!!movie?.account_states?.rated"
                     (loadMore)="movieStore.loadMoreReviews()"
                     (submitReview)="handleReviewSubmit($event, movie!.id)"
+                    [isMember]="isMember()"
                 />
             </footer>
         }

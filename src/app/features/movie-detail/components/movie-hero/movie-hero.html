@@ -1,11 +1,19 @@
-<header
-    class="movie-hero"
-    [style.backgroundImage]="
-        displayData()
-            ? 'url(https://image.tmdb.org/t/p/original' + displayData()?.backdropPath + ')'
-            : 'none'
-    "
->
+<header class="movie-hero">
+    <div
+        class="movie-hero__backdrop-placeholder"
+        [class.hidden]="isBackdropLoaded()"
+    ></div>
+
+    @if (displayData()?.backdropPath) {
+        <img
+            [src]="'https://image.tmdb.org/t/p/original' + displayData()?.backdropPath"
+            alt=""
+            class="movie-hero__backdrop"
+            [class.movie-hero__backdrop--loaded]="isBackdropLoaded()"
+            (load)="isBackdropLoaded.set(true)"
+        />
+    }
+
     <div class="movie-hero__fade"></div>
     <div class="movie-hero__content">
         <div class="movie-hero__content__grid">
@@ -17,9 +25,15 @@
                         radius="1.6rem"
                     />
                 } @else if (displayData()?.posterPath) {
+                    <div class="movie-hero__poster-placeholder">
+                        <mat-icon>image</mat-icon>
+                    </div>
                     <img
                         [src]="'https://image.tmdb.org/t/p/w500' + displayData()?.posterPath"
-                        [alt]="displayData()?.title"
+                        [alt]="displayData()?.title || ''"
+                        class="movie-hero__poster-img"
+                        [class.movie-hero__poster-img--loaded]="isPosterLoaded()"
+                        (load)="isPosterLoaded.set(true)"
                     />
                 }
             </figure>
@@ -65,7 +79,6 @@
                             [text]="displayData()?.rating | number: '1.1-1'"
                             [highlight]="true"
                         />
-
                         @for (meta of displayData()?.metadata; track meta.text) {
                             <app-meta-badge [text]="meta.text" />
                         }

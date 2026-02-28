@@ -11,15 +11,12 @@
         max-width: 144rem;
         margin: 0 auto;
         padding: clamp(6rem, 10vh, 10rem) 2.4rem 0;
-        display: grid;
-        grid-template-columns: 1fr;
-        gap: 8rem;
+        @include grid(minmax(0, 1fr), 8rem);
+        width: 100%;
 
         @include mq('lg') {
             padding: 12rem 6.4rem 0;
-            grid-template-columns: 1.6fr 1fr;
-            align-items: start;
-            gap: 12rem;
+            @include grid(1.6fr 1fr, 12rem, start);
         }
     }
 

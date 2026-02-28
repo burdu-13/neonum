@@ -25,3 +25,14 @@ export interface ExploreCacheEntry {
     total: number;
     totalPages: number;
 }
+
+export interface GenreResponse {
+    genres: Genre[];
+}
+
+export interface ExploreResponse {
+    page?: number;
+    results: Movie[];
+    total_results: number;
+    total_pages: number;
+}

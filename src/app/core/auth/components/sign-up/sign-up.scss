@@ -6,13 +6,7 @@
     @include flex(center, center);
 
     &__card {
-        width: 100%;
-        max-width: 48rem;
-        padding: clamp(3.2rem, 10vw, 6.4rem);
-        @include glass($opacity: 0.05, $blur: 2rem);
-        border: 1px solid var(--nn-border);
-        border-radius: 4rem;
-        @include flex(stretch, stretch, column, $gap: 4.8rem);
+        @include form-card;
         text-align: center;
     }
 
@@ -25,22 +19,13 @@
     }
 
     &__label {
+        @include text-upper(1.1rem, 0.5em, var(--nn-primary), 700);
         display: block;
-        font-size: 1.1rem;
-        text-transform: uppercase;
-        letter-spacing: 0.5em;
-        color: var(--nn-primary);
-        font-weight: 700;
         margin-bottom: 1.6rem;
     }
 
     &__title {
-        font-size: clamp(3.6rem, 5vw, 4.8rem);
-        font-weight: 300;
-        letter-spacing: -0.04em;
-        line-height: 1;
-        margin-bottom: 2rem;
-        color: var(--nn-text);
+        @include page-title(2rem);
 
         span {
             color: var(--nn-primary);
@@ -68,14 +53,8 @@
     }
 
     &__action {
-        background: transparent;
-        border: none;
-        color: var(--nn-text);
-        font-size: 1.2rem;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.15em;
-        cursor: pointer;
+        @include button-reset;
+        @include text-upper(1.2rem, 0.15em, var(--nn-text), 700);
         opacity: 0.6;
         transition: opacity 0.3s ease;
 

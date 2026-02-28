@@ -14,6 +14,7 @@ export class MovieActions {
     public readonly watchlistIds = input.required<number[]>();
     public readonly favoriteIds = input.required<number[]>();
     public readonly hasTrailer = input<boolean>(false);
+    public readonly isMember = input<boolean>(false);
 
     public readonly toggleWatchlist = output<{ id: number; status: boolean }>();
     public readonly toggleFavorite = output<{ id: number; status: boolean }>();

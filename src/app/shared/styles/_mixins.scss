@@ -39,3 +39,62 @@
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+@mixin text-upper($size: 1.1rem, $spacing: 0.5em, $color: var(--nn-primary), $weight: 700) {
+    font-size: $size;
+    text-transform: uppercase;
+    letter-spacing: $spacing;
+    color: $color;
+    font-weight: $weight;
+}
+
+@mixin button-reset {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+@mixin form-card {
+    width: 100%;
+    max-width: 48rem;
+    padding: clamp(3.2rem, 10vw, 6.4rem);
+    @include glass($opacity: 0.05, $blur: 2rem);
+    border: 1px solid var(--nn-border);
+    border-radius: 4rem;
+    @include flex(stretch, stretch, column, $gap: 4.8rem);
+}
+
+@mixin page-title($margin-bottom: 2rem) {
+    font-size: clamp(3.6rem, 5vw, 4.8rem);
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: $margin-bottom;
+    color: var(--nn-text);
+}
+
+@mixin nn-container {
+    width: 100%;
+    max-width: 144rem;
+    margin: 0 auto;
+    padding: 0 2rem;
+
+    @include mq('sm') {
+        padding: 0 4rem;
+    }
+}
+
+@mixin grid($cols: 1fr, $gap: 0, $align: stretch, $justify: stretch) {
+    display: grid;
+    grid-template-columns: $cols;
+    gap: $gap;
+    align-items: $align;
+    justify-items: $justify;
+}
+
+@mixin auto-grid($min-width: 20rem, $gap: 2rem, $max-width: 1fr, $justify: stretch) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax($min-width, $max-width));
+    gap: $gap;
+    justify-items: $justify;
+}

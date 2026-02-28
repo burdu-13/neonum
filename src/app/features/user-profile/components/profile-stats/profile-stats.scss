@@ -2,15 +2,21 @@
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 3.2rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+    width: 100%;
     max-width: 60rem;
     margin: 0 auto 8rem;
+
+    @include mq('sm') {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 3.2rem;
+    }
 
     &__item {
         @include flex(center, center, column, $gap: 0.8rem);
         @include glass(0.2, 1.6rem);
-        padding: 3.2rem;
+        padding: clamp(2rem, 5vw, 3.2rem);
         border-radius: 2.4rem;
         border: 1px solid rgba(var(--nn-primary-rgb), 0.1);
     }
@@ -26,5 +32,6 @@
         text-transform: uppercase;
         letter-spacing: 0.15rem;
         color: var(--nn-icon-muted);
+        text-align: center;
     }
 }

@@ -1,50 +1,65 @@
 @use '../../styles/mixins' as *;
 
 .nn-rating {
-    @include flex($align: center, $gap: 1.2rem);
-    margin-bottom: 2rem;
+    @include flex(flex-start, flex-start, column, $gap: 1.2rem);
+    width: 100%;
+    margin-bottom: 2.4rem;
+
+    @include mq('sm') {
+        @include flex($align: center, $direction: row, $gap: 2rem);
+    }
 
     &__label {
         font-size: 1.2rem;
         font-weight: 700;
         color: var(--nn-icon-muted);
         text-transform: uppercase;
-        letter-spacing: 0.1rem;
+        letter-spacing: 0.15rem;
+        white-space: nowrap;
     }
 
     &__stars {
         @include flex($align: center, $gap: 0.2rem);
+        flex-wrap: wrap;
+        margin-left: -0.4rem;
     }
 
     &__star-btn {
         background: none;
         border: none;
-        padding: 0.2rem;
+        padding: 0.6rem;
         cursor: pointer;
         color: var(--nn-border);
-        transition: color 0.2s ease;
+        transition: all 0.2s ease;
         @include flex(center, center);
 
         mat-icon {
-            font-size: 2rem;
-            width: 2rem;
-            height: 2rem;
+            font-size: 2.2rem;
+            width: 2.2rem;
+            height: 2.2rem;
         }
 
         &--active {
             color: var(--nn-primary);
+            filter: drop-shadow(0 0 0.8rem rgba(var(--nn-primary-rgb), 0.4));
         }
 
         &:hover {
             color: var(--nn-primary);
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.9);
         }
     }
 
     &__value {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         font-weight: 800;
         color: var(--nn-primary);
-        min-width: 4rem;
-        font-variant-numeric: tabular-nums;
+        min-width: 4.5rem;
+        padding-left: 0.4rem;
+        font-family: var(--nn-font-mono);
     }
 }

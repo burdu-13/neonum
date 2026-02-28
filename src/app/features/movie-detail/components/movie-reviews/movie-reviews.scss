@@ -2,6 +2,7 @@
 
 .reviews {
     margin-top: 4.8rem;
+    width: 100%;
 
     &__title {
         font-size: 2.4rem;
@@ -10,28 +11,27 @@
         letter-spacing: 0.05rem;
     }
 
-    .empty__state {
-        grid-column: 1 / -1;
-    }
-
     &__grid {
         display: grid;
-        grid-template-columns: 1fr;
-        gap: 3.2rem;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 2.4rem;
         align-items: start;
 
         @include mq('md') {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 3.2rem;
         }
 
         &__card {
             background: rgba(var(--nn-surface-rgb), 0.2);
             border: 0.1rem solid var(--nn-border);
             border-radius: 1.2rem;
-            padding: 2.4rem;
+            padding: clamp(1.6rem, 4vw, 2.4rem);
             cursor: pointer;
             transition: all 0.3s ease;
             @include flex(flex-start, stretch, column);
+            width: 100%;
+            overflow: hidden;
 
             &:hover {
                 border-color: var(--nn-primary);
@@ -39,42 +39,49 @@
             }
 
             &__header {
-                @include flex(space-between, center);
+                @include flex(space-between, flex-start);
+                flex-wrap: wrap;
+                gap: 1.6rem;
                 margin-bottom: 1.6rem;
 
                 &__user {
                     @include flex($align: center, $gap: 1.2rem);
+                    min-width: 0;
 
                     &__avatar {
                         width: 4rem;
                         height: 4rem;
                         border-radius: 50%;
                         object-fit: cover;
+                        flex-shrink: 0;
                         border: 0.1rem solid var(--nn-border);
 
                         &--fallback {
                             width: 4rem;
                             height: 4rem;
                             border-radius: 50%;
+                            flex-shrink: 0;
                             @include flex(center, center);
                             background: rgba(var(--nn-primary-rgb), 0.1);
                             color: var(--nn-primary);
                             font-size: 1.6rem;
                             font-weight: 700;
-                            border: 0.1rem solid rgba(var(--nn-primary-rgb), 0.3);
                         }
                     }
 
                     &__info {
                         @include flex(flex-start, flex-start, column);
+                        min-width: 0;
 
                         &__author {
                             font-size: 1.4rem;
                             font-weight: 600;
                             color: var(--nn-text);
+                            width: 100%;
+                            @include text-truncate;
                         }
 
-                        &__info__date {
+                        &__date {
                             font-size: 1.2rem;
                             color: var(--nn-icon-muted);
                         }
@@ -83,11 +90,15 @@
             }
 
             &__content {
+                width: 100%;
                 p {
                     font-size: 1.5rem;
                     line-height: 1.6;
                     color: rgba(var(--nn-text-rgb), 0.8);
                     margin: 0;
+                    word-wrap: break-word;
+                    overflow-wrap: break-word;
+
                     display: -webkit-box;
                     -webkit-line-clamp: 4;
                     line-clamp: 4;
@@ -115,7 +126,6 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05rem;
                 cursor: pointer;
-                text-align: left;
             }
         }
     }
