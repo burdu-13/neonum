@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
 import { Movie, TVShow } from '../../../../shared/models/movie.model';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -14,6 +14,7 @@ import { RouterLink } from '@angular/router';
 export class MovieCard {
     public readonly movie = input.required<Movie | TVShow>();
     public readonly priority = input<boolean>(false);
+    protected readonly isLoaded = signal<boolean>(false);
 
     protected readonly displayData = computed(() => {
         const item = this.movie();

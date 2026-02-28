@@ -3,7 +3,13 @@ import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, catchError, EMPTY, of, concatMap } from 'rxjs';
 import { Movie } from '../../../shared/models/movie.model';
-import { ExploreCacheEntry, ExploreFilters, Genre } from '../models/explore.model';
+import {
+    ExploreCacheEntry,
+    ExploreFilters,
+    ExploreResponse,
+    Genre,
+    GenreResponse,
+} from '../models/explore.model';
 import { ExploreService } from '../services/explore-service';
 
 interface ExploreState {
@@ -13,7 +19,8 @@ interface ExploreState {
     isLoading: boolean;
     totalResults: number;
     totalPages: number;
-    cache: Record<string, ExploreCacheEntry>;
+    genreCache: Record<string, Genre[]>;
+    movieCache: Record<string, ExploreResponse>;
 }
 
 const initialState: ExploreState = {
@@ -27,7 +34,8 @@ const initialState: ExploreState = {
     isLoading: false,
     totalResults: 0,
     totalPages: 0,
-    cache: {},
+    genreCache: {},
+    movieCache: {},
 };
 
 export const ExploreStore = signalStore(
@@ -36,49 +44,68 @@ export const ExploreStore = signalStore(
     withMethods((store, exploreService = inject(ExploreService)) => ({
         loadGenres: rxMethod<'movie' | 'tv'>(
             pipe(
-                switchMap((type) =>
-                    exploreService.getGenres(type).pipe(
-                        tap((res) => patchState(store, { genres: res.genres })),
+                switchMap((type) => {
+                    const cacheKey = `genres_${type}`;
+                    const cachedGenres = store.genreCache()[cacheKey];
+
+                    if (cachedGenres) {
+                        patchState(store, { genres: cachedGenres });
+                        return EMPTY;
+                    }
+
+                    return exploreService.getGenres(type).pipe(
+                        tap((res: GenreResponse) => {
+                            const extractedGenres = res.genres;
+                            patchState(store, {
+                                genres: extractedGenres,
+                                genreCache: {
+                                    ...store.genreCache(),
+                                    [cacheKey]: extractedGenres,
+                                },
+                            });
+                        }),
                         catchError(() => EMPTY),
-                    ),
-                ),
+                    );
+                }),
             ),
         ),
 
         loadMovies: rxMethod<{ filters: ExploreFilters; append: boolean }>(
             pipe(
-                tap(() => patchState(store, { isLoading: true })),
-                concatMap(({ filters, append }) => {
-                    const cacheKey = JSON.stringify(filters);
-                    const cachedData = store.cache()[cacheKey];
+                switchMap(({ filters, append }) => {
+                    const cacheKey = `${filters.type}_${filters.sort_by}_${filters.with_genres}_p${filters.page}`;
+                    const cachedResponse = store.movieCache()[cacheKey];
 
-                    if (cachedData && !append) {
+                    if (!append && cachedResponse) {
                         patchState(store, {
-                            movies: cachedData.results,
-                            totalResults: cachedData.total,
-                            totalPages: cachedData.totalPages,
+                            movies: cachedResponse.results,
+                            totalResults: cachedResponse.total_results,
+                            totalPages: cachedResponse.total_pages,
                             isLoading: false,
                         });
-                        return of(null);
+                        return EMPTY;
                     }
 
+                    patchState(store, { isLoading: true });
                     return exploreService.discoverMovies(filters).pipe(
-                        tap((res) => {
+                        tap((res: ExploreResponse) => {
+                            const newMovies = append
+                                ? [...store.movies(), ...res.results]
+                                : res.results;
+
                             patchState(store, {
-                                movies: append ? [...store.movies(), ...res.results] : res.results,
+                                movies: newMovies,
                                 totalResults: res.total_results,
                                 totalPages: res.total_pages,
                                 isLoading: false,
-                                cache: append
-                                    ? store.cache()
-                                    : {
-                                          ...store.cache(),
-                                          [cacheKey]: {
-                                              results: res.results,
-                                              total: res.total_results,
-                                              totalPages: res.total_pages,
-                                          },
-                                      },
+                                movieCache: {
+                                    ...store.movieCache(),
+                                    [cacheKey]: {
+                                        results: res.results,
+                                        total_results: res.total_results,
+                                        total_pages: res.total_pages,
+                                    },
+                                },
                             });
                         }),
                         catchError(() => {
@@ -101,24 +128,23 @@ export const ExploreStore = signalStore(
         },
 
         updateFilters(newFilters: Partial<ExploreFilters>) {
-            patchState(store, (state) => {
-                const typeChanged = newFilters.type && newFilters.type !== state.filters.type;
-                const updatedFilters = {
+            const typeChanged = newFilters.type && newFilters.type !== store.filters().type;
+
+            patchState(store, (state) => ({
+                filters: {
                     ...state.filters,
                     ...newFilters,
                     page: 1,
-
                     with_genres: typeChanged
                         ? ''
                         : (newFilters.with_genres ?? state.filters.with_genres),
-                };
+                },
+                movies: typeChanged ? [] : state.movies,
+            }));
 
-                return {
-                    filters: updatedFilters,
-
-                    genres: typeChanged ? [] : state.genres,
-                };
-            });
+            if (typeChanged) {
+                this.loadGenres(newFilters.type as 'movie' | 'tv');
+            }
             this.loadMovies({ filters: store.filters(), append: false });
         },
     })),

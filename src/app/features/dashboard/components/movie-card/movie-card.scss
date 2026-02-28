@@ -28,16 +28,34 @@
         will-change: transform, opacity;
     }
 
+    &__placeholder {
+        @include abs-center;
+        @include flex(center, center);
+        width: 100%;
+        height: 100%;
+        color: var(--nn-icon-muted);
+        animation: cardPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+        mat-icon {
+            font-size: 4.8rem;
+            width: 4.8rem;
+            height: 4.8rem;
+            opacity: 0.15;
+        }
+    }
+
     &__poster {
         width: 100%;
         height: 100%;
         object-fit: cover;
         opacity: 0;
+        position: relative;
+        z-index: 1;
         transition:
             transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
             opacity 0.6s ease-in-out;
 
-        &[src] {
+        &--loaded {
             opacity: 1;
         }
     }
@@ -82,5 +100,15 @@
         margin: 0;
         font-size: 1.3rem;
         color: var(--nn-icon-muted);
+    }
+}
+
+@keyframes cardPulse {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
     }
 }

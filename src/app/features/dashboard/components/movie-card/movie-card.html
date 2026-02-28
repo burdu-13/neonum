@@ -5,6 +5,10 @@
     [attr.aria-label]="displayData().title"
 >
     <div class="movie-card__poster-wrapper">
+        <div class="movie-card__placeholder">
+            <mat-icon>image</mat-icon>
+        </div>
+
         <img
             [ngSrc]="displayData().poster"
             width="342"
@@ -12,6 +16,8 @@
             [priority]="priority()"
             [alt]="displayData().title"
             class="movie-card__poster"
+            [class.movie-card__poster--loaded]="isLoaded()"
+            (load)="isLoaded.set(true)"
             sizes="(max-width: 768px) 50vw, 20vw"
         />
 

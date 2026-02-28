@@ -1,7 +1,6 @@
 <section class="seasons">
     <div class="seasons__header">
-        <span class="seasons__label">Structure</span>
-        <h2 class="seasons__title">Cinematic Segments</h2>
+        <span class="seasons__label">Seasons</span>
     </div>
 
     <div class="seasons__grid">
@@ -25,7 +24,7 @@
                         {{ season.episode_count }} Episodes • {{ season.air_date | date: 'yyyy' }}
                     </p>
                     <p class="season-card__overview">
-                        {{ season.overview || 'No transmission log provided.' }}
+                        {{ season.overview || 'Nothing found.' }}
                     </p>
                 </div>
             </div>
