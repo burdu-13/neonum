@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { UserStore } from '../../../store/user-info/user.store';
 import { BreakpointService } from '../../services/breakpoint-service/breakpoint-service';
@@ -9,10 +9,19 @@ import { MovieStore } from '../../../store/movie/movie.store';
 import { MobileMenu } from './components/mobile-menu/mobile-menu';
 import { NavLink } from './components/nav-link/nav-link';
 import { BrandLogo } from './components/brand-logo/brand-logo';
+import { NnTooltipDirective } from '../nn-tooltip/directives/tooltip';
 
 @Component({
     selector: 'app-header',
-    imports: [MatIconModule, Skeleton, NnButton, MobileMenu, NavLink, BrandLogo],
+    imports: [
+        MatIconModule,
+        Skeleton,
+        NnButton,
+        MobileMenu,
+        NavLink,
+        BrandLogo,
+        NnTooltipDirective,
+    ],
     templateUrl: './header.html',
     styleUrl: './header.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
