@@ -118,7 +118,6 @@ Navigate to `http://localhost:8888/` (or the port Netlify Dev assigns). The appl
 - `npm run start` - Runs the Angular development server only (`ng serve`). API will not function without Netlify Dev.
 - `npm run build` - Builds the application for production (`ng build`).
 - `npm run watch` - Builds the application and watches for file changes (`ng build --watch --configuration development`).
-- `npm run test` - Runs unit tests using Vitest (`ng test`).
 
 ---
 
@@ -126,7 +125,6 @@ Navigate to `http://localhost:8888/` (or the port Netlify Dev assigns). The appl
 
 - **Formatting**: Prettier is configured (`.prettierrc`).
 - **TypeScript Strict Mode**: Enabled in `tsconfig.json`.
-- **Testing**: Vitest (`ng test`) with `jsdom` configuration.
 - **Dependency Handling**: `deno.lock` and `package-lock.json` mappings are present.
 
 ---
