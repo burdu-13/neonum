@@ -40,6 +40,7 @@ export const routes: Routes = [
     {
         path: 'actor/:id',
         title: 'Neonum | Personnel Profile',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/actor-detail/container/actor-detail-container').then(
                 (c) => c.ActorDetailContainer,

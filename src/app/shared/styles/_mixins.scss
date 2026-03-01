@@ -1,3 +1,5 @@
+@use 'sass:map';
+
 @mixin flex($justify: flex-start, $align: stretch, $direction: row, $wrap: nowrap, $gap: 0) {
     display: flex;
     justify-content: $justify;
@@ -31,7 +33,7 @@
         'xl': 1660px,
     );
 
-    $width: map-get($breakpoints, $size);
+    $width: map.get($breakpoints, $size);
 
     @if $limit == 'max' {
         @media (max-width: ($width - 1px)) {
