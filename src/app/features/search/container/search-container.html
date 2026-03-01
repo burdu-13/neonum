@@ -1,64 +1,61 @@
 <main class="search-page">
-    <header class="search-header">
-        <div class="search-bar-wrapper">
+    <header class="search-page__header">
+        <div class="search-page__bar-wrapper">
             <app-nn-input
                 [formControl]="searchControl"
                 [iconPath]="searchIconPath"
                 placeholder="Search movies, actors or TV shows..."
             />
             @if (isLoading()) {
-                <div class="search-progress-bar">
-                    <div class="search-progress-bar__fill"></div>
+                <div class="search-page__progress-bar">
+                    <div class="search-page__progress-bar__fill"></div>
                 </div>
             }
         </div>
     </header>
 
-    <div class="search-layout">
-        <aside class="search-sidebar">
-            <div class="sidebar-content">
-                <h3 class="sidebar-label">Filter By</h3>
-                <app-search-filters
-                    [activeType]="searchType()"
-                    (filterChanged)="onTypeChange($event)"
-                />
-            </div>
+    <div class="search-page__layout">
+        <aside class="search-page__sidebar">
+            <h3 class="search-page__sidebar-title">Filter By</h3>
+            <app-search-filters
+                [activeType]="searchType()"
+                (filterChanged)="onTypeChange($event)"
+            />
         </aside>
 
-        <section class="search-results">
+        <section class="search-page__results">
             @if (
                 isLoading() &&
                 !movieResults().length &&
                 !tvResults().length &&
                 !actorResults().length
             ) {
-                <div class="results-grid">
+                <div class="skeleton-grid">
                     @for (i of [1, 2, 3, 4, 5, 6, 7, 8]; track i) {
                         <div class="skeleton-card">
                             <app-skeleton
-                                height="32rem"
+                                height="38rem"
                                 radius="1.2rem"
+                                width="100%"
                             />
-                            <div class="skeleton-card__meta">
-                                <app-skeleton
-                                    height="2rem"
-                                    width="80%"
-                                    radius="0.4rem"
-                                />
-                                <app-skeleton
-                                    height="1.6rem"
-                                    width="40%"
-                                    radius="0.4rem"
-                                />
-                            </div>
+                            <app-skeleton
+                                height="2rem"
+                                width="80%"
+                                radius="0.4rem"
+                            />
+                            <app-skeleton
+                                height="1.6rem"
+                                width="40%"
+                                radius="0.4rem"
+                            />
                         </div>
                     }
                 </div>
             } @else if (!searchControl.value) {
                 <div class="centered-state">
                     <app-nn-empty-state
-                        title="Search"
-                        description="Enter a title or name to search in the database."
+                        title="Search Archive"
+                        description="Enter a cinematic title or actor name to query the database."
                         icon="search"
                     />
                 </div>
@@ -66,12 +63,14 @@
                 <div class="centered-state">
                     <app-nn-empty-state
                         title="No Matches Found"
-                        description="The query '{{ searchControl.value }}' yielded zero results."
+                        description="The query '{{
+                            searchControl.value
+                        }}' yielded zero results in the mainframe."
                         icon="search_off"
                     />
                 </div>
             } @else {
-                <div class="results-stack">
+                <div class="search-page__results-stack">
                     @let type = searchType();
 
                     @if ((type === 'multi' || type === 'movie') && movieResults().length) {

@@ -1,27 +1,35 @@
 @use '../../../../shared/styles/mixins' as *;
 
 .results-section {
-    margin-bottom: 6.4rem;
+    @include flex($direction: column, $gap: 2.4rem);
 
-    &:last-of-type {
-        margin-bottom: 0;
+    .section-title {
+        font-size: 2rem;
+        font-weight: 800;
+        margin: 0;
+        color: var(--nn-text);
+        text-transform: uppercase;
+        letter-spacing: 0.1rem;
+        @include flex(center, flex-start, $gap: 1.2rem);
+
+        &::before {
+            content: '';
+            width: 0.4rem;
+            height: 2rem;
+            background: var(--nn-primary);
+            border-radius: 1rem;
+        }
     }
 }
 
-.section-title {
-    font-size: 1.4rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    letter-spacing: 0.2rem;
-    color: var(--nn-text);
-    margin-bottom: 3.2rem;
-    @include flex(center, flex-start);
-}
-
 .results-grid {
-    @include auto-grid(20rem, 3.2rem);
+    @include auto-grid(16rem, 2rem);
 
     @include mq('sm') {
-        @include auto-grid(16rem, 2.4rem);
+        @include auto-grid(20rem, 2.4rem);
+    }
+
+    @include mq('lg') {
+        @include auto-grid(22rem, 3.2rem);
     }
 }

@@ -1,30 +1,42 @@
 @use '../../../../shared/styles/mixins' as *;
 
 .search-filters {
-    @include flex(center, center, $gap: 1.2rem);
-    flex-wrap: wrap;
+    @include flex(flex-start, stretch, row, wrap, 1.2rem);
+    width: 100%;
+
+    @include mq('lg') {
+        flex-direction: column;
+        flex-wrap: nowrap;
+    }
 
     .filter-chip {
         @include button-reset;
-        padding: 0.8rem 2rem;
-        border-radius: 0.4rem;
-        border: 1px solid var(--nn-border);
+        flex: 1 1 auto;
+        text-align: center;
+
+        padding: 1.2rem 2.4rem;
+        border-radius: 3rem;
+        border: 1px solid rgba(var(--nn-primary-rgb), 0.2);
         color: var(--nn-text);
-        font-size: 1.2rem;
+        font-size: 1.3rem;
         font-weight: 700;
         letter-spacing: 0.1rem;
-        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        white-space: nowrap;
+        transition: all 0.3s cubic-bezier(0.2, 1, 0.3, 1);
+        @include glass(0.05, 1rem);
 
         &:hover {
             border-color: var(--nn-primary);
-            background: rgba(var(--nn-primary-rgb), 0.05);
+            background: rgba(var(--nn-primary-rgb), 0.1);
+            transform: translateY(-0.2rem);
         }
 
         &.active {
             background: var(--nn-primary);
             color: var(--nn-bg);
             border-color: var(--nn-primary);
-            box-shadow: 0 0 1.5rem rgba(var(--nn-primary-rgb), 0.3);
+            box-shadow: 0 0.8rem 1.6rem rgba(var(--nn-primary-rgb), 0.3);
+            transform: translateY(-0.2rem);
         }
     }
 }

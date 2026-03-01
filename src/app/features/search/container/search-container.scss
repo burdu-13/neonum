@@ -1,119 +1,118 @@
 @use '../../../shared/styles/mixins' as *;
 
 .search-page {
-    width: 100%;
-    max-width: 144rem;
-    margin: 0 auto;
-    padding: 12rem 2.4rem 8rem;
+    --nn-nav-height: 8rem;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
+    padding: calc(var(--nn-nav-height) + 4rem) 0 12rem;
 
-    @include mq('md') {
-        padding: 8rem 1.6rem 4rem;
-    }
-
-    .search-header {
-        width: 100%;
-        margin-bottom: 6.4rem;
+    &__header {
+        @include nn-container;
+        margin-bottom: 4.8rem;
         @include flex(center, center);
-
-        @include mq('md') {
-            margin-bottom: 3.2rem;
-        }
     }
 
-    .search-bar-wrapper {
+    &__bar-wrapper {
         position: relative;
         width: 100%;
         max-width: 72rem;
     }
 
-    .search-progress-bar {
+    &__progress-bar {
         position: absolute;
         bottom: 0;
         left: 2rem;
         right: 2rem;
-        height: 2px;
+        height: 0.2rem;
         background: rgba(var(--nn-primary-rgb), 0.1);
-        overflow: hidden;
+        border-radius: 1rem;
 
         &__fill {
             width: 30%;
             height: 100%;
             background: var(--nn-primary);
             box-shadow: 0 0 1rem var(--nn-primary);
+            animation: searchProgress 1.5s infinite ease-in-out;
         }
     }
 
-    .search-layout {
-        @include grid(1fr, 6.4rem);
-        flex: 1;
+    &__layout {
+        @include nn-container;
+        @include grid(minmax(0, 1fr), 4rem);
+
+        @include mq('lg') {
+            @include grid(24rem minmax(0, 1fr), 6.4rem, start);
+        }
     }
 
-    .search-sidebar {
-        .sidebar-content {
-            position: sticky;
-            top: 12rem;
-            @include flex(flex-start, stretch, column, $gap: 2.4rem);
+    &__sidebar {
+        position: sticky;
+        top: calc(var(--nn-nav-height) + 2rem);
+        @include flex(flex-start, stretch, column, $gap: 2.4rem);
+        z-index: 10;
+        background: var(--nn-bg);
 
-            @include mq('md') {
-                position: static;
-                width: 100%;
-                overflow-x: auto;
-                padding-bottom: 0.8rem;
-                &::-webkit-scrollbar {
-                    display: none;
-                }
+        &-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.15rem;
+            color: var(--nn-icon-muted);
+            display: none;
+
+            @include mq('lg') {
+                display: block;
+                margin-bottom: 0.8rem;
             }
         }
     }
 
-    .sidebar-label {
-        font-size: 1.2rem;
-        font-weight: 800;
-        text-transform: uppercase;
-        color: var(--nn-text-muted);
-        opacity: 0.6;
+    &__results {
+        min-width: 0;
+        width: 100%;
 
-        @include mq('md') {
-            display: none;
+        &-stack {
+            @include flex($direction: column, $gap: 6.4rem);
         }
     }
 
-    .search-results {
-        min-width: 0;
-    }
-
-    .results-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
-        gap: 3.2rem;
+    .skeleton-grid {
+        @include auto-grid(16rem, 2rem);
 
         @include mq('sm') {
-            grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
-            gap: 1.6rem;
+            @include auto-grid(20rem, 2.4rem);
+        }
+
+        @include mq('lg') {
+            @include auto-grid(22rem, 3.2rem);
         }
     }
 
     .skeleton-card {
-        @include flex(flex-start, stretch, column, $gap: 1.6rem);
-        &__meta {
-            @include flex(flex-start, stretch, column, $gap: 0.8rem);
-        }
+        @include flex(flex-start, stretch, column, $gap: 1.2rem);
     }
 
     .centered-state {
         @include flex(center, center);
         min-height: 40rem;
-    }
 
-    .results-stack {
-        @include flex(flex-start, stretch, column, $gap: 6.4rem);
+        width: 100%;
+        padding: 0 1.6rem;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+        word-break: break-word;
 
-        @include mq('sm') {
-            gap: 4.8rem;
+        app-nn-empty-state {
+            width: 100%;
+            max-width: 100%;
         }
+    }
+}
+
+@keyframes searchProgress {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(400%);
     }
 }

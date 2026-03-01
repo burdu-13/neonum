@@ -23,7 +23,7 @@ export class NnTooltipDirective implements OnDestroy {
     private readonly injector = inject(EnvironmentInjector);
 
     private componentRef: ComponentRef<NnTooltip> | null = null;
-    private showTimeout: any;
+    private showTimeout?: ReturnType<typeof setTimeout>;
 
     @HostListener('mouseenter')
     public onMouseEnter(): void {
