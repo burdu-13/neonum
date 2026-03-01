@@ -1,59 +1,142 @@
 # Neonum
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.0.3.
+![Angular](https://img.shields.io/badge/Angular-21-DD0031?logo=angular)
+![TypeScript Strict](https://img.shields.io/badge/TypeScript-Strict-blue?logo=typescript)
 
-## Development server
+Neonum is a production-ready media exploration application built with Angular 21, leveraging Standalone Components, the new control flow, and NgRx SignalStore for reactive state management. The project is focused on performance, strict typing, and maintaining a clear separation of concerns.
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## Features
+
+- Dashboard and media exploration
+- Movie and TV show detail views
+- Personnel (actor) profiles
+- Local user authentication and profiles built with route guards
+- Responsive design via Angular Material and custom SCSS
+
+---
+
+## Tech Stack
+
+- **Framework**: Angular 21 (Standalone Components)
+- **Language**: TypeScript 5.9 (Strict mode enabled)
+- **State Management**: @ngrx/signals, @angular-architects/ngrx-toolkit, RxJS
+- **Styling**: SCSS, Angular Material 21
+- **Platform**: Node.js 24.0.0
+
+---
+
+## Architecture
+
+The application implements a feature-driven architecture.
+
+**Standalone Approach**: Exclusively uses Standalone Components.
+
+**Smart/Dumb Pattern**: Features are separated into Smart `container` components that connect to the store, and Dumb `components` that rely on inputs/outputs.
+
+**State Management**: Centralized reactive state through `@ngrx/signals` configured separately under `store/`.
+
+**Core / Shared / Features**:
+
+- `core/`: Singleton services, guards, and interceptors (e.g., auth interceptor).
+- `shared/`: Reusable, generic UI components, directives, styles, and pipes.
+- `features/`: Specific, isolated features combining their distinct routes, components, and containers.
+
+---
+
+## Project Structure
+
+```
+src/app/
+├── core/
+│   ├── auth/
+│   ├── guards/
+│   ├── interceptors/
+│   └── services/
+├── features/
+│   ├── actor-detail/
+│   ├── dashboard/
+│   ├── explore/
+│   ├── movie-detail/
+│   ├── search/
+│   └── user-profile/
+├── shared/
+│   ├── components/
+│   ├── directives/
+│   ├── models/
+│   ├── pipes/
+│   ├── services/
+│   └── styles/
+└── store/
+    ├── global/
+    ├── movie/
+    ├── search/
+    └── user-info/
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## Getting Started
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Prerequisites
 
-```bash
-ng generate component component-name
-```
+- Node.js
+- npm
+- Netlify CLI (`npm install -g netlify-cli`)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+### Important: Environment Variables and API Access
 
-```bash
-ng generate --help
-```
+This project requires a `.env` file with a valid TMDB API key to function correctly. The application is run via **Netlify Dev** (`netlify dev`) rather than the standard Angular dev server, because Netlify Dev injects the environment variables and proxies serverless functions needed for API communication.
 
-## Building
+**The `.env` file is not included in the repository.** Without it, the application will start but API calls will fail and no media data will be loaded. If you have been granted access to the required credentials, create a `.env` file in the project root and populate it with the appropriate values before running the project.
 
-To build the project run:
+### Installation
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+1. Clone the repository.
+2. Install dependencies:
 
 ```bash
-ng test
+npm install
 ```
 
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+3. Create a `.env` file in the project root with the required API credentials.
+4. Run the development server using Netlify Dev:
 
 ```bash
-ng e2e
+netlify dev
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Navigate to `http://localhost:8888/` (or the port Netlify Dev assigns). The application will automatically reload if you change any of the source files.
 
-## Additional Resources
+> **Note**: Running `npm run start` directly will start the Angular dev server, but environment variables will not be injected and API functionality will not work.
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---
+
+## Available Scripts
+
+- `npm run start` - Runs the Angular development server only (`ng serve`). API will not function without Netlify Dev.
+- `npm run build` - Builds the application for production (`ng build`).
+- `npm run watch` - Builds the application and watches for file changes (`ng build --watch --configuration development`).
+- `npm run test` - Runs unit tests using Vitest (`ng test`).
+
+---
+
+## Quality and Tooling
+
+- **Formatting**: Prettier is configured (`.prettierrc`).
+- **TypeScript Strict Mode**: Enabled in `tsconfig.json`.
+- **Testing**: Vitest (`ng test`) with `jsdom` configuration.
+- **Dependency Handling**: `deno.lock` and `package-lock.json` mappings are present.
+
+---
+
+## Performance
+
+High Lighthouse scores which help with SEO optimization.
+
+---
+
+## License
+
+Private. No open-source license provided.
