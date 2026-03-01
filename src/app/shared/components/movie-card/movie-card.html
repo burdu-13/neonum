@@ -18,7 +18,8 @@
             class="movie-card__poster"
             [class.movie-card__poster--loaded]="isLoaded()"
             (load)="isLoaded.set(true)"
-            sizes="(max-width: 768px) 50vw, 20vw"
+            ngSrcset="342w, 500w, 780w"
+            sizes="(max-width: 768px) 50vw, 290px"
         />
 
         <div class="movie-card__badge">

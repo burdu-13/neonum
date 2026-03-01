@@ -13,4 +13,5 @@ import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 })
 export class ProfileHero {
     public readonly user = input<AccountDetails | null>(null);
+    protected readonly hasAvatarError = signal(false);
 }

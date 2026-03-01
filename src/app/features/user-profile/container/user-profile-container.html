@@ -11,34 +11,36 @@
             />
 
             <section class="profile__section">
-                @if (movieStore.watchlistMovies().length > 0 || movieStore.isDetailLoading()) {
+
+                @if (movieStore.watchlistMovies().length > 0 || movieStore.isLoading()) {
                     <app-movie-shelf
-                        title="Watchlist"
+                        title="Your Watchlist"
                         [movies]="movieStore.watchlistMovies()"
-                        [isLoading]="movieStore.isDetailLoading()"
+                        [isLoading]="movieStore.isLoading()"
                         [isPersonal]="true"
                     />
                 } @else {
                     <app-nn-empty-state
-                        title="Empty Queue"
-                        message="Your watchlist is currently empty. Explore the library to add movies."
+                        title="Watchlist Empty"
+                        description="Explore the archive to curate your personal viewing queue."
                         icon="bookmark_border"
                     />
                 }
             </section>
 
             <section class="profile__section">
-                @if (movieStore.favoriteMovies().length > 0 || movieStore.isDetailLoading()) {
+
+                @if (movieStore.favoriteMovies().length > 0 || movieStore.isLoading()) {
                     <app-movie-shelf
-                        title="Favorites"
+                        title="Your Favorites"
                         [movies]="movieStore.favoriteMovies()"
-                        [isLoading]="movieStore.isDetailLoading()"
+                        [isLoading]="movieStore.isLoading()"
                         [isPersonal]="true"
                     />
                 } @else {
                     <app-nn-empty-state
                         title="No Favorites"
-                        message="Mark movies as favorites to see them showcased here."
+                        description="Mark your favorite masterpieces to showcase them here."
                         icon="favorite_border"
                     />
                 }
@@ -47,18 +49,18 @@
     } @else {
         <div class="profile__loading">
             <app-skeleton
-                height="32rem"
+                height="40rem"
                 width="100%"
-                radius="2.4rem"
+                radius="4rem"
             />
             <div class="profile__loading-grid">
                 <app-skeleton
-                    height="12rem"
-                    radius="1.6rem"
+                    height="16rem"
+                    radius="3.2rem"
                 />
                 <app-skeleton
-                    height="12rem"
-                    radius="1.6rem"
+                    height="16rem"
+                    radius="3.2rem"
                 />
             </div>
         </div>

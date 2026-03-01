@@ -9,7 +9,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 })
 export class NnBanner {
     public readonly imageSrc = input.required<string>();
-    public readonly label = input<string>('Curated Essence');
+    public readonly label = input<string>('');
     public readonly title = input.required<string>();
     public readonly description = input<string>();
 }

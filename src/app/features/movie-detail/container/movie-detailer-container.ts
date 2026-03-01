@@ -113,12 +113,19 @@ export class MovieDetailerContainer {
 
     constructor() {
         effect(() => {
-            const type = this.route.snapshot.url[0].path as 'movie' | 'tv';
+            const segments =
+                this.route.snapshot.url.length > 0
+                    ? this.route.snapshot.url
+                    : this.route.parent?.snapshot.url;
 
-            this.movieStore.loadMovieDetail({
-                id: this.id(),
-                type,
-            });
+            const type = segments?.[0]?.path as 'movie' | 'tv';
+
+            if (type && this.id()) {
+                this.movieStore.loadMovieDetail({
+                    id: this.id(),
+                    type,
+                });
+            }
         });
 
         effect(() => {
