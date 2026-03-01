@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { patchState, signalStore, withHooks, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap, catchError, EMPTY, of, concatMap } from 'rxjs';
 import { Movie } from '../../../shared/models/movie.model';
@@ -11,6 +11,7 @@ import {
     GenreResponse,
 } from '../models/explore.model';
 import { ExploreService } from '../services/explore-service';
+import { GlobalStore } from '../../../store/global/global.store';
 
 interface ExploreState {
     movies: Movie[];
@@ -148,4 +149,10 @@ export const ExploreStore = signalStore(
             this.loadMovies({ filters: store.filters(), append: false });
         },
     })),
+    withHooks({
+        onInit(store) {
+            const globalStore = inject(GlobalStore);
+            globalStore.registerReset(() => patchState(store, initialState));
+        },
+    }),
 );

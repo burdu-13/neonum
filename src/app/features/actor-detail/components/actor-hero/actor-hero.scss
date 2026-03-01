@@ -1,132 +1,98 @@
 @use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
 
 .actor-hero {
     position: relative;
     width: 100%;
-    min-height: 40vh;
     background: var(--nn-bg);
-    padding: 12rem 2.4rem 4rem;
-    overflow: hidden;
+    padding: clamp(14rem, 20vh, 22rem) 2.4rem 0;
 
-    @include mq('md') {
-        padding: 16rem 6.4rem 6rem;
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        background:
-            radial-gradient(
-                circle at 20% 30%,
-                rgba(var(--nn-primary-rgb), 0.15) 0%,
-                transparent 50%
-            ),
-            linear-gradient(to bottom, transparent, var(--nn-bg));
-        z-index: 1;
+    @include mq('lg') {
+        padding: 18rem 6.4rem 0;
     }
 
     &__frame {
-        position: relative;
-        max-width: 144rem;
+        max-width: 166rem;
         margin: 0 auto;
+        position: relative;
         z-index: 2;
     }
 
-    &__grid {
+    &__layout {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 3.2rem;
-        align-items: center;
-
-        @include mq('md') {
-            grid-template-columns: 24rem 1fr;
-            gap: 6.4rem;
-        }
+        gap: 6rem;
+        align-items: end;
 
         @include mq('lg') {
-            grid-template-columns: 32rem 1fr;
+            grid-template-columns: 1fr 38rem;
+            gap: 10rem;
+        }
+
+        @include mq('xl') {
+            grid-template-columns: 1fr 44rem;
+            gap: 14rem;
         }
     }
 
     &__portrait {
+        grid-row: 1;
         width: 100%;
-        max-width: 20rem;
+        max-width: 32rem;
         justify-self: center;
         aspect-ratio: 2 / 3;
-        border-radius: 2rem;
+        border-radius: 3.2rem;
         overflow: hidden;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow:
-            0 2rem 4rem rgba(0, 0, 0, 0.6),
-            0 0 0 1px rgba(var(--nn-primary-rgb), 0.2);
+        border: 1px solid var(--nn-border);
+        @include glass($opacity: 0.1, $blur: 0);
+        box-shadow: 0 4rem 8rem rgba(0, 0, 0, 0.4);
 
-        @include mq('md') {
-            max-width: 100%;
-            justify-self: start;
+        @include mq('lg') {
+            grid-row: auto;
+            max-width: none;
         }
 
         img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
     }
 
-    &__info {
-        text-align: center;
-
-        @include mq('md') {
-            text-align: left;
-        }
+    &__label {
+        display: block;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5em;
+        color: var(--nn-primary);
+        font-weight: 700;
+        margin-bottom: 2rem;
     }
 
     &__name {
-        font-size: clamp(3.2rem, 6vw, 7.2rem);
-        font-weight: 900;
-        line-height: 1.1;
-        margin-bottom: 2.4rem;
+        font-size: clamp(4.8rem, 8vw, 11rem);
+        font-weight: 300;
+        letter-spacing: -0.05em;
+        line-height: 0.9;
+        margin-bottom: 4.8rem;
         color: var(--nn-text);
-        text-transform: uppercase;
-        letter-spacing: -0.02em;
-        filter: drop-shadow(0 0 2rem rgba(var(--nn-primary-rgb), 0.3));
     }
 
-    &__bio {
-        background: rgba(var(--nn-surface-rgb), 0.4);
-        padding: 2.4rem;
-        border-radius: 1.6rem;
-        border: 1px solid var(--nn-border);
-        backdrop-filter: blur(1rem);
+    &__biography {
         max-width: 90rem;
 
-        h3 {
-            font-size: 1rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 0.4rem;
-            color: var(--nn-primary);
-            margin-bottom: 1.6rem;
-            display: inline-block;
-            border-bottom: 2px solid var(--nn-primary);
-            padding-bottom: 0.4rem;
-        }
-
         p {
-            font-size: 1.5rem;
-            line-height: 1.7;
-            color: var(--nn-text);
-            opacity: 0.8;
-            margin: 0;
+            font-size: clamp(1.7rem, 2vw, 2rem);
+            line-height: 1.8;
+            font-weight: 300;
+            color: var(--nn-icon-muted);
             display: -webkit-box;
             -webkit-line-clamp: 6;
             -webkit-box-orient: vertical;
             overflow: hidden;
 
             @include mq('lg') {
-                font-size: 1.7rem;
-                -webkit-line-clamp: 8;
+                -webkit-line-clamp: 10;
             }
         }
     }

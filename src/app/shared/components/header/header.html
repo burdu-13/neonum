@@ -17,8 +17,8 @@
                 icon="casino"
                 variant="surface"
                 (clicked)="movieStore.getRandomContent()"
-                title="I'm Feeling Lucky"
                 ariaLabel="Lucky Shuffle"
+                nnTooltip="Lucky Shuffle"
             />
 
             <app-nn-button
@@ -26,6 +26,7 @@
                 variant="surface"
                 (clicked)="router.navigate(['/search'])"
                 ariaLabel="Search Movies"
+                nnTooltip="Search"
             />
 
             @if (bp.isLargeTablet() || bp.isDesktop()) {

@@ -1,25 +1,37 @@
 @let m = movie();
 @if (m) {
     <div class="movie-actions">
-        @let isWatchlisted = watchlistIds().includes(m.id);
-        @let isFavorited = favoriteIds().includes(m.id);
+        @let isWatchlisted = m.account_states?.watchlist || watchlistIds().includes(m.id);
+        @let isFavorited = m.account_states?.favorite || favoriteIds().includes(m.id);
 
-        <app-nn-button
-            [label]="isWatchlisted ? 'In Watchlist' : 'Watchlist'"
-            [icon]="isWatchlisted ? 'bookmark' : 'bookmark_border'"
-            [isActive]="isWatchlisted"
-            [disabled]="!isMember()"
-            (clicked)="toggleWatchlist.emit({ id: m.id, status: !isWatchlisted })"
-        />
+        <div
+            class="movie-actions__tooltip-wrapper"
+            [class.disabled]="!isMember()"
+            [nnTooltip]="!isMember() ? 'You must be logged in to modify collections.' : ''"
+        >
+            <app-nn-button
+                [label]="isWatchlisted ? 'In Watchlist' : 'Watchlist'"
+                [icon]="isWatchlisted ? 'bookmark' : 'bookmark_border'"
+                [isActive]="isWatchlisted"
+                [disabled]="!isMember()"
+                (clicked)="toggleWatchlist.emit({ id: m.id, status: !isWatchlisted })"
+            />
+        </div>
 
-        <app-nn-button
-            [label]="isFavorited ? 'Favorite' : 'Mark Favorite'"
-            [icon]="isFavorited ? 'favorite' : 'favorite_border'"
-            [isActive]="isFavorited"
-            [disabled]="!isMember()"
-            variant="danger"
-            (clicked)="toggleFavorite.emit({ id: m.id, status: !isFavorited })"
-        />
+        <div
+            class="movie-actions__tooltip-wrapper"
+            [class.disabled]="!isMember()"
+            [nnTooltip]="!isMember() ? 'You must be logged in to modify collections.' : ''"
+        >
+            <app-nn-button
+                [label]="isFavorited ? 'Favorite' : 'Mark Favorite'"
+                [icon]="isFavorited ? 'favorite' : 'favorite_border'"
+                [isActive]="isFavorited"
+                [disabled]="!isMember()"
+                variant="danger"
+                (clicked)="toggleFavorite.emit({ id: m.id, status: !isFavorited })"
+            />
+        </div>
 
         @if (hasTrailer()) {
             <app-nn-button

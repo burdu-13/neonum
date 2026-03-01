@@ -66,6 +66,12 @@
                 />
             </footer>
         }
+
+        @if (!isLoading && similarMovies().length > 0) {
+            <div class="detail-gallery__similar">
+                <app-similar-movies [media]="similarMovies()" />
+            </div>
+        }
     </div>
 
     @if (isTrailerOpen()) {

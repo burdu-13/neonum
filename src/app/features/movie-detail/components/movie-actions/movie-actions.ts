@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { NnButton } from '../../../../shared/components/nn-button/nn-button';
 import { MovieDetails } from '../../../../shared/models/movie.model';
+import { NnTooltipDirective } from '../../../../shared/components/nn-tooltip/directives/tooltip';
 
 @Component({
     selector: 'app-movie-actions',
-    imports: [NnButton],
+    imports: [NnButton,NnTooltipDirective],
     templateUrl: './movie-actions.html',
     styleUrl: './movie-actions.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -3,19 +3,19 @@
     aria-labelledby="similar-heading"
 >
     <div class="similar-assets__header">
-        <h2 id="similar-heading">Recommended Assets</h2>
+        <h2 id="similar-heading">Recommended</h2>
         <div class="header-line"></div>
     </div>
 
     <div class="similar-assets__grid">
-        @for (movie of movies(); track movie.id; let i = $index) {
+        @for (item of media(); track item.id; let i = $index) {
             <app-movie-card
-                [movie]="movie"
+                [movie]="item"
                 class="similar-card-reveal"
                 [style.animation-delay]="i * 0.05 + 's'"
             />
         } @empty {
-            <p class="empty-note">No similar cinematic assets found.</p>
+            <p class="empty-note">No similar media found.</p>
         }
     </div>
 </section>

@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, effect, input, signal } f
 import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 import { MetaBadge } from '../../../../shared/components/meta-badge/meta-badge';
 import { CategoryPill } from '../../../../shared/components/category-pill/category-pill';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { HeroDisplayModel } from '../../models/cinematic.config';
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
     selector: 'app-movie-hero',
-    imports: [Skeleton, MetaBadge, CategoryPill, CommonModule, NgOptimizedImage, MatIcon],
+    imports: [Skeleton, MetaBadge, CategoryPill, CommonModule, MatIcon],
     templateUrl: './movie-hero.html',
     styleUrl: './movie-hero.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

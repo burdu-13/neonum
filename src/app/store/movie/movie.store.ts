@@ -1,5 +1,12 @@
 import { computed, inject } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+    patchState,
+    signalStore,
+    withComputed,
+    withHooks,
+    withMethods,
+    withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
     pipe,
@@ -24,6 +31,7 @@ import {
 import { AlertService } from '../../shared/services/alert/alert';
 import { UserStore } from '../user-info/user.store';
 import { Router } from '@angular/router';
+import { GlobalStore } from '../global/global.store';
 
 interface MovieState {
     trending: Movie[];
@@ -164,9 +172,6 @@ export const MovieStore = signalStore(
             loadMovieDetail: rxMethod<{ id: string; type: 'movie' | 'tv' }>(
                 pipe(
                     filter((data) => !!data.id),
-                    distinctUntilChanged(
-                        (prev, curr) => prev.id === curr.id && prev.type === curr.type,
-                    ),
                     tap(({ id, type }) => {
                         const mId = Number(id);
 
@@ -447,4 +452,10 @@ export const MovieStore = signalStore(
             },
         }),
     ),
+    withHooks({
+        onInit(store) {
+            const globalStore = inject(GlobalStore);
+            globalStore.registerReset(() => patchState(store, initialState));
+        },
+    }),
 );

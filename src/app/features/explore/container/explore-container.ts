@@ -8,7 +8,7 @@ import {
     untracked,
 } from '@angular/core';
 import { ExploreStore } from '../store/explore.store';
-import { MovieCard } from '../../dashboard/components/movie-card/movie-card';
+import { MovieCard } from '../../../shared/components/movie-card/movie-card';
 import { InteractionObserver } from '../../../shared/directives/interaction-observer';
 import { BreakpointService } from '../../../shared/services/breakpoint-service/breakpoint-service';
 import { ExploreFilters } from '../components/explore-filters/explore-filters';

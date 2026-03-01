@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MovieCard } from '../movie-card/movie-card';
+import { MovieCard } from '../../../../shared/components/movie-card/movie-card';
 import { Skeleton } from '../../../../shared/components/skeleton/skeleton';
 import { Movie } from '../../../../shared/models/movie.model';
 import { CommonModule } from '@angular/common';

@@ -1,50 +1,56 @@
 @use '../../../../shared/styles/mixins' as *;
+@use '../../../../shared/styles/variables' as *;
 
 .actor-sidebar {
-    background: rgba(var(--nn-surface-rgb), 0.3);
-    border: 0.1rem solid var(--nn-border);
-    border-radius: 1.6rem;
-    padding: 3.2rem;
-    backdrop-filter: blur(1rem);
+    @include glass($opacity: 0.03, $blur: 3.2rem);
+    border: 1px solid var(--nn-border);
+    border-radius: 3.2rem;
+    padding: 4.8rem;
+
+    &__header {
+        margin-bottom: 4rem;
+    }
+
+    &__label {
+        display: block;
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4em;
+        color: var(--nn-primary);
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+    }
 
     &__title {
-        font-size: 1.6rem;
-        font-weight: 800;
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+    }
+
+    &__specs {
+        @include flex($direction: column, $gap: 3.2rem);
+    }
+}
+
+.spec-item {
+    @include flex($direction: column, $gap: 0.8rem);
+
+    &__label {
+        font-size: 1.1rem;
         text-transform: uppercase;
-        letter-spacing: 0.2rem;
+        letter-spacing: 0.15em;
+        font-weight: 700;
+        opacity: 0.4;
+    }
+
+    &__value {
+        font-size: 1.6rem;
+        font-weight: 400;
         color: var(--nn-text);
-        margin-bottom: 3.2rem;
-        padding-bottom: 1.6rem;
-        border-bottom: 0.1rem solid var(--nn-border);
-    }
 
-    &__group {
-        @include flex(flex-start, stretch, column, $gap: 2.8rem);
-    }
-
-    &__item {
-        @include flex(flex-start, flex-start, column, $gap: 0.8rem);
-
-        label {
-            font-size: 1.1rem;
-            font-weight: 900;
-            text-transform: uppercase;
+        &--highlight {
             color: var(--nn-primary);
-            letter-spacing: 0.1rem;
-            opacity: 0.8;
+            font-weight: 700;
         }
-
-        span {
-            font-size: 1.6rem;
-            font-weight: 500;
-            color: var(--nn-text);
-            line-height: 1.4;
-        }
-    }
-
-    &__highlight {
-        color: var(--nn-primary) !important;
-        font-family: 'Monaco', 'Consolas', monospace;
-        font-weight: 700 !important;
     }
 }

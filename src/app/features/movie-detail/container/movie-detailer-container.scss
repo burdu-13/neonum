@@ -8,7 +8,7 @@
     padding-bottom: 12rem;
 
     &__body {
-        max-width: 144rem;
+        max-width: 166rem;
         margin: 0 auto;
         padding: clamp(6rem, 10vh, 10rem) 2.4rem 0;
         @include grid(minmax(0, 1fr), 8rem);
@@ -33,5 +33,10 @@
         margin-top: clamp(6rem, 12vh, 12rem);
         border-top: 1px solid var(--nn-border);
         padding-top: clamp(8rem, 14vh, 14rem);
+    }
+
+    &__similar {
+        grid-column: 1 / -1;
+        margin-top: clamp(4rem, 8vh, 8rem);
     }
 }

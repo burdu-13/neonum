@@ -1,45 +1,51 @@
 <section class="actor-sidebar">
-    <h3 class="actor-sidebar__title">Technical Specifications</h3>
+    <div class="actor-sidebar__header">
+        <h3 class="actor-sidebar__title">Information</h3>
+    </div>
 
-    <div class="actor-sidebar__group">
+    <div class="actor-sidebar__specs">
         @if (isLoading()) {
-            @for (i of [1, 2, 3, 4]; track i) {
-                <div class="actor-sidebar__item">
+            @for (i of [1, 2, 3, 4, 5]; track i) {
+                <div class="spec-item">
                     <app-skeleton
                         width="40%"
-                        height="1.2rem"
-                        style="margin-bottom: 0.8rem"
+                        height="1.1rem"
+                        style="margin-bottom: 0.8rem; display: block"
                     />
                     <app-skeleton
-                        width="80%"
+                        width="70%"
                         height="1.6rem"
                     />
                 </div>
             }
         } @else {
-            <div class="actor-sidebar__item">
-                <label>Known For</label>
-                <span>{{ actor()?.known_for_department || 'Acting' }}</span>
+            <div class="spec-item">
+                <span class="spec-item__label">Known For</span>
+                <span class="spec-item__value">
+                    {{ actor()?.known_for_department || 'Acting' }}
+                </span>
             </div>
 
-            <div class="actor-sidebar__item">
-                <label>Gender</label>
-                <span>{{ actor()?.gender === 1 ? 'Female' : 'Male' }}</span>
+            <div class="spec-item">
+                <span class="spec-item__label">Gender</span>
+                <span class="spec-item__value">
+                    {{ actor()?.gender === 1 ? 'Female' : 'Male' }}
+                </span>
             </div>
 
-            <div class="actor-sidebar__item">
-                <label>Birthday</label>
-                <span>{{ actor()?.birthday | date: 'longDate' }}</span>
+            <div class="spec-item">
+                <span class="spec-item__label">Birthday</span>
+                <span class="spec-item__value">{{ actor()?.birthday | date: 'longDate' }}</span>
             </div>
 
-            <div class="actor-sidebar__item">
-                <label>Place of Birth</label>
-                <span>{{ actor()?.place_of_birth || 'Unknown Origin' }}</span>
+            <div class="spec-item">
+                <span class="spec-item__label">Origin</span>
+                <span class="spec-item__value">{{ actor()?.place_of_birth || 'Unknown' }}</span>
             </div>
 
-            <div class="actor-sidebar__item">
-                <label>Popularity Index</label>
-                <span class="actor-sidebar__highlight">
+            <div class="spec-item">
+                <span class="spec-item__label">Popularity</span>
+                <span class="spec-item__value spec-item__value--highlight">
                     {{ actor()?.popularity | number: '1.1-1' }}
                 </span>
             </div>
