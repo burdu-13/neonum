@@ -6,6 +6,7 @@ import {
     inject,
     input,
     signal,
+    untracked,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
@@ -116,6 +117,12 @@ export class MovieDetailerContainer {
                 id: this.id(),
                 type,
             });
+        });
+
+        effect(() => {
+            if (this.isMember() && !this.movieStore.collectionsLoaded()) {
+                untracked(() => this.movieStore.loadCollections());
+            }
         });
     }
 

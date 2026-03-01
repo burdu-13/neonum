@@ -1,8 +1,8 @@
 @let m = movie();
 @if (m) {
     <div class="movie-actions">
-        @let isWatchlisted = watchlistIds().includes(m.id);
-        @let isFavorited = favoriteIds().includes(m.id);
+        @let isWatchlisted = m.account_states?.watchlist || watchlistIds().includes(m.id);
+        @let isFavorited = m.account_states?.favorite || favoriteIds().includes(m.id);
 
         <div
             class="movie-actions__tooltip-wrapper"
