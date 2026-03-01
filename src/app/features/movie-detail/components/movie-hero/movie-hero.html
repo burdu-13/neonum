@@ -6,11 +6,14 @@
 
     @if (displayData()?.backdropPath) {
         <img
-            [src]="'https://image.tmdb.org/t/p/original' + displayData()?.backdropPath"
-            alt=""
+            [ngSrc]="displayData()!.backdropPath!"
+            alt="Banner for movie"
             class="movie-hero__backdrop"
             [class.movie-hero__backdrop--loaded]="isBackdropLoaded()"
             (load)="isBackdropLoaded.set(true)"
+            fill
+            priority
+            sizes="100vw"
         />
     }
 
@@ -29,11 +32,14 @@
                         <mat-icon>image</mat-icon>
                     </div>
                     <img
-                        [src]="'https://image.tmdb.org/t/p/w500' + displayData()?.posterPath"
+                        [ngSrc]="displayData()!.posterPath!"
                         [alt]="displayData()?.title || ''"
                         class="movie-hero__poster-img"
                         [class.movie-hero__poster-img--loaded]="isPosterLoaded()"
                         (load)="isPosterLoaded.set(true)"
+                        width="342"
+                        height="513"
+                        priority
                     />
                 }
             </figure>

@@ -57,7 +57,7 @@ export class App implements OnInit {
 
                             window.scrollTo({ top: 0, behavior: 'instant' });
                             document.body.classList.remove('body-lock');
-                        }, 300);
+                        }, 0);
                     }
                 }),
 

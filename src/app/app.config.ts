@@ -23,10 +23,10 @@ export const appConfig: ApplicationConfig = {
             useValue: (config: ImageLoaderConfig) => {
                 if (!config.src) return '';
 
-                const widths = [92, 154, 185, 342, 500, 780];
+                const widths = [92, 154, 185, 342, 500, 780, 1280];
 
                 const width = config.width
-                    ? widths.find((w) => w >= config!.width!) || 'original'
+                    ? widths.find((w) => w >= config.width!) || 'original'
                     : 342;
 
                 const sizePath = width === 'original' ? 'original' : `w${width}`;
