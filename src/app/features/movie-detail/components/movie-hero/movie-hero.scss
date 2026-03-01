@@ -87,7 +87,7 @@
                 @include flex(flex-end, flex-start, column);
 
                 &__title {
-                    font-size: clamp(4rem, 6vw, 7.2rem);
+                    font-size: clamp(2rem, 6vw, 7.2rem);
                     font-weight: 800;
                     line-height: 1.1;
                     letter-spacing: -0.02em;

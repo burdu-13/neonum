@@ -4,18 +4,35 @@
 .nn-banner {
     position: relative;
     width: 100%;
-    min-height: 50rem;
-    border-radius: 3.2rem;
+    max-width: 166rem;
+    margin: 0 auto;
+    min-height: clamp(40rem, 60vh, 65rem);
+    border-radius: 2.4rem;
     overflow: hidden;
-    @include flex($direction: column, $justify: flex-end);
-    padding: 6rem;
+    @include flex(center, center, column);
+    padding: 2.4rem;
     background: var(--nn-bg-dark);
 
+    @include mq('md') {
+        justify-content: flex-end;
+        align-items: flex-start;
+        padding: 4.8rem;
+        border-radius: 3.2rem;
+    }
+
+    @include mq('lg') {
+        padding: 6.4rem;
+    }
+
+    @include mq('xl') {
+        padding: 8rem;
+    }
+
     &__image-wrapper {
-        position: absolute;
-        inset: 0;
+        @include abs-center;
         z-index: 1;
-        overflow: hidden;
+        width: 100%;
+        height: 100%;
     }
 
     &__image {
@@ -23,58 +40,92 @@
         object-position: center;
         width: 100%;
         height: 100%;
-        transition: transform 1.2s cubic-bezier(0.2, 1, 0.3, 1);
+        display: block;
     }
 
     &__overlay {
-        position: absolute;
-        inset: 0;
+        @include abs-center;
+        z-index: 2;
         background: linear-gradient(
             to top,
-            rgba(0, 0, 0, 0.85) 0%,
-            rgba(0, 0, 0, 0.3) 60%,
-            rgba(0, 0, 0, 0) 100%
+            rgba(0, 0, 0, 0.95) 0%,
+            rgba(0, 0, 0, 0.4) 50%,
+            transparent 100%
         );
     }
 
     &__content {
         position: relative;
-        z-index: 2;
-        max-width: 72rem;
-        @include glass($opacity: 0.1, $blur: 1.5rem);
-        padding: 4rem;
+        z-index: 3;
+        width: 100%;
+        max-width: 86rem;
+        @include glass($opacity: 0.1, $blur: 3rem);
+        padding: clamp(2.4rem, 5vw, 4.8rem);
         border-radius: 2.4rem;
         border: 1px solid rgba(255, 255, 255, 0.1);
+        box-sizing: border-box;
+        text-align: center;
+
+        @include mq('md') {
+            text-align: left;
+        }
     }
 
     &__label {
         display: block;
-        font-size: 1.2rem;
+        font-size: 1rem;
+        font-weight: 900;
         text-transform: uppercase;
-        letter-spacing: 0.5em;
+        letter-spacing: 0.4rem;
         color: var(--nn-primary);
-        margin-bottom: 2rem;
-        font-weight: 700;
+        margin-bottom: 1.6rem;
+
+        @include mq('md') {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
     }
 
     &__title {
-        font-size: clamp(3.2rem, 6vw, 6.4rem);
-        font-weight: 300;
-        letter-spacing: -0.04em;
+        font-size: clamp(2.4rem, 5vw, 5.2rem);
+        font-weight: 800;
         line-height: 1.1;
-        margin-bottom: 2.4rem;
+        letter-spacing: -0.02em;
         color: var(--nn-text);
+        margin: 0 0 1.6rem;
+        text-transform: uppercase;
+        overflow-wrap: break-word;
     }
 
     &__description {
-        font-size: 1.8rem;
-        font-weight: 300;
+        font-size: clamp(1.4rem, 2vw, 1.7rem);
         line-height: 1.6;
-        color: rgba(255, 255, 255, 0.7);
-        margin-bottom: 3.2rem;
+        color: rgba(var(--nn-text-rgb), 0.85);
+        margin: 0 0 3.2rem;
+        max-width: 65rem;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        margin-left: auto;
+        margin-right: auto;
+
+        @include mq('md') {
+            margin-left: 0;
+            margin-right: 0;
+        }
     }
 
     &__actions {
-        @include flex($align: center, $gap: 1.6rem);
+        @include flex(center, center, $gap: 1.6rem);
+        flex-wrap: wrap;
+
+        @include mq('md') {
+            justify-content: flex-start;
+        }
+
+        & > * {
+            flex-shrink: 0;
+        }
     }
 }

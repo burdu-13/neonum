@@ -46,11 +46,19 @@ export class Header {
     }
 
     public toggleMenu(): void {
-        this.isMenuOpen.set(!this.isMenuOpen());
+        const nextState = !this.isMenuOpen();
+        this.isMenuOpen.set(nextState);
+
+        if (nextState) {
+            document.body.classList.add('body-lock');
+        } else {
+            document.body.classList.remove('body-lock');
+        }
     }
 
     public closeMenu(): void {
         this.isMenuOpen.set(false);
+        document.body.classList.remove('body-lock');
     }
 
     protected handleLogout(): void {

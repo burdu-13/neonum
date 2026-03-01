@@ -22,15 +22,25 @@
     transform: translate(-50%, -50%);
 }
 
-@mixin mq($size) {
+@mixin mq($size, $limit: 'min') {
     $breakpoints: (
-        'sm': 576px,
-        'md': 768px,
-        'lg': 992px,
-        'xl': 1200px,
+        'xs': 480px,
+        'sm': 768px,
+        'md': 1024px,
+        'lg': 1280px,
+        'xl': 1660px,
     );
-    @media (min-width: map-get($breakpoints, $size)) {
-        @content;
+
+    $width: map-get($breakpoints, $size);
+
+    @if $limit == 'max' {
+        @media (max-width: ($width - 1px)) {
+            @content;
+        }
+    } @else {
+        @media (min-width: $width) {
+            @content;
+        }
     }
 }
 

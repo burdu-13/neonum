@@ -10,7 +10,6 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         title: 'Neonum | Dashboard',
-        canActivate: [authGuard],
         loadChildren: () =>
             import('./features/dashboard/dashboard.routes').then((r) => r.DASHBOARD_ROUTES),
     },
@@ -41,7 +40,6 @@ export const routes: Routes = [
     {
         path: 'actor/:id',
         title: 'Neonum | Personnel Profile',
-        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/actor-detail/container/actor-detail-container').then(
                 (c) => c.ActorDetailContainer,

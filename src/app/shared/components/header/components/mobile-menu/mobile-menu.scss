@@ -4,19 +4,21 @@
 .mobile-menu {
     position: fixed;
     inset: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
     @include glass(0.98, 2.4rem);
     background: var(--nn-bg);
-    z-index: 2000;
     padding: 10rem 2.4rem 4.8rem;
-
     transform: translateX(100%);
-    transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    transition: transform 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+    will-change: transform;
 
     @include flex(space-between, flex-start, column);
     pointer-events: none;
     visibility: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
 
     &--open {
         transform: translateX(0);
@@ -28,6 +30,7 @@
         position: absolute;
         top: 2rem;
         right: 2.4rem;
+        z-index: 2001;
     }
 
     &__content {
@@ -60,11 +63,13 @@
         cursor: pointer;
         width: 100%;
         text-transform: uppercase;
-        transition: all 0.2s ease;
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
 
         &:active {
             opacity: 0.6;
-            transform: translateX(0.4rem);
+            transform: translateX(0.8rem);
         }
     }
 
@@ -73,33 +78,35 @@
         padding-top: 3.2rem;
         border-top: 0.1rem solid var(--nn-border);
         opacity: 0;
-        transform: translateY(1.5rem);
+        transform: translateY(2rem);
         transition:
-            opacity 0.4s ease 0.4s,
-            transform 0.4s ease 0.4s;
-
+            opacity 0.3s ease,
+            transform 0.3s ease;
         .mobile-menu--open & {
             opacity: 1;
             transform: translateY(0);
+            transition-delay: 0.35s;
         }
     }
 
     &__label {
-        font-size: 1.1rem;
+        font-size: 1rem;
         text-transform: uppercase;
-        letter-spacing: 0.2rem;
+        letter-spacing: 0.3rem;
         color: var(--nn-icon-muted);
         display: block;
         margin-bottom: 1.6rem;
+        font-weight: 700;
     }
 
     &__user {
         @include flex(space-between, center);
 
         app-nav-link {
-            font-size: 2rem;
-            font-weight: 700;
+            font-size: 2.2rem;
+            font-weight: 800;
             letter-spacing: -0.01em;
+            color: var(--nn-text);
         }
     }
 }
