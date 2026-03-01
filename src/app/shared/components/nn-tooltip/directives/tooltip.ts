@@ -27,7 +27,7 @@ export class NnTooltipDirective implements OnDestroy {
 
     @HostListener('mouseenter')
     public onMouseEnter(): void {
-        if (this.componentRef) return;
+        if (this.componentRef || !this.nnTooltip()) return;
         this.showTimeout = setTimeout(() => this.showTooltip(), 200);
     }
 
