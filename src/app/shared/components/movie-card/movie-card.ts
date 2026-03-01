@@ -1,6 +1,6 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
-import { Movie, TVShow } from '../../../../shared/models/movie.model';
+import { Movie, TVShow } from '../../models/movie.model';
 import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 

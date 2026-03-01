@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { Movie } from '../../../../shared/models/movie.model';
-import { MovieCard } from "../../../dashboard/components/movie-card/movie-card";
+import { Movie, TVShow } from '../../../../shared/models/movie.model';
+import { MovieCard } from '../../../../shared/components/movie-card/movie-card';
 
 @Component({
     selector: 'app-similar-movies',
@@ -10,5 +10,5 @@ import { MovieCard } from "../../../dashboard/components/movie-card/movie-card";
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SimilarMovies {
-    public readonly movies = input.required<Movie[]>();
+    public readonly media = input.required<(Movie | TVShow)[]>();
 }

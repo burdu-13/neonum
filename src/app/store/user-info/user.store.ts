@@ -13,6 +13,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { AccountDetails, AuthCredentials } from '../../core/auth/models/auth.model';
 import { Auth } from '../../core/auth/services/auth';
 import { AlertService } from '../../shared/services/alert/alert';
+import { GlobalStore } from '../global/global.store';
 
 export interface UserState {
     sessionId: string | null;
@@ -57,6 +58,7 @@ export const UserStore = signalStore(
             authService = inject(Auth),
             alertService = inject(AlertService),
             router = inject(Router),
+            globalStore = inject(GlobalStore),
         ) => ({
             restoreSession: rxMethod<void>(
                 pipe(
@@ -96,6 +98,7 @@ export const UserStore = signalStore(
                     switchMap((credentials) =>
                         authService.login(credentials).pipe(
                             tap((session) => {
+                                globalStore.resetAllStores();
                                 localStorage.removeItem('is_guest');
                                 localStorage.removeItem('guest_created_at');
                                 localStorage.setItem('neonum_session_id', session.session_id);
@@ -150,6 +153,7 @@ export const UserStore = signalStore(
                     switchMap(() =>
                         authService.loginAsGuest().pipe(
                             tap((res) => {
+                                globalStore.resetAllStores();
                                 const now = Date.now();
                                 localStorage.setItem('is_guest', 'true');
                                 localStorage.setItem('guest_created_at', now.toString());
@@ -177,6 +181,7 @@ export const UserStore = signalStore(
             ),
 
             logout(): void {
+                globalStore.resetAllStores();
                 localStorage.removeItem('neonum_session_id');
                 localStorage.removeItem('is_guest');
                 localStorage.removeItem('guest_created_at');
@@ -187,6 +192,7 @@ export const UserStore = signalStore(
                     isAuthenticated: false,
                     isGuest: false,
                     guestCreatedAt: null,
+                    isLoading: false,
                 });
 
                 router.navigate(['/auth/login']);

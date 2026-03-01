@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
-import { MovieCard } from '../components/movie-card/movie-card';
+import { MovieCard } from '../../../shared/components/movie-card/movie-card';
 import { NnEmptyState } from '../../../shared/components/nn-empty-state/nn-empty-state';
 import { NnBanner } from '../../../shared/components/nn-banner/nn-banner';
 import { NnButton } from '../../../shared/components/nn-button/nn-button';

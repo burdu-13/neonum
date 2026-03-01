@@ -1,8 +1,7 @@
 @use '../../../../shared/styles/mixins' as *;
-@use '../../../../shared/styles/variables' as *;
 
 .similar-assets {
-    margin-top: 8rem;
+    width: 100%;
 
     &__header {
         @include flex(flex-start, center, $gap: 2.4rem);
@@ -10,30 +9,40 @@
 
         h2 {
             font-size: 2.4rem;
-            font-weight: 600;
-            letter-spacing: 0.05rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.1rem;
             white-space: nowrap;
             color: var(--nn-text);
+            @include flex(center, flex-start, $gap: 1.2rem);
+
+            &::before {
+                content: '';
+                width: 0.4rem;
+                height: 2.4rem;
+                background: var(--nn-primary);
+                border-radius: 1rem;
+            }
         }
 
         .header-line {
             flex-grow: 1;
             height: 0.1rem;
-            background: var(--nn-border);
+            background: linear-gradient(to right, rgba(var(--nn-primary-rgb), 0.3), transparent);
         }
     }
 
     &__grid {
-        @include auto-grid(14rem, 3.2rem 1.6rem);
+        @include auto-grid(14rem, 2.4rem);
 
         @include mq('sm') {
-            @include auto-grid(16rem, 4rem 2.4rem);
+            @include auto-grid(16rem, 2.4rem);
         }
         @include mq('md') {
-            @include auto-grid(20rem, 4.8rem 3.2rem);
+            @include auto-grid(20rem, 3.2rem);
         }
         @include mq('xl') {
-            @include auto-grid(24rem, 6.4rem 4rem);
+            @include auto-grid(22rem, 4rem);
         }
     }
 
@@ -49,7 +58,7 @@
 .similar-card-reveal {
     opacity: 0;
     transform: translateY(2rem);
-    animation: smoothReveal 0.6s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+    animation: smoothReveal 0.6s cubic-bezier(0.2, 1, 0.3, 1) forwards;
 }
 
 @keyframes smoothReveal {

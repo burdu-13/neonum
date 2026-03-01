@@ -11,7 +11,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MovieStore } from '../../../store/movie/movie.store';
 import { MovieTrailer } from '../../../shared/components/movie-trailer/movie-trailer';
-import { MovieDetails, ReviewPayload } from '../../../shared/models/movie.model';
+import { Movie, MovieDetails, ReviewPayload, TVShow } from '../../../shared/models/movie.model';
 import { MovieFeedback } from '../components/movie-feedback/movie-feedback';
 import { MovieActions } from '../components/movie-actions/movie-actions';
 import { MovieHero } from '../components/movie-hero/movie-hero';
@@ -23,6 +23,7 @@ import { CinematicSeasons } from '../components/cinematic-seasons/cinematic-seas
 import { CinematicSynopsis } from '../components/cinematic-synopsis/cinematic-synopsis';
 import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-episodes';
 import { UserStore } from '../../../store/user-info/user.store';
+import { SimilarMovies } from '../components/similar-movies/similar-movies';
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -36,6 +37,7 @@ import { UserStore } from '../../../store/user-info/user.store';
         CinematicSeasons,
         CinematicSynopsis,
         CinematicEpisodes,
+        SimilarMovies,
     ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
@@ -129,6 +131,18 @@ export class MovieDetailerContainer {
     public get topCast() {
         return this.movieStore.selectedMovie()?.credits?.cast?.slice(0, 8) || [];
     }
+
+    protected readonly similarMovies = computed(() => {
+        const movie = this.movieStore.selectedMovie() as MovieDetails & {
+            recommendations?: { results: (Movie | TVShow)[] };
+            similar?: { results: (Movie | TVShow)[] };
+        };
+
+        if (!movie) return [];
+
+        const results = movie.recommendations?.results || movie.similar?.results || [];
+        return results.slice(0, 12);
+    });
 
     public handleReviewSubmit(payload: ReviewPayload, movieId: number): void {
         this.movieStore.submitRating({

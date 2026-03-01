@@ -1,5 +1,5 @@
 <section class="reviews">
-    <h2 class="reviews__title">Audience Assessments</h2>
+    <h2 class="reviews__title">Audience Reviews</h2>
 
     <div class="reviews__grid">
         @for (review of reviews(); track review.id) {
@@ -48,12 +48,12 @@
                 </div>
 
                 <button class="reviews__grid__card__trigger">
-                    {{ expandedReviewIds().has(review.id) ? 'Show less' : 'Read full assessment' }}
+                    {{ expandedReviewIds().has(review.id) ? 'Show less' : 'Read full review' }}
                 </button>
             </article>
         }@empty {
             <app-nn-empty-state 
-                title="No Assessments Yet" 
+                title="No Reviews Yet" 
                 description="This cinematic asset has not yet been analyzed by the collective."
                 icon="rate_review"
                 class="empty__state"

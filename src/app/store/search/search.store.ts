@@ -1,5 +1,12 @@
 import { computed, inject } from '@angular/core';
-import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import {
+    patchState,
+    signalStore,
+    withComputed,
+    withHooks,
+    withMethods,
+    withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
     pipe,
@@ -15,6 +22,7 @@ import { Movie, TVShow } from '../../shared/models/movie.model';
 import { ActorDetails } from '../../shared/models/actor.model';
 import { SearchApiService } from '../../features/search/services/search-api-service';
 import { SearchResultItem } from '../../shared/models/search.model';
+import { GlobalStore } from '../global/global.store';
 
 interface SearchState {
     query: string;
@@ -95,4 +103,10 @@ export const SearchStore = signalStore(
 
         clearStore: () => patchState(store, initialState),
     })),
+    withHooks({
+        onInit(store) {
+            const globalStore = inject(GlobalStore);
+            globalStore.registerReset(() => patchState(store, initialState));
+        },
+    }),
 );

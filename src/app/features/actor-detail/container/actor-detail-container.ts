@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angular/core';
 import { ActorStore } from '../store/actor.store';
 import { NnEmptyState } from "../../../shared/components/nn-empty-state/nn-empty-state";
-import { MovieCard } from "../../dashboard/components/movie-card/movie-card";
+import { MovieCard } from "../../../shared/components/movie-card/movie-card";
 import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 import { ActorHero } from "../components/actor-hero/actor-hero";
 import { ActorSidebar } from "../components/actor-sidebar/actor-sidebar";

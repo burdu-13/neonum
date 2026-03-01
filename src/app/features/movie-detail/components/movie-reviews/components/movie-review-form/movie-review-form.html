@@ -8,19 +8,19 @@
         appearance="outline"
         class="review-form__field"
     >
-        <mat-label>Share your cinematic perspective...</mat-label>
+        <mat-label>Share your ideas...</mat-label>
         <textarea
             matInput
             [(ngModel)]="reviewContent"
             rows="6"
-            placeholder="Write your assessment here..."
+            placeholder="Write your review here..."
             class="review-form__textarea"
         ></textarea>
     </mat-form-field>
 
     <div class="review-form__actions">
         <app-nn-button
-            label="Submit Assessment"
+            label="Submit Review"
             variant="primary"
             [disabled]="!reviewContent || rating === 0"
             (clicked)="submit.emit({ content: reviewContent, rating: rating })"
