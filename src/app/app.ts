@@ -52,7 +52,12 @@ export class App implements OnInit {
                     if (event instanceof NavigationStart) {
                         this.globalStore.setLoading(true);
                     } else {
-                        setTimeout(() => this.globalStore.setLoading(false), 300);
+                        setTimeout(() => {
+                            this.globalStore.setLoading(false);
+
+                            window.scrollTo({ top: 0, behavior: 'instant' });
+                            document.body.classList.remove('body-lock');
+                        }, 300);
                     }
                 }),
 
