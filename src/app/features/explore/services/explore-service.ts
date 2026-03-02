@@ -36,7 +36,8 @@ export class ExploreService {
 
         if (filters.with_genres) path += `&with_genres=${filters.with_genres}`;
 
-        return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
+        const safePath = encodeURIComponent(path);
+        return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${safePath}`);
     }
 
     public getGenres(type: 'movie' | 'tv' = 'movie'): Observable<GenreResponse> {

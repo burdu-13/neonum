@@ -137,7 +137,7 @@ export const ExploreStore = signalStore(
             const currentFilters = store.filters();
 
             const hasChanged = Object.entries(newFilters).some(
-                ([key, value]) => value !== (currentFilters as any)[key],
+                ([key, value]) => value !== currentFilters[key as keyof ExploreFilters],
             );
 
             if (!hasChanged && store.movies().length > 0) return;
