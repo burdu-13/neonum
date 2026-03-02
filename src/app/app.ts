@@ -1,11 +1,4 @@
-import {
-    ChangeDetectionStrategy,
-    Component,
-    DestroyRef,
-    inject,
-    OnInit,
-    signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import {
     NavigationCancel,
     NavigationEnd,
@@ -22,49 +15,44 @@ import { filter, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NnGuestBanner } from './shared/components/nn-guest-banner/nn-guest-banner';
 import { UserStore } from './store/user-info/user.store';
+import { NnGlobalLoader } from "./shared/components/nn-global-loader/nn-global-loader";
 
 @Component({
     selector: 'app-root',
-    imports: [RouterOutlet, Header, Footer, AlertUi, NnGuestBanner],
+    imports: [RouterOutlet, Header, Footer, AlertUi, NnGuestBanner, NnGlobalLoader],
     templateUrl: './app.html',
     styleUrl: './app.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class App implements OnInit {
+export class App {
     protected readonly title = signal('neonum');
     private readonly router = inject(Router);
     private readonly destroyRef = inject(DestroyRef);
     protected readonly globalStore = inject(GlobalStore);
     protected readonly userStore = inject(UserStore);
 
-    private loaderTimeout?: ReturnType<typeof setTimeout>;
-
-    ngOnInit(): void {
+    constructor() {
         this.router.events
             .pipe(
                 filter(
-                    (event) =>
-                        event instanceof NavigationStart ||
-                        event instanceof NavigationEnd ||
-                        event instanceof NavigationCancel ||
-                        event instanceof NavigationError,
+                    (e) =>
+                        e instanceof NavigationStart ||
+                        e instanceof NavigationEnd ||
+                        e instanceof NavigationCancel ||
+                        e instanceof NavigationError,
                 ),
                 tap((event) => {
                     if (event instanceof NavigationStart) {
-                        this.loaderTimeout = setTimeout(() => {
-                            this.globalStore.setLoading(true);
-                        }, 250);
+                        this.globalStore.setLoading(true);
                     } else {
-                        clearTimeout(this.loaderTimeout);
+                        window.scrollTo({ top: 0, behavior: 'instant' });
 
                         setTimeout(() => {
                             this.globalStore.setLoading(false);
-                            window.scrollTo({ top: 0, behavior: 'instant' });
-                            document.body.classList.remove('body-lock');
-                        }, 0);
+                        }, 300);
                     }
                 }),
-                takeUntilDestroyed(this.destroyRef),
+                takeUntilDestroyed(),
             )
             .subscribe();
     }

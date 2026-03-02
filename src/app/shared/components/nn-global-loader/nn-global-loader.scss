@@ -1,0 +1,52 @@
+@use '../../styles/mixins' as *;
+
+.global-loader {
+    @include flex(center, center, column, $gap: 3.2rem);
+    position: fixed;
+    top: 8rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    background: var(--nn-bg);
+
+    &__orbit {
+        width: 6.4rem;
+        height: 6.4rem;
+        border: 0.2rem solid transparent;
+        border-top-color: var(--nn-primary);
+        border-bottom-color: var(--nn-primary);
+        border-radius: 50%;
+        animation:
+            nn-fade-in 0.2s ease-out forwards,
+            nn-orbit 1s linear infinite;
+        box-shadow: 0 0 2rem rgba(var(--nn-primary-rgb), 0.2);
+    }
+
+    &__text {
+        font-size: 1.1rem;
+        font-weight: 900;
+        color: var(--nn-primary);
+        letter-spacing: 0.5rem;
+        text-transform: uppercase;
+        animation: nn-fade-in 0.2s ease-out forwards;
+    }
+}
+
+@keyframes nn-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes nn-orbit {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

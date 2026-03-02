@@ -14,11 +14,6 @@
     size-adjust: 107.5%;
 }
 
-html,
-body {
-    overflow-x: hidden;
-}
-
 .body-lock {
     overflow: hidden;
     touch-action: none;
@@ -27,6 +22,7 @@ body {
 html {
     min-height: 100%;
     font-size: 62.5%;
+    overflow-x: hidden;
 }
 
 body,
