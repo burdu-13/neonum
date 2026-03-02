@@ -24,21 +24,23 @@ import { CinematicSynopsis } from '../components/cinematic-synopsis/cinematic-sy
 import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-episodes';
 import { UserStore } from '../../../store/user-info/user.store';
 import { SimilarMovies } from '../components/similar-movies/similar-movies';
+import { Skeleton } from "../../../shared/components/skeleton/skeleton";
 
 @Component({
     selector: 'app-movie-detailer-container',
     imports: [
-        MatIconModule,
-        MovieTrailer,
-        MovieFeedback,
-        MovieActions,
-        MovieHero,
-        CinematicCast,
-        CinematicSeasons,
-        CinematicSynopsis,
-        CinematicEpisodes,
-        SimilarMovies,
-    ],
+    MatIconModule,
+    MovieTrailer,
+    MovieFeedback,
+    MovieActions,
+    MovieHero,
+    CinematicCast,
+    CinematicSeasons,
+    CinematicSynopsis,
+    CinematicEpisodes,
+    SimilarMovies,
+    Skeleton
+],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -136,7 +138,7 @@ export class MovieDetailerContainer {
     }
 
     public get topCast() {
-        return this.movieStore.selectedMovie()?.credits?.cast?.slice(0, 8) || [];
+        return this.movieStore.selectedMovie()?.credits?.cast?.slice(0, 6) || [];
     }
 
     protected readonly similarMovies = computed(() => {

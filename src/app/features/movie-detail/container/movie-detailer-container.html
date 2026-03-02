@@ -47,29 +47,59 @@
             }
         </div>
 
-        <aside class="detail-gallery__sidebar">
-            <app-cinematic-cast
-                [cast]="topCast"
-                [isLoading]="isLoading"
-            />
-        </aside>
-
-        @if (!isLoading) {
-            <footer class="detail-gallery__footer">
-                <app-movie-feedback
-                    [reviews]="movieStore.processedReviews()"
-                    [hasMore]="movieStore.hasMoreReviews()"
-                    [isRated]="!!movie?.account_states?.rated"
-                    (loadMore)="movieStore.loadMoreReviews()"
-                    (submitReview)="handleReviewSubmit($event, movie!.id)"
-                    [isMember]="isMember()"
+        @defer (on viewport) {
+            <aside class="detail-gallery__sidebar">
+                <app-cinematic-cast
+                    [cast]="topCast"
+                    [isLoading]="isLoading"
                 />
-            </footer>
+            </aside>
+        } @placeholder {
+            <div class="detail-gallery__sidebar-placeholder">
+                <app-skeleton
+                    width="100%"
+                    height="320px"
+                    radius="1.6rem"
+                />
+            </div>
         }
 
-        @if (!isLoading && similarMovies().length > 0) {
-            <div class="detail-gallery__similar">
-                <app-similar-movies [media]="similarMovies()" />
+        @defer (on viewport) {
+            @if (!isLoading) {
+                <footer class="detail-gallery__footer">
+                    <app-movie-feedback
+                        [reviews]="movieStore.processedReviews()"
+                        [hasMore]="movieStore.hasMoreReviews()"
+                        [isRated]="!!movie?.account_states?.rated"
+                        (loadMore)="movieStore.loadMoreReviews()"
+                        (submitReview)="handleReviewSubmit($event, movie!.id)"
+                        [isMember]="isMember()"
+                    />
+                </footer>
+            }
+        } @placeholder {
+            <div class="detail-gallery__footer-placeholder">
+                <app-skeleton
+                    width="100%"
+                    height="200px"
+                    radius="1.6rem"
+                />
+            </div>
+        }
+
+        @defer (on viewport) {
+            @if (!isLoading && similarMovies().length > 0) {
+                <div class="detail-gallery__similar">
+                    <app-similar-movies [media]="similarMovies()" />
+                </div>
+            }
+        } @placeholder {
+            <div class="detail-gallery__similar-placeholder">
+                <app-skeleton
+                    width="100%"
+                    height="400px"
+                    radius="1.6rem"
+                />
             </div>
         }
     </div>
