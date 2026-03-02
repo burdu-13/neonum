@@ -14,11 +14,6 @@
     size-adjust: 107.5%;
 }
 
-html,
-body {
-    overflow-x: hidden;
-}
-
 .body-lock {
     overflow: hidden;
     touch-action: none;
@@ -27,6 +22,8 @@ body {
 html {
     min-height: 100%;
     font-size: 62.5%;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 body,
@@ -36,6 +33,7 @@ html,
 }
 
 body {
+    overflow-y: scroll;
     @include mat.all-component-themes($neonum-theme);
     background-color: var(--nn-bg);
     color: var(--nn-text);

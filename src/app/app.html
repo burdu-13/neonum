@@ -1,25 +1,21 @@
 <div class="app-shell">
-    <div class="app-shell__inner">
-        <app-header></app-header>
-        <app-alert></app-alert>
+    <app-header></app-header>
+    <app-alert></app-alert>
 
-        @if (userStore.isGuest()) {
-            <app-nn-guest-banner
-                [hoursRemaining]="userStore.guestSessionRemainingHours()"
-                (upgradeRequested)="navigateToSignUp()"
-            />
-        }
+    @if (userStore.isGuest()) {
+        <app-nn-guest-banner
+            [hoursRemaining]="userStore.guestSessionRemainingHours()"
+            (upgradeRequested)="navigateToSignUp()"
+        />
+    }
 
-        <main class="app-main">
-            @if (globalStore.isAppLoading()) {
-                <div class="global-loader">
-                    <div class="global-loader__orbit"></div>
-                    <span class="global-loader__text">Loading...</span>
-                </div>
-            }
-            <router-outlet></router-outlet>
-        </main>
+    @if (globalStore.isAppLoading()) {
+        <app-nn-global-loader></app-nn-global-loader>
+    }
 
-        <app-footer></app-footer>
-    </div>
+    <main class="app-main">
+        <router-outlet></router-outlet>
+    </main>
+
+    <app-footer class="main__footer"></app-footer>
 </div>
