@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { NgOptimizedImage } from "@angular/common";
 
 @Component({
     selector: 'app-nn-banner',
-    imports: [],
+    imports: [NgOptimizedImage],
     templateUrl: './nn-banner.html',
     styleUrl: './nn-banner.scss',
     changeDetection: ChangeDetectionStrategy.OnPush,

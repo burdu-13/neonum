@@ -23,28 +23,29 @@ export const appConfig: ApplicationConfig = {
             useValue: (config: ImageLoaderConfig) => {
                 if (!config.src || config.src === 'null') return '';
 
-                const posterWidths = [92, 154, 185, 342, 500, 780];
-                const backdropWidths = [300, 780, 1280];
+                const isLocal =
+                    config.src.includes('images/') ||
+                    config.src.includes('assets/') ||
+                    config.src.endsWith('.webp');
 
-                const availableWidths = config.src.includes('backdrop')
-                    ? backdropWidths
-                    : posterWidths;
-
-                let sizePath: string;
-                if (config.width && config.width > availableWidths[availableWidths.length - 1]) {
-                    sizePath = 'original';
-                } else {
-                    const width = config.width
-                        ? availableWidths.find((w) => w >= config.width!) ||
-                          availableWidths[availableWidths.length - 1]
-                        : availableWidths.includes(780)
-                          ? 780
-                          : 342;
-                    sizePath = `w${width}`;
+                if (isLocal) {
+                    const path = config.src.startsWith('/') ? config.src : `/${config.src}`;
+                    return path.replace(/\\/g, '/');
                 }
 
-                const cleanHash = config.src.startsWith('/') ? config.src : `/${config.src}`;
-                return `https://image.tmdb.org/t/p/${sizePath}${cleanHash}`;
+                const posterWidths = [92, 154, 185, 342, 500, 780];
+                const backdropWidths = [300, 780, 1280];
+                const isBackdrop = config.src.includes('backdrop');
+                const availableWidths = isBackdrop ? backdropWidths : posterWidths;
+
+                const width = config.width
+                    ? availableWidths.find((w) => w >= config.width!) ||
+                      availableWidths[availableWidths.length - 1]
+                    : isBackdrop
+                      ? 780
+                      : 342;
+
+                return `https://image.tmdb.org/t/p/w${width}${config.src.startsWith('/') ? config.src : `/${config.src}`}`;
             },
         },
         provideStoreDevtools({

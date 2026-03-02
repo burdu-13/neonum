@@ -1,11 +1,13 @@
 <div class="nn-banner">
     <div class="nn-banner__image-wrapper">
         <img
-            [src]="imageSrc()"
+            [ngSrc]="imageSrc()"
             fill
             class="nn-banner__image"
             alt="Hero Cinematic Banner"
             priority
+            fetchpriority="high"
+            sizes="(max-width: 768px) 100vw, (max-width: 1660px) 100vw, 100vw"
         />
         <div class="nn-banner__overlay"></div>
     </div>
