@@ -16,6 +16,7 @@ export const routes: Routes = [
     {
         path: 'explore',
         title: 'Neonum | Explore Media',
+        canActivate: [authGuard],
         loadComponent: () =>
             import('./features/explore/container/explore-container').then(
                 (c) => c.FeatureContainer,

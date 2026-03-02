@@ -37,6 +37,8 @@ export class App implements OnInit {
     protected readonly globalStore = inject(GlobalStore);
     protected readonly userStore = inject(UserStore);
 
+    private loaderTimeout?: ReturnType<typeof setTimeout>;
+
     ngOnInit(): void {
         this.router.events
             .pipe(
@@ -47,20 +49,21 @@ export class App implements OnInit {
                         event instanceof NavigationCancel ||
                         event instanceof NavigationError,
                 ),
-
                 tap((event) => {
                     if (event instanceof NavigationStart) {
-                        this.globalStore.setLoading(true);
+                        this.loaderTimeout = setTimeout(() => {
+                            this.globalStore.setLoading(true);
+                        }, 100);
                     } else {
+                        clearTimeout(this.loaderTimeout);
+
                         setTimeout(() => {
                             this.globalStore.setLoading(false);
-
                             window.scrollTo({ top: 0, behavior: 'instant' });
                             document.body.classList.remove('body-lock');
                         }, 0);
                     }
                 }),
-
                 takeUntilDestroyed(this.destroyRef),
             )
             .subscribe();

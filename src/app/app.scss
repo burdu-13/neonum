@@ -15,11 +15,16 @@
     }
 }
 
+.app-main {
+    position: relative;
+    min-height: 50vh;
+}
+
 .global-loader {
     @include flex(center, center, column, $gap: 3.2rem);
-    position: fixed;
+    position: absolute;
     inset: 0;
-    z-index: 9999;
+    z-index: 50;
     background: var(--nn-bg);
 
     &__orbit {
@@ -39,17 +44,5 @@
         color: var(--nn-primary);
         letter-spacing: 0.5rem;
         text-transform: uppercase;
-    }
-}
-
-@keyframes nn-orbit {
-    from {
-        transform: rotate(0deg) scale(1);
-    }
-    50% {
-        transform: rotate(180deg) scale(1.1);
-    }
-    to {
-        transform: rotate(360deg) scale(1);
     }
 }

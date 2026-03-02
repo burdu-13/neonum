@@ -1,11 +1,4 @@
 <div class="app-shell">
-    @if (globalStore.isAppLoading()) {
-        <div class="global-loader">
-            <div class="global-loader__orbit"></div>
-            <span class="global-loader__text">Loading...</span>
-        </div>
-    }
-
     <div class="app-shell__inner">
         <app-header></app-header>
         <app-alert></app-alert>
@@ -18,6 +11,12 @@
         }
 
         <main class="app-main">
+            @if (globalStore.isAppLoading()) {
+                <div class="global-loader">
+                    <div class="global-loader__orbit"></div>
+                    <span class="global-loader__text">Loading...</span>
+                </div>
+            }
             <router-outlet></router-outlet>
         </main>
 
