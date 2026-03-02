@@ -14,7 +14,7 @@ import { BreakpointService } from '../../../shared/services/breakpoint-service/b
 import { ExploreFilters } from '../components/explore-filters/explore-filters';
 import { ExploreHeader } from '../components/explore-header/explore-header';
 import { EXPLORE_TYPE_OPTIONS } from '../components/explore-header/config/toggle.config';
-import { Skeleton } from "../../../shared/components/skeleton/skeleton";
+import { Skeleton } from '../../../shared/components/skeleton/skeleton';
 
 @Component({
     selector: 'app-explore-container',
@@ -52,11 +52,6 @@ export class FeatureContainer {
             const type = this.contentType() as 'movie' | 'tv';
 
             untracked(() => {
-                if (this.lastType !== type) {
-                    this.exploreStore.loadGenres(type);
-                    this.lastType = type;
-                }
-
                 this.exploreStore.updateFilters({
                     sort_by: sort,
                     type: type,

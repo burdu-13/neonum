@@ -12,16 +12,29 @@ export class ExploreService {
 
     public discoverMovies(filters: ExploreFilters): Observable<MovieResponse> {
         const contentType = filters.type || 'movie';
+        let path = `discover/${contentType}?page=${filters.page}`;
 
-        let path = `discover/${contentType}?page=${filters.page}&sort_by=${filters.sort_by}`;
+        let sort = filters.sort_by || 'popularity.desc';
+        if (contentType === 'tv' && sort === 'primary_release_date.desc') {
+            sort = 'first_air_date.desc';
+        }
+        path += `&sort_by=${sort}`;
+
+        if (sort === 'vote_average.desc') {
+            path += '&vote_count.gte=300';
+        }
+
+        if (sort === 'primary_release_date.desc' || sort === 'first_air_date.desc') {
+            const today = new Date().toISOString().split('T')[0];
+            if (contentType === 'movie') {
+                path += `&primary_release_date.lte=${today}`;
+            } else {
+                path += `&first_air_date.lte=${today}`;
+            }
+            path += '&vote_count.gte=20';
+        }
 
         if (filters.with_genres) path += `&with_genres=${filters.with_genres}`;
-        if (filters['vote_average.gte']) path += `&vote_average.gte=${filters['vote_average.gte']}`;
-        if (filters['vote_count.gte']) path += `&vote_count.gte=${filters['vote_count.gte']}`;
-        if (filters['primary_release_date.gte'])
-            path += `&primary_release_date.gte=${filters['primary_release_date.gte']}`;
-        if (filters['primary_release_date.lte'])
-            path += `&primary_release_date.lte=${filters['primary_release_date.lte']}`;
 
         return this.http.get<MovieResponse>(`${this.proxyUrl}?path=${path}`);
     }
