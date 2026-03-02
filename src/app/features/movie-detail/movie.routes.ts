@@ -5,6 +5,6 @@ export const MOVIE_ROUTES: Routes = [
     {
         path: '',
         component: MovieDetailerContainer,
-        title: 'Neonum | Media Tetails',
+        title: 'Neonum | Media Details',
     },
 ];

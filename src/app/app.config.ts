@@ -24,10 +24,19 @@ export const appConfig: ApplicationConfig = {
                 if (!config.src || config.src === 'null') return '';
 
                 const widths = [92, 154, 185, 342, 500, 780, 1280];
-                const width = config.width ? widths.find((w) => w >= config.width!) || 1280 : 342;
-                const sizePath = `w${width}`;
-                const cleanHash = config.src.startsWith('/') ? config.src : `/${config.src}`;
 
+                let sizePath: string;
+
+                if (config.width && config.width > 1280) {
+                    sizePath = 'original';
+                } else {
+                    const width = config.width
+                        ? widths.find((w) => w >= config.width!) || 1280
+                        : 780;
+                    sizePath = `w${width}`;
+                }
+
+                const cleanHash = config.src.startsWith('/') ? config.src : `/${config.src}`;
                 return `https://image.tmdb.org/t/p/${sizePath}${cleanHash}`;
             },
         },
