@@ -6,15 +6,9 @@
     background-color: var(--nn-bg);
 
     &__inner {
-        opacity: 1;
         display: flex;
         flex-direction: column;
         min-height: 100vh;
-
-        &--hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
     }
 }
 
@@ -27,10 +21,14 @@
 
 .global-loader {
     @include flex(center, center, column, $gap: 3.2rem);
-    position: absolute;
-    inset: 0;
-    z-index: 50;
+    position: fixed;
+    top: 4rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
     background: var(--nn-bg);
+    animation: nn-fade-in 0.2s ease-out forwards;
 
     &__orbit {
         width: 6.4rem;
@@ -49,6 +47,16 @@
         color: var(--nn-primary);
         letter-spacing: 0.5rem;
         text-transform: uppercase;
+        display: block;
+    }
+}
+
+@keyframes nn-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
     }
 }
 

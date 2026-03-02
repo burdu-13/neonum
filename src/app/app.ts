@@ -53,7 +53,7 @@ export class App implements OnInit {
                     if (event instanceof NavigationStart) {
                         this.loaderTimeout = setTimeout(() => {
                             this.globalStore.setLoading(true);
-                        }, 100);
+                        }, 250);
                     } else {
                         clearTimeout(this.loaderTimeout);
 

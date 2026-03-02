@@ -7,7 +7,7 @@ import {
     MovieResponse,
     TmdbStatusResponse,
     WatchlistRequest,
-} from '../../../shared/models/movie.model';
+} from '../../models/movie.model';
 import { UserStore } from '../../../store/user-info/user.store';
 
 @Injectable({

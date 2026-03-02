@@ -16,10 +16,9 @@ import {
     EMPTY,
     forkJoin,
     filter,
-    distinctUntilChanged,
     exhaustMap,
 } from 'rxjs';
-import { MovieService } from '../../features/dashboard/services/movie';
+import { MovieService } from '../../shared/services/movie/movie';
 import { MovieDetailService } from '../../features/movie-detail/services/movie-detail';
 import {
     Episode,
