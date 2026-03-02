@@ -119,33 +119,50 @@ export const ExploreStore = signalStore(
         ),
 
         loadNextPage() {
-            if (!store.isLoading() && store.filters().page < store.totalPages()) {
+            if (store.isLoading() || store.movies().length === 0) return;
+
+            if (store.filters().page < store.totalPages()) {
                 const nextPage = store.filters().page + 1;
+
                 patchState(store, (state) => ({
                     filters: { ...state.filters, page: nextPage },
+                    isLoading: true,
                 }));
+
                 this.loadMovies({ filters: store.filters(), append: true });
             }
         },
 
         updateFilters(newFilters: Partial<ExploreFilters>) {
-            const typeChanged = newFilters.type && newFilters.type !== store.filters().type;
+            const currentFilters = store.filters();
+
+            const hasChanged = Object.entries(newFilters).some(
+                ([key, value]) => value !== currentFilters[key as keyof ExploreFilters],
+            );
+
+            if (!hasChanged && store.movies().length > 0) return;
+
+            const newType = newFilters.type ?? currentFilters.type;
+            const typeChanged = newType !== currentFilters.type;
 
             patchState(store, (state) => ({
                 filters: {
                     ...state.filters,
                     ...newFilters,
                     page: 1,
+
                     with_genres: typeChanged
                         ? ''
                         : (newFilters.with_genres ?? state.filters.with_genres),
                 },
-                movies: typeChanged ? [] : state.movies,
+                movies: [],
+                isLoading: true,
             }));
 
-            if (typeChanged) {
-                this.loadGenres(newFilters.type as 'movie' | 'tv');
+            if (typeChanged || store.genres().length === 0) {
+                this.loadGenres(newType as 'movie' | 'tv');
             }
+
             this.loadMovies({ filters: store.filters(), append: false });
         },
     })),
