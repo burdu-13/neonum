@@ -23,16 +23,23 @@ export const appConfig: ApplicationConfig = {
             useValue: (config: ImageLoaderConfig) => {
                 if (!config.src || config.src === 'null') return '';
 
-                const widths = [92, 154, 185, 342, 500, 780, 1280];
+                const posterWidths = [92, 154, 185, 342, 500, 780];
+                const backdropWidths = [300, 780, 1280];
+
+                const availableWidths = config.src.includes('backdrop')
+                    ? backdropWidths
+                    : posterWidths;
 
                 let sizePath: string;
-
-                if (config.width && config.width > 1280) {
+                if (config.width && config.width > availableWidths[availableWidths.length - 1]) {
                     sizePath = 'original';
                 } else {
                     const width = config.width
-                        ? widths.find((w) => w >= config.width!) || 1280
-                        : 780;
+                        ? availableWidths.find((w) => w >= config.width!) ||
+                          availableWidths[availableWidths.length - 1]
+                        : availableWidths.includes(780)
+                          ? 780
+                          : 342;
                     sizePath = `w${width}`;
                 }
 
