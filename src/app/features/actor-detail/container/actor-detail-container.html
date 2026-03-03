@@ -1,48 +1,58 @@
 @let actor = actorStore.selectedActor();
 @let isLoading = actorStore.isLoading();
 
-<main class="actor-detail">
-    <app-actor-hero
-        [actor]="actor"
-        [isLoading]="isLoading"
-    />
+@if (actor || isLoading) {
+    <main class="actor-detail">
+        <app-actor-hero
+            [actor]="actor"
+            [isLoading]="isLoading"
+        />
 
-    <div class="actor-detail__content">
-        <section class="actor-detail__main">
-            <div class="actor-detail__section">
-                <header class="actor-detail__section-header">
-                    <h2 class="actor-detail__title">Known For</h2>
-                </header>
+        <div class="actor-detail__content">
+            <section class="actor-detail__main">
+                <div class="actor-detail__section">
+                    <header class="actor-detail__section-header">
+                        <h2 class="actor-detail__title">Known For</h2>
+                    </header>
 
-                <div class="actor-detail__grid">
-                    @if (isLoading) {
-                        @for (i of [1, 2, 3, 4, 5, 6, 8]; track i) {
-                            <app-skeleton
-                                width="100%"
-                                height="38rem"
-                                radius="2.4rem"
-                            />
+                    <div class="actor-detail__grid">
+                        @if (isLoading) {
+                            @for (i of [1, 2, 3, 4, 5, 6, 8]; track i) {
+                                <app-skeleton
+                                    width="100%"
+                                    height="38rem"
+                                    radius="2.4rem"
+                                />
+                            }
+                        } @else {
+                            @for (credit of actorStore.knownFor(); track credit.id) {
+                                <app-movie-card [movie]="credit" />
+                            } @empty {
+                                <app-nn-empty-state
+                                    title="No Records Found"
+                                    description="There are no film credits available for this actor."
+                                    icon="movie"
+                                />
+                            }
                         }
-                    } @else {
-                        @for (credit of actorStore.knownFor(); track credit.id) {
-                            <app-movie-card [movie]="credit" />
-                        } @empty {
-                            <app-nn-empty-state
-                                title="No Records Found"
-                                description="There are no film credits available for this actor."
-                                icon="movie"
-                            />
-                        }
-                    }
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <aside class="actor-detail__sidebar">
-            <app-actor-sidebar
-                [actor]="actor"
-                [isLoading]="isLoading"
-            />
-        </aside>
+            <aside class="actor-detail__sidebar">
+                <app-actor-sidebar
+                    [actor]="actor"
+                    [isLoading]="isLoading"
+                />
+            </aside>
+        </div>
+    </main>
+} @else {
+    <div class="actor-detail__not-found">
+        <app-nn-empty-state
+            title="Profile Not Found"
+            description="The requested actor profile does not exist or is not available."
+            icon="person_off"
+        />
     </div>
-</main>
+}

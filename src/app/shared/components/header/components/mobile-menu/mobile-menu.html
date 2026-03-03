@@ -18,12 +18,14 @@
             >
                 DASHBOARD
             </app-nav-link>
-            <app-nav-link
-                path="/explore"
-                (clicked)="closed.emit()"
-            >
-                EXPLORE
-            </app-nav-link>
+            @if (showExplore()) {
+                <app-nav-link
+                    path="/explore"
+                    (clicked)="closed.emit()"
+                >
+                    EXPLORE
+                </app-nav-link>
+            }
             <button
                 class="mobile-menu__lucky-btn"
                 (click)="luckyClicked.emit()"

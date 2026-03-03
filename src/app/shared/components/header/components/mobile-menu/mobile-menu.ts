@@ -14,9 +14,10 @@ import { Router } from '@angular/router';
 })
 export class MobileMenu {
     protected readonly router = inject(Router);
-    
+
     public readonly isOpen = input.required<boolean>();
     public readonly account = input<AccountDetails | null>(null);
+    public readonly showExplore = input.required<boolean>();
 
     public readonly closed = output<void>();
     public readonly luckyClicked = output<void>();
