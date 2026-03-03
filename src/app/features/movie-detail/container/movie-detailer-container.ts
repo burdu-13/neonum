@@ -25,6 +25,7 @@ import { CinematicEpisodes } from '../components/cinematic-episodes/cinematic-ep
 import { UserStore } from '../../../store/user-info/user.store';
 import { SimilarMovies } from '../components/similar-movies/similar-movies';
 import { Skeleton } from "../../../shared/components/skeleton/skeleton";
+import { NnEmptyState } from "../../../shared/components/nn-empty-state/nn-empty-state";
 
 @Component({
     selector: 'app-movie-detailer-container',
@@ -39,7 +40,8 @@ import { Skeleton } from "../../../shared/components/skeleton/skeleton";
     CinematicSynopsis,
     CinematicEpisodes,
     SimilarMovies,
-    Skeleton
+    Skeleton,
+    NnEmptyState
 ],
     templateUrl: './movie-detailer-container.html',
     styleUrl: './movie-detailer-container.scss',

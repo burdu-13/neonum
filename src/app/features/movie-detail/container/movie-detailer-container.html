@@ -1,113 +1,124 @@
 @let movie = movieStore.selectedMovie();
 @let isLoading = movieStore.isLoading();
 
-<main class="detail-gallery">
-    <app-movie-hero
-        [displayData]="heroDisplay()"
-        [isLoading]="isLoading"
-    >
-        <div actions>
-            <app-movie-actions
-                [movie]="movie"
-                [watchlistIds]="movieStore.watchlistIds()"
-                [favoriteIds]="movieStore.favoriteIds()"
-                [hasTrailer]="!!trailerKey()"
-                (toggleWatchlist)="movieStore.toggleWatchlist($event)"
-                (toggleFavorite)="movieStore.toggleFavorite($event)"
-                (openTrailer)="isTrailerOpen.set(true)"
-                [isMember]="isMember()"
-            />
-        </div>
-    </app-movie-hero>
+@if (movie || isLoading) {
+    <main class="detail-gallery">
+        <app-movie-hero
+            [displayData]="heroDisplay()"
+            [isLoading]="isLoading"
+        >
+            <div actions>
+                <app-movie-actions
+                    [movie]="movie"
+                    [watchlistIds]="movieStore.watchlistIds()"
+                    [favoriteIds]="movieStore.favoriteIds()"
+                    [hasTrailer]="!!trailerKey()"
+                    (toggleWatchlist)="movieStore.toggleWatchlist($event)"
+                    (toggleFavorite)="movieStore.toggleFavorite($event)"
+                    (openTrailer)="isTrailerOpen.set(true)"
+                    [isMember]="isMember()"
+                />
+            </div>
+        </app-movie-hero>
 
-    <div class="detail-gallery__body">
-        <div class="detail-gallery__main-content">
-            <app-cinematic-synopsis
-                [overview]="movie?.overview"
-                [isLoading]="isLoading"
-            />
-
-            @if (!isLoading && seasons().length > 0) {
-                <div class="detail-gallery__seasons-wrapper">
-                    <app-cinematic-seasons
-                        [seasons]="seasons()"
-                        [activeSeason]="activeSeasonNumber()"
-                        (seasonClicked)="onSeasonSelect($event)"
-                    />
-
-                    @if (
-                        movieStore.activeSeasonEpisodes().length > 0 || movieStore.isSeasonLoading()
-                    ) {
-                        <app-cinematic-episodes
-                            [episodes]="movieStore.activeSeasonEpisodes()"
-                            [isLoading]="movieStore.isSeasonLoading()"
-                        />
-                    }
-                </div>
-            }
-        </div>
-
-        @defer (on viewport) {
-            <aside class="detail-gallery__sidebar">
-                <app-cinematic-cast
-                    [cast]="topCast"
+        <div class="detail-gallery__body">
+            <div class="detail-gallery__main-content">
+                <app-cinematic-synopsis
+                    [overview]="movie?.overview"
                     [isLoading]="isLoading"
                 />
-            </aside>
-        } @placeholder {
-            <div class="detail-gallery__sidebar-placeholder">
-                <app-skeleton
-                    width="100%"
-                    height="320px"
-                    radius="1.6rem"
-                />
-            </div>
-        }
 
-        @defer (on viewport) {
-            @if (!isLoading) {
-                <footer class="detail-gallery__footer">
-                    <app-movie-feedback
-                        [reviews]="movieStore.processedReviews()"
-                        [hasMore]="movieStore.hasMoreReviews()"
-                        [isRated]="!!movie?.account_states?.rated"
-                        (loadMore)="movieStore.loadMoreReviews()"
-                        (submitReview)="handleReviewSubmit($event, movie!.id)"
-                        [isMember]="isMember()"
+                @if (!isLoading && seasons().length > 0) {
+                    <div class="detail-gallery__seasons-wrapper">
+                        <app-cinematic-seasons
+                            [seasons]="seasons()"
+                            [activeSeason]="activeSeasonNumber()"
+                            (seasonClicked)="onSeasonSelect($event)"
+                        />
+
+                        @if (
+                            movieStore.activeSeasonEpisodes().length > 0 ||
+                            movieStore.isSeasonLoading()
+                        ) {
+                            <app-cinematic-episodes
+                                [episodes]="movieStore.activeSeasonEpisodes()"
+                                [isLoading]="movieStore.isSeasonLoading()"
+                            />
+                        }
+                    </div>
+                }
+            </div>
+
+            @defer (on viewport) {
+                <aside class="detail-gallery__sidebar">
+                    <app-cinematic-cast
+                        [cast]="topCast"
+                        [isLoading]="isLoading"
                     />
-                </footer>
-            }
-        } @placeholder {
-            <div class="detail-gallery__footer-placeholder">
-                <app-skeleton
-                    width="100%"
-                    height="200px"
-                    radius="1.6rem"
-                />
-            </div>
-        }
-
-        @defer (on viewport) {
-            @if (!isLoading && similarMovies().length > 0) {
-                <div class="detail-gallery__similar">
-                    <app-similar-movies [media]="similarMovies()" />
+                </aside>
+            } @placeholder {
+                <div class="detail-gallery__sidebar-placeholder">
+                    <app-skeleton
+                        width="100%"
+                        height="320px"
+                        radius="1.6rem"
+                    />
                 </div>
             }
-        } @placeholder {
-            <div class="detail-gallery__similar-placeholder">
-                <app-skeleton
-                    width="100%"
-                    height="400px"
-                    radius="1.6rem"
-                />
-            </div>
-        }
-    </div>
 
-    @if (isTrailerOpen()) {
-        <app-movie-trailer
-            [trailerKey]="trailerKey()!"
-            (close)="isTrailerOpen.set(false)"
+            @defer (on viewport) {
+                @if (!isLoading) {
+                    <footer class="detail-gallery__footer">
+                        <app-movie-feedback
+                            [reviews]="movieStore.processedReviews()"
+                            [hasMore]="movieStore.hasMoreReviews()"
+                            [isRated]="!!movie?.account_states?.rated"
+                            (loadMore)="movieStore.loadMoreReviews()"
+                            (submitReview)="handleReviewSubmit($event, movie!.id)"
+                            [isMember]="isMember()"
+                        />
+                    </footer>
+                }
+            } @placeholder {
+                <div class="detail-gallery__footer-placeholder">
+                    <app-skeleton
+                        width="100%"
+                        height="200px"
+                        radius="1.6rem"
+                    />
+                </div>
+            }
+
+            @defer (on viewport) {
+                @if (!isLoading && similarMovies().length > 0) {
+                    <div class="detail-gallery__similar">
+                        <app-similar-movies [media]="similarMovies()" />
+                    </div>
+                }
+            } @placeholder {
+                <div class="detail-gallery__similar-placeholder">
+                    <app-skeleton
+                        width="100%"
+                        height="400px"
+                        radius="1.6rem"
+                    />
+                </div>
+            }
+        </div>
+
+        @if (isTrailerOpen()) {
+            <app-movie-trailer
+                [trailerKey]="trailerKey()!"
+                (close)="isTrailerOpen.set(false)"
+            />
+        }
+    </main>
+} @else {
+    <div class="detail-gallery__not-found">
+        <app-nn-empty-state
+            title="Not Found"
+            description="The requested resource does not exist or is not available."
+            icon="block"
         />
-    }
-</main>
+    </div>
+}
