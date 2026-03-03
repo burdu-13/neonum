@@ -8,7 +8,9 @@
         @if (bp.isLargeTablet() || bp.isDesktop()) {
             <nav class="header__nav">
                 <app-nav-link path="/dashboard">DASHBOARD</app-nav-link>
-                <app-nav-link path="/explore">EXPLORE</app-nav-link>
+                @if (store.isAuthenticated() || store.isGuest()) {
+                    <app-nav-link path="/explore">EXPLORE</app-nav-link>
+                }
             </nav>
         }
 
@@ -80,6 +82,7 @@
             (closed)="closeMenu()"
             (luckyClicked)="handleLuckyClick()"
             (logoutClicked)="handleLogout()"
+            [showExplore]="store.isAuthenticated() || store.isGuest()"
         />
     }
 </header>
